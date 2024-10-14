@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:simpkl_mobile/animation.dart';
 import 'package:simpkl_mobile/components/BottomNavBar.dart';
 import 'package:simpkl_mobile/pages/jurnal_page.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:simpkl_mobile/pages/logIn.dart';
+import 'package:simpkl_mobile/pages/nilaiAkhir.dart';
+import 'package:simpkl_mobile/pages/wellcomePage1.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,10 +19,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        scaffoldBackgroundColor: Colors.white, // Set background global
+        scaffoldBackgroundColor: Colors.white, // Set background 
       ),
-      home: MyHomePage(),
+      home:logIn(),
     );
   }
 }
@@ -39,7 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Center(child: Text('Home Page')),
     JurnalPage(),
     Center(child: Text('Kehadiran Page')),
-    Center(child: Text('Nilai Page')),
+    Center(child: Text('Nilai Page')), NilaiAkhir(),
     Center(child: Text('Profile Page')),
   ];
 
