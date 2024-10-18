@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:simpkl_mobile/contstants/colors.dart';
+import 'package:simpkl_mobile/main.dart';
 
 class logIn extends StatefulWidget {
   const logIn({super.key});
@@ -115,8 +116,12 @@ class _LogInState extends State<logIn> {
                         // Validasi form, jika tidak valid munculkan pesan peringatan
                         if (_formKey.currentState!.validate()) {
                           // Jika form valid, eksekusi logika login
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Processing Data')),
+                          // ScaffoldMessenger.of(context).showSnackBar(
+                          //   const SnackBar(content: Text('Processing Data')),
+                          // );
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => MyHomePage()),
                           );
                         }
                       },

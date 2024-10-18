@@ -3,13 +3,10 @@ import 'package:simpkl_mobile/animation.dart';
 import 'package:simpkl_mobile/components/BottomNavBar.dart';
 import 'package:simpkl_mobile/pages/jurnal_page.dart';
 import 'package:intl/date_symbol_data_local.dart';
-<<<<<<< HEAD
 import 'package:simpkl_mobile/pages/presence_page.dart';
-=======
 import 'package:simpkl_mobile/pages/logIn.dart';
 import 'package:simpkl_mobile/pages/nilaiAkhir.dart';
 import 'package:simpkl_mobile/pages/wellcomePage1.dart';
->>>>>>> ae4d3b474b977178bc99c48cb3768497b63fbb98
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,12 +24,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.white, // Set background 
       ),
-<<<<<<< HEAD
-      home: const MyHomePage(),
-=======
-      home:logIn(),
->>>>>>> ae4d3b474b977178bc99c48cb3768497b63fbb98
-    );
+      home: logIn(),
+    ); 
   }
 }
 
@@ -47,19 +40,11 @@ class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = <Widget>[
-<<<<<<< HEAD
     const Center(child: Text('Home Page')),
     const JurnalPage(),
     const PresencePage(),
     const Center(child: Text('Nilai Page')),
     const Center(child: Text('Profile Page')),
-=======
-    Center(child: Text('Home Page')),
-    JurnalPage(),
-    Center(child: Text('Kehadiran Page')),
-    Center(child: Text('Nilai Page')), NilaiAkhir(),
-    Center(child: Text('Profile Page')),
->>>>>>> ae4d3b474b977178bc99c48cb3768497b63fbb98
   ];
 
   void _onItemTapped(int index) {
