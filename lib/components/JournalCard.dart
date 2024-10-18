@@ -85,7 +85,7 @@ class JournalCard extends StatelessWidget {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(5.0),  // Sesuaikan dengan radius yang diinginkan
                   child: Image.network(
-                    'https://via.placeholder.com/50',
+                    'https://awsimages.detik.net.id/community/media/visual/2023/05/26/yuk-serbu-ada-pendidikan-dan-pelatihan-kerja-gratis_169.jpeg?w=600&q=90',
                     width: 40,
                     height: 40,
                     fit: BoxFit.cover,  // Menjaga agar gambar sesuai dengan kotak

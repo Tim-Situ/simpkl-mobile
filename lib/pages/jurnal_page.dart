@@ -4,6 +4,7 @@ import 'package:simpkl_mobile/components/JournalCard.dart';
 import 'dart:ui';
 
 import 'package:simpkl_mobile/contstants/colors.dart';
+import 'package:simpkl_mobile/pages/detail_jurnal_page.dart';
 
 class JurnalPage extends StatefulWidget {
   @override
@@ -118,13 +119,22 @@ class _JurnalPageState extends State<JurnalPage> {
                 typeOfActivity: "Bimbingan",
               ),
               SizedBox(height: 15,),
-              JournalCard(
-                title: "Membuat Website",
-                status: "Menunggu",
-                timeRange: "09:00 - 16:00",
-                date: getFormattedDate(selectedDate),
-                typeOfWork: "Sesuai Kompetensi",
-                typeOfActivity: "Ditugaskan",
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context, 
+                    MaterialPageRoute(builder: (context) => DetailJurnalPage()),
+                  );
+              
+                },
+                child: JournalCard(
+                  title: "Membuat Website",
+                  status: "Menunggu",
+                  timeRange: "09:00 - 16:00",
+                  date: getFormattedDate(selectedDate),
+                  typeOfWork: "Sesuai Kompetensi",
+                  typeOfActivity: "Ditugaskan",
+                ),
               ),
             ],
           ),
