@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:simpkl_mobile/components/JournalCard.dart';
-import 'dart:ui';
 
 import 'package:simpkl_mobile/contstants/colors.dart';
 import 'package:simpkl_mobile/pages/detail_jurnal_page.dart';
 
 class JurnalPage extends StatefulWidget {
+  const JurnalPage({super.key});
+
   @override
   State<StatefulWidget> createState() => _JurnalPageState();
 }
@@ -22,10 +23,11 @@ class _JurnalPageState extends State<JurnalPage> {
       firstDate: DateTime(2020),
       lastDate: DateTime(2025),
     );
-    if (picked != null && picked != selectedDate)
+    if (picked != null && picked != selectedDate) {
       setState(() {
         selectedDate = picked;
       });
+    }
   }
 
   // Format Tanggal
@@ -37,14 +39,15 @@ class _JurnalPageState extends State<JurnalPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: EdgeInsets.only(top: 50, right: 20, left: 20, bottom: 20),
+        padding:
+            const EdgeInsets.only(top: 50, right: 20, left: 20, bottom: 20),
         child: SingleChildScrollView(
           child: Column(
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(width: 100),
+                  const SizedBox(width: 100),
                   GestureDetector(
                     onTap: () => _selectDate(context),
                     child: Column(
@@ -63,14 +66,12 @@ class _JurnalPageState extends State<JurnalPage> {
                         Text(
                           getFormattedDate(selectedDate),
                           style: const TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500
-                          ),
+                              fontSize: 15, fontWeight: FontWeight.w500),
                         ),
                       ],
                     ),
                   ),
-                  Container(
+                  SizedBox(
                     width: 100,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -80,16 +81,17 @@ class _JurnalPageState extends State<JurnalPage> {
                           width: 50,
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius: BorderRadius.all(Radius.circular(12)),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(12)),
                             boxShadow: [
                               BoxShadow(
-                                color: Color(0xFFD3D1D8).withOpacity(0.3),
-                                offset: Offset(5, 10),
+                                color: const Color(0xFFD3D1D8).withOpacity(0.3),
+                                offset: const Offset(5, 10),
                                 blurRadius: 20,
                               ),
                             ],
                           ),
-                          child: Icon(
+                          child: const Icon(
                             Icons.notifications_none_outlined,
                             color: Colors.black,
                             size: 25,
@@ -100,7 +102,9 @@ class _JurnalPageState extends State<JurnalPage> {
                   ),
                 ],
               ),
-              SizedBox(height: 35,),
+              const SizedBox(
+                height: 35,
+              ),
               JournalCard(
                 title: "Piket Pagi",
                 status: "Ditolak",
@@ -109,7 +113,9 @@ class _JurnalPageState extends State<JurnalPage> {
                 typeOfWork: "Pekerjaan Lain",
                 typeOfActivity: "Inisiatif",
               ),
-              SizedBox(height: 15,),
+              const SizedBox(
+                height: 15,
+              ),
               JournalCard(
                 title: "Daily Scrum",
                 status: "Diterima",
@@ -142,20 +148,23 @@ class _JurnalPageState extends State<JurnalPage> {
       ),
       floatingActionButton: Container(
         decoration: BoxDecoration(
-          color: Colors.white, 
+          color: Colors.white,
           borderRadius: BorderRadius.circular(1),
           boxShadow: [
             BoxShadow(
-              color: Color(0xFFD3D1D8).withOpacity(0.3),
+              color: const Color(0xFFD3D1D8).withOpacity(0.3),
               // offset: Offset(5, 10),
               blurRadius: 10,
             ),
-          ], 
+          ],
         ),
         child: FloatingActionButton(
           onPressed: () {},
-          child: const Icon(Icons.add, color: SimpklColor.darkBlue,),
           backgroundColor: Colors.white,
+          child: const Icon(
+            Icons.add,
+            color: SimpklColor.darkBlue,
+          ),
         ),
       ),
     );
