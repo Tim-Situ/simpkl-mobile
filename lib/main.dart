@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.white, // Set background 
       ),
-      home: logIn(),
+      home: WellcomePage1(),
     ); 
   }
 }
@@ -43,7 +43,7 @@ class _MyHomePageState extends State<MyHomePage> {
     const Center(child: Text('Home Page')),
     const JurnalPage(),
     const PresencePage(),
-    const Center(child: Text('Nilai Page')),
+    const NilaiAkhir(),
     const Center(child: Text('Profile Page')),
   ];
 

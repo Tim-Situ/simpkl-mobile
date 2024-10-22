@@ -12,100 +12,105 @@ class NilaiAkhir extends StatefulWidget {
 class _NilaiAkhirState extends State<NilaiAkhir> {
   @override
   Widget build(BuildContext context) {
+
+    // Mendapatkan ukuran layar
+    final size = MediaQuery.of(context).size;
+
     return Scaffold(
       body: SafeArea(
         bottom: false,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 50),
-
-              // Header dengan Teks dan Icon Lonceng
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  // Kontainer untuk teks "Nilai Akhir" dan deskripsinya
-                  Container(
-                    width: 300,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Text(
-                          'Nilai Akhir',
-                          style: TextStyle(
-                            fontSize: 24.0,
-                            fontWeight: FontWeight.bold,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 50),
+            
+                // Header dengan Teks dan Icon Lonceng
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    // Kontainer untuk teks "Nilai Akhir" dan deskripsinya
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: const [
+                          Text(
+                            'Nilai Akhir',
+                            style: TextStyle(
+                              fontSize: 24.0,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        SizedBox(height: 4.0),
-                        Text(
-                          'Penilaian diberikan oleh Guru Pembimbing',
-                          style: TextStyle(
-                            fontSize: 16.0,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  // Tombol Lonceng Notif
-                  IconButton(
-                    icon: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white, // Background 
-                        borderRadius:
-                            BorderRadius.circular(10), // Border radius 10
-                        boxShadow: [
-                          BoxShadow(
-                            color:
-                                Colors.grey.withOpacity(0.5), // Warna bayangan
-                            blurRadius: 5,
-                            spreadRadius: 2,
+                          SizedBox(height: 4.0),
+                          Text(
+                            'Penilaian diberikan oleh Guru Pembimbing',
+                            style: TextStyle(
+                              fontSize: 16.0,
+                              color: Colors.grey,
+                            ),
                           ),
                         ],
                       ),
-                      padding: const EdgeInsets.all(
-                          8.0), // Padding penempatkan icon di tengah
-                      child: const Icon(
-                        Icons.notifications_none,
-                        size: 32.0,
-                        color: Colors.black, //  icon
-                      ),
                     ),
-                    onPressed: () {
-                      // Aksi ketika tombol lonceng ditekan
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Notifikasi ditekan'),
+            
+                    // Tombol Lonceng Notif
+                    IconButton(
+                      icon: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white, // Background 
+                          borderRadius:
+                              BorderRadius.circular(10), // Border radius 10
+                          boxShadow: [
+                            BoxShadow(
+                              color:
+                                  Colors.grey.withOpacity(0.5), // Warna bayangan
+                              blurRadius: 5,
+                              spreadRadius: 2,
+                            ),
+                          ],
                         ),
-                      );
-                    },
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 50),
-
-              // ListView Builder untuk Daftar Nilai
-              ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: dataDummyDaftarNilai.length,
-                itemBuilder: (context, index) {
-                  final nilai = daftarNilai(
-                    aspek: dataDummyDaftarNilai[index]['aspek'],
-                    subAspek: dataDummyDaftarNilai[index]['subAspek'],
-                    nilai: dataDummyDaftarNilai[index]['nilai'],
-                    deskripsi: dataDummyDaftarNilai[index]['deskripsi'],
-                  );
-
-                  return NilaiCard(nilai: nilai);
-                },
-              ),
-            ],
+                        padding: const EdgeInsets.all(
+                            8.0), // Padding penempatkan icon di tengah
+                        child: const Icon(
+                          Icons.notifications_none,
+                          size: 32.0,
+                          color: Colors.black, //  icon
+                        ),
+                      ),
+                      onPressed: () {
+                        // Aksi ketika tombol lonceng ditekan
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Notifikasi ditekan'),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+            
+                const SizedBox(height: 50),
+            
+                // ListView Builder untuk Daftar Nilai
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: dataDummyDaftarNilai.length,
+                  itemBuilder: (context, index) {
+                    final nilai = daftarNilai(
+                      aspek: dataDummyDaftarNilai[index]['aspek'],
+                      subAspek: dataDummyDaftarNilai[index]['subAspek'],
+                      nilai: dataDummyDaftarNilai[index]['nilai'],
+                      deskripsi: dataDummyDaftarNilai[index]['deskripsi'],
+                    );
+            
+                    return NilaiCard(nilai: nilai);
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),

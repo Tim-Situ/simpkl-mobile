@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:simpkl_mobile/components/JournalCard.dart';
 
 import 'package:simpkl_mobile/contstants/colors.dart';
+import 'package:simpkl_mobile/pages/create_journal_page.dart';
 import 'package:simpkl_mobile/pages/detail_jurnal_page.dart';
 
 class JurnalPage extends StatefulWidget {
@@ -159,7 +160,12 @@ class _JurnalPageState extends State<JurnalPage> {
           ],
         ),
         child: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+              context, 
+              MaterialPageRoute(builder: (context) => CreateJournalPage()),
+            );
+          },
           backgroundColor: Colors.white,
           child: const Icon(
             Icons.add,
