@@ -7,6 +7,11 @@ import 'package:simpkl_mobile/pages/presence_page.dart';
 import 'package:simpkl_mobile/pages/logIn.dart';
 import 'package:simpkl_mobile/pages/nilaiAkhir.dart';
 import 'package:simpkl_mobile/pages/wellcomePage1.dart';
+import 'package:simpkl_mobile/pages/Profile.dart';
+import 'package:simpkl_mobile/pages/dataSiswa.dart';
+import 'package:simpkl_mobile/pages/dataPembimbing.dart';
+import 'package:simpkl_mobile/pages/dataPerusahaan.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -44,7 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
     const JurnalPage(),
     const PresencePage(),
     const Center(child: Text('Nilai Page')),
-    const Center(child: Text('Profile Page')),
+    const ProfilePage(),
   ];
 
   void _onItemTapped(int index) {
