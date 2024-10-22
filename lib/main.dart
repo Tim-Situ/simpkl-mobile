@@ -48,13 +48,8 @@ class _MyHomePageState extends State<MyHomePage> {
     const Center(child: Text('Home Page')),
     const JurnalPage(),
     const PresencePage(),
-<<<<<<< HEAD
-    const Center(child: Text('Nilai Page')),
-    const ProfilePage(),
-=======
     const NilaiAkhir(),
-    const Center(child: Text('Profile Page')),
->>>>>>> 1d9d11c234336a64ecd5f29d65278b584c83d2d1
+    const ProfilePage(),
   ];
 
   void _onItemTapped(int index) {
