@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:simpkl_mobile/animation.dart';
 import 'package:simpkl_mobile/components/BottomNavBar.dart';
+import 'package:simpkl_mobile/pages/home_page.dart';
 import 'package:simpkl_mobile/pages/jurnal_page.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:simpkl_mobile/pages/presence_page.dart';
@@ -45,7 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = <Widget>[
-    const Center(child: Text('Home Page')),
+    HomePage(),
     const JurnalPage(),
     const PresencePage(),
     const NilaiAkhir(),
