@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:simpkl_mobile/animation.dart';
 import 'package:simpkl_mobile/components/BottomNavBar.dart';
+import 'package:simpkl_mobile/pages/home_page.dart';
 import 'package:simpkl_mobile/pages/jurnal_page.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:simpkl_mobile/pages/presence_page.dart';
 import 'package:simpkl_mobile/pages/logIn.dart';
 import 'package:simpkl_mobile/pages/nilaiAkhir.dart';
 import 'package:simpkl_mobile/pages/wellcomePage1.dart';
+import 'package:simpkl_mobile/pages/Profile.dart';
+import 'package:simpkl_mobile/pages/dataSiswa.dart';
+import 'package:simpkl_mobile/pages/dataPembimbing.dart';
+import 'package:simpkl_mobile/pages/dataPerusahaan.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,11 +46,11 @@ class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = <Widget>[
-    const Center(child: Text('Home Page')),
+    HomePage(),
     const JurnalPage(),
     const PresencePage(),
     const NilaiAkhir(),
-    const Center(child: Text('Profile Page')),
+    const ProfilePage(),
   ];
 
   void _onItemTapped(int index) {
