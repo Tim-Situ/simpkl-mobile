@@ -49,27 +49,29 @@ class _JurnalPageState extends State<JurnalPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const SizedBox(width: 100),
-                  GestureDetector(
-                    onTap: () => _selectDate(context),
-                    child: Column(
-                      children: [
-                        const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Choose Date",
-                              style: TextStyle(fontSize: 12),
-                            ),
-                            Icon(Icons.keyboard_arrow_down)
-                          ],
-                        ),
-                        // Menampilkan tanggal dengan format yang diinginkan
-                        Text(
-                          getFormattedDate(selectedDate),
-                          style: const TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.w500),
-                        ),
-                      ],
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () => _selectDate(context),
+                      child: Column(
+                        children: [
+                          const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Choose Date",
+                                style: TextStyle(fontSize: 12),
+                              ),
+                              Icon(Icons.keyboard_arrow_down)
+                            ],
+                          ),
+                          // Menampilkan tanggal dengan format yang diinginkan
+                          Text(
+                            getFormattedDate(selectedDate),
+                            style: const TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.w500),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -147,30 +149,20 @@ class _JurnalPageState extends State<JurnalPage> {
           ),
         ),
       ),
-      floatingActionButton: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(1),
-          boxShadow: [
-            BoxShadow(
-              color: const Color(0xFFD3D1D8).withOpacity(0.3),
-              // offset: Offset(5, 10),
-              blurRadius: 10,
-            ),
-          ],
+      floatingActionButton: FloatingActionButton(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(50),
         ),
-        child: FloatingActionButton(
-          onPressed: () {
-            Navigator.push(
-              context, 
-              MaterialPageRoute(builder: (context) => CreateJournalPage()),
-            );
-          },
-          backgroundColor: Colors.white,
-          child: const Icon(
-            Icons.add,
-            color: SimpklColor.darkBlue,
-          ),
+        onPressed: () {
+          Navigator.push(
+            context, 
+            MaterialPageRoute(builder: (context) => CreateJournalPage()),
+          );
+        },
+        backgroundColor: Colors.white,
+        child: const Icon(
+          Icons.add,
+          color: SimpklColor.darkBlue,
         ),
       ),
     );

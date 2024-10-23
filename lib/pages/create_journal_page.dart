@@ -146,7 +146,7 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Colors.grey), // Border warna grey saat normal
+                      borderSide: const BorderSide(color: SimpklColor.darkBlue), // Border warna grey saat normal
                       borderRadius: BorderRadius.circular(12),
                     ),
                     suffixIcon: Padding(
@@ -182,7 +182,7 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Colors.grey), // Border warna grey saat normal
+                      borderSide: const BorderSide(color: SimpklColor.darkBlue), // Border warna grey saat normal
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
@@ -207,7 +207,7 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Colors.grey), // Border warna grey saat normal
+                      borderSide: const BorderSide(color: SimpklColor.darkBlue), // Border warna grey saat normal
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
@@ -222,7 +222,7 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Colors.grey), // Border warna grey saat normal
+                      borderSide: const BorderSide(color: SimpklColor.darkBlue), // Border warna grey saat normal
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
@@ -250,7 +250,7 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Colors.grey), // Border warna grey saat normal
+                      borderSide: const BorderSide(color: SimpklColor.darkBlue), // Border warna grey saat normal
                       borderRadius: BorderRadius.circular(12),
                     ),
                     suffixIcon: Padding(
@@ -291,7 +291,7 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Colors.grey), // Border warna grey saat normal
+                      borderSide: const BorderSide(color: SimpklColor.darkBlue), // Border warna grey saat normal
                       borderRadius: BorderRadius.circular(12),
                     ),
                     suffixIcon: Padding(
@@ -327,7 +327,7 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Colors.grey), // Border warna grey saat normal
+                      borderSide: const BorderSide(color: SimpklColor.darkBlue), // Border warna grey saat normal
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
@@ -339,7 +339,7 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
                 width: double.infinity,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.grey),
+                  border: Border.all(color: SimpklColor.darkBlue),
                 ),
                 child: InkWell(
                   onTap: _pickImage,
@@ -356,7 +356,7 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
                               ),
                               Text(
                                 'choose your photo from your file',
-                                style: TextStyle(fontSize: 14, color: Colors.grey),
+                                style: TextStyle(fontSize: 14, color: SimpklColor.darkBlue),
                               ),
                             ],
                           )
