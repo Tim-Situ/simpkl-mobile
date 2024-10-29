@@ -35,7 +35,11 @@ dependencies:
   image_picker: ^1.1.2
   carousel_slider: ^5.0.0
   flutter_local_notifications: ^17.2.4
+<<<<<<< HEAD
   url_launcher: ^6.3.1
+=======
+  panara_dialogs: ^0.1.5
+>>>>>>> 593b2899b017726fbf648c36cf65388f29ae201e
 
 dev_dependencies:
 
