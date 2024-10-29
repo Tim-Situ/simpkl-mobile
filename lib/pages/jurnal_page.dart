@@ -3,6 +3,8 @@ import 'package:intl/intl.dart';
 import 'package:simpkl_mobile/components/JournalCard.dart';
 
 import 'package:simpkl_mobile/contstants/colors.dart';
+import 'package:simpkl_mobile/pages/create_journal_page.dart';
+import 'package:simpkl_mobile/pages/detail_jurnal_page.dart';
 
 class JurnalPage extends StatefulWidget {
   const JurnalPage({super.key});
@@ -47,27 +49,29 @@ class _JurnalPageState extends State<JurnalPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const SizedBox(width: 100),
-                  GestureDetector(
-                    onTap: () => _selectDate(context),
-                    child: Column(
-                      children: [
-                        const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Choose Date",
-                              style: TextStyle(fontSize: 12),
-                            ),
-                            Icon(Icons.keyboard_arrow_down)
-                          ],
-                        ),
-                        // Menampilkan tanggal dengan format yang diinginkan
-                        Text(
-                          getFormattedDate(selectedDate),
-                          style: const TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.w500),
-                        ),
-                      ],
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () => _selectDate(context),
+                      child: Column(
+                        children: [
+                          const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Choose Date",
+                                style: TextStyle(fontSize: 12),
+                              ),
+                              Icon(Icons.keyboard_arrow_down)
+                            ],
+                          ),
+                          // Menampilkan tanggal dengan format yang diinginkan
+                          Text(
+                            getFormattedDate(selectedDate),
+                            style: const TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.w500),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -123,40 +127,43 @@ class _JurnalPageState extends State<JurnalPage> {
                 typeOfWork: "Sesuai Kompetensi",
                 typeOfActivity: "Bimbingan",
               ),
-              const SizedBox(
+              SizedBox(
                 height: 15,
               ),
-              JournalCard(
-                title: "Membuat Website",
-                status: "Menunggu",
-                timeRange: "09:00 - 16:00",
-                date: getFormattedDate(selectedDate),
-                typeOfWork: "Sesuai Kompetensi",
-                typeOfActivity: "Ditugaskan",
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => DetailJurnalPage()),
+                  );
+                },
+                child: JournalCard(
+                  title: "Membuat Website",
+                  status: "Menunggu",
+                  timeRange: "09:00 - 16:00",
+                  date: getFormattedDate(selectedDate),
+                  typeOfWork: "Sesuai Kompetensi",
+                  typeOfActivity: "Ditugaskan",
+                ),
               ),
             ],
           ),
         ),
       ),
-      floatingActionButton: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(1),
-          boxShadow: [
-            BoxShadow(
-              color: const Color(0xFFD3D1D8).withOpacity(0.3),
-              // offset: Offset(5, 10),
-              blurRadius: 10,
-            ),
-          ],
+      floatingActionButton: FloatingActionButton(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(50),
         ),
-        child: FloatingActionButton(
-          onPressed: () {},
-          backgroundColor: Colors.white,
-          child: const Icon(
-            Icons.add,
-            color: SimpklColor.darkBlue,
-          ),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => CreateJournalPage()),
+          );
+        },
+        backgroundColor: Colors.white,
+        child: const Icon(
+          Icons.add,
+          color: SimpklColor.darkBlue,
         ),
       ),
     );

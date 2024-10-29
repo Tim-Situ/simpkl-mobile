@@ -64,7 +64,7 @@ class PresencePage extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 20),
-              ResponsiveBoxes(),
+              const ResponsiveBoxes(),
               const SizedBox(height: 20),
               Expanded(
                 child: Container(
@@ -80,7 +80,7 @@ class PresencePage extends StatelessWidget {
                       ),
                     ],
                   ),
-                  child: AttendanceList(),
+                  child: const AttendanceList(),
                 ),
               ),
             ],

@@ -52,13 +52,13 @@ class _AttendanceListState extends State<AttendanceList> {
     if (filter == 'Last Week') {
       filteredData = attendanceData.where((item) {
         DateTime date = format.parse(item['tanggal']!); // Parse date
-        return date.isAfter(now.subtract(Duration(days: 7))) &&
+        return date.isAfter(now.subtract(const Duration(days: 7))) &&
             date.isBefore(now);
       }).toList();
     } else if (filter == 'Last Month') {
       filteredData = attendanceData.where((item) {
         DateTime date = format.parse(item['tanggal']!); // Parse date
-        return date.isAfter(now.subtract(Duration(days: 30))) &&
+        return date.isAfter(now.subtract(const Duration(days: 30))) &&
             date.isBefore(now);
       }).toList();
     } else {
@@ -93,7 +93,7 @@ class _AttendanceListState extends State<AttendanceList> {
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               Container(
-                margin: EdgeInsets.symmetric(vertical: 10),
+                margin: const EdgeInsets.symmetric(vertical: 10),
                 padding:
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
                 decoration: BoxDecoration(
@@ -115,7 +115,7 @@ class _AttendanceListState extends State<AttendanceList> {
                     value: filter,
                     icon: const Icon(Icons.keyboard_arrow_down,
                         color: Colors.orange, size: 16),
-                    style: TextStyle(color: Colors.black, fontSize: 12),
+                    style: const TextStyle(color: Colors.black, fontSize: 12),
                     isDense: true,
                     itemHeight: null, // Let items determine their own height
                     onChanged: (String? newValue) {
@@ -129,7 +129,7 @@ class _AttendanceListState extends State<AttendanceList> {
                       return DropdownMenuItem<String>(
                         value: value,
                         child: Padding(
-                          padding: EdgeInsets.symmetric(vertical: 4.0),
+                          padding: const EdgeInsets.symmetric(vertical: 4.0),
                           child: Text(value),
                         ),
                       );

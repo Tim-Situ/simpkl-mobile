@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:simpkl_mobile/components/BottomNavBar.dart';
+import 'package:simpkl_mobile/pages/home_page.dart';
 import 'package:simpkl_mobile/pages/jurnal_page.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:simpkl_mobile/pages/presence_page.dart';
+import 'package:simpkl_mobile/pages/nilaiAkhir.dart';
+import 'package:simpkl_mobile/pages/wellcomePage1.dart';
+import 'package:simpkl_mobile/pages/Profile.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDateFormatting('id_ID', null);
+
   runApp(const MyApp());
 }
 
@@ -16,10 +22,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        scaffoldBackgroundColor: Colors.white, // Set background global
+        scaffoldBackgroundColor: Colors.white, // Set background
       ),
-      home: const MyHomePage(),
+      home: WellcomePage1(),
     );
   }
 }
@@ -35,11 +42,11 @@ class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = <Widget>[
-    const Center(child: Text('Home Page')),
+    HomePage(),
     const JurnalPage(),
     const PresencePage(),
-    const Center(child: Text('Nilai Page')),
-    const Center(child: Text('Profile Page')),
+    const NilaiAkhir(),
+    const ProfilePage(),
   ];
 
   void _onItemTapped(int index) {
