@@ -91,11 +91,13 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _launchURL(String url) async {
-    final Uri uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
-    } else {
-      throw 'Could not launch $url';
+    try {
+      final Uri uri = Uri.parse(url);
+      if (!await launchUrl(uri)) {
+        throw Exception('Could not launch $uri');
+      }
+    } catch (e) {
+      print("Error membuka tautan: $e");
     }
   }
 
