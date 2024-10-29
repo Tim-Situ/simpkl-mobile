@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({super.key});
@@ -15,6 +16,12 @@ class _HomePageState extends State<HomePage> {
     'https://fileserver.telkomuniversity.ac.id/mytelu/banners/photo_2022-01-27_10-13-02_1643253212901.jpeg',
     'https://fileserver.telkomuniversity.ac.id/mytelu/banners/banner1_1632211918017_1643253030279.jpeg',
     'https://fileserver.telkomuniversity.ac.id/mytelu/banners/banner2_1643253100022.jpeg',
+  ];
+
+  final List<String> linkImg = [
+    'https://smb.telkomuniversity.ac.id/cerita-telutizen/pentingnya-pemanfaatan-waktu-luang-mahasiswa-kuliah-produktif-tapi-tetap-asik/',
+    'https://smb.telkomuniversity.ac.id/cerita-telutizen/mengapa-memilih-jurusan-perhotelan-5-alasan-dan-peluang-kerja-yang-menjanjikan/',
+    'https://smb.telkomuniversity.ac.id/cerita-telutizen/cara-agar-tidak-salah-jurusan-calon-mahasiswa-baru-harus-baca/',
   ];
 
   DateTime selectedDate = DateTime.now();
@@ -34,7 +41,8 @@ class _HomePageState extends State<HomePage> {
     const DarwinInitializationSettings iosInitializationSettings =
         DarwinInitializationSettings();
 
-    const InitializationSettings initializationSettings = InitializationSettings(
+    const InitializationSettings initializationSettings =
+        InitializationSettings(
       android: androidInitializationSettings,
       iOS: iosInitializationSettings,
     );
@@ -63,22 +71,31 @@ class _HomePageState extends State<HomePage> {
       iOS: DarwinNotificationDetails(),
     );
 
-    await flutterLocalNotificationsPlugin.show(
+    await flutterLocalNotificationsPlugin
+        .show(
       0,
       'PRAKERAN',
       'Selamat, Jurnal Kamu Diterima Oleh Pembimbing',
       platformChannelSpecifics,
       payload: 'data tambahan',
-    ).then((_) {
+    )
+        .then((_) {
       print("Notifikasi berhasil dikirim");
     }).catchError((error) {
       print("Error saat mengirim notifikasi: $error");
     });
   }
 
-
   String getFormattedDate(DateTime date) {
     return DateFormat('dd MMMM yyyy', 'id_ID').format(date);
+  }
+
+  _launchURL(String url) async {
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 
   @override
@@ -108,13 +125,15 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   GestureDetector(
-                    onTap: _showNotification, // Menampilkan notifikasi saat ikon ditekan
+                    onTap:
+                        _showNotification, // Menampilkan notifikasi saat ikon ditekan
                     child: Container(
                       height: 50,
                       width: 50,
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: const BorderRadius.all(Radius.circular(12)),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(12)),
                         boxShadow: [
                           BoxShadow(
                             color: const Color(0xFFD3D1D8).withOpacity(0.3),
@@ -143,16 +162,24 @@ class _HomePageState extends State<HomePage> {
                 autoPlayAnimationDuration: Duration(milliseconds: 800),
                 enableInfiniteScroll: true,
               ),
-              items: imgList.map((item) => Container(
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(15.0), 
-                  child: Image.network(
-                    item,
-                    fit: BoxFit.cover, // Memastikan gambar menutupi seluruh container
-                    width: 1000.0,
-                  ),
-                ),
-              )).toList(),
+              items: imgList
+                  .map((item) => InkWell(
+                        onTap: () {
+                          _launchURL(linkImg[0]);
+                        },
+                        child: Container(
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(15.0),
+                            child: Image.network(
+                              item,
+                              fit: BoxFit
+                                  .cover, // Memastikan gambar menutupi seluruh container
+                              width: 1000.0,
+                            ),
+                          ),
+                        ),
+                      ))
+                  .toList(),
             ),
             Padding(
               padding: const EdgeInsets.all(20.0),
