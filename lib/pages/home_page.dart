@@ -90,9 +90,10 @@ class _HomePageState extends State<HomePage> {
     return DateFormat('dd MMMM yyyy', 'id_ID').format(date);
   }
 
-  _launchURL(String url) async {
-    if (await canLaunchUrl(Uri.parse(url))) {
-      await launchUrl(Uri.parse(url));
+  Future<void> _launchURL(String url) async {
+    final Uri uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
     } else {
       throw 'Could not launch $url';
     }
@@ -162,24 +163,26 @@ class _HomePageState extends State<HomePage> {
                 autoPlayAnimationDuration: Duration(milliseconds: 800),
                 enableInfiniteScroll: true,
               ),
-              items: imgList
-                  .map((item) => InkWell(
-                        onTap: () {
-                          _launchURL(linkImg[0]);
-                        },
-                        child: Container(
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(15.0),
-                            child: Image.network(
-                              item,
-                              fit: BoxFit
-                                  .cover, // Memastikan gambar menutupi seluruh container
-                              width: 1000.0,
-                            ),
-                          ),
-                        ),
-                      ))
-                  .toList(),
+              items: imgList.asMap().entries.map((entry) {
+                int index = entry.key;
+                String item = entry.value;
+                return InkWell(
+                  onTap: () {
+                    _launchURL(linkImg[index]);
+                  },
+                  child: Container(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(15.0),
+                      child: Image.network(
+                        item,
+                        fit: BoxFit
+                            .cover, // Memastikan gambar menutupi seluruh container
+                        width: 1000.0,
+                      ),
+                    ),
+                  ),
+                );
+              }).toList(),
             ),
             Padding(
               padding: const EdgeInsets.all(20.0),
