@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:simpkl_mobile/contstants/colors.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:panara_dialogs/panara_dialogs.dart';
 
 class CreateJournalPage extends StatefulWidget {
   const CreateJournalPage({super.key});
@@ -75,6 +76,13 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
         setState(() {
           _image = File(pickedFile.path);
         });
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Dokumentasi berhasil diupload!'),
+            duration: Duration(seconds: 2), // Durasi tampilan Snackbar
+          ),
+        );
       } else {
         print("No image selected.");
       }
@@ -345,7 +353,7 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
                   onTap: _pickImage,
                   child: Center(
                     child: _image == null
-                        ? Column(
+                        ? const Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(Icons.cloud_upload_outlined, size: 50, color: SimpklColor.darkBlue),
@@ -366,7 +374,27 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
               ),
               SizedBox(height: 10,),
               InkWell(
-                onTap: (){},
+                onTap: (){
+                  PanaraConfirmDialog.show(
+                      context,
+                      title: "Apakah Kamu Yakin?",
+                      message: "Jurnal tidak bisa diedit atau dihapus setelah disimpan!",
+                      confirmButtonText: "Yakin",
+                      cancelButtonText: "Batal",
+                      onTapCancel: () {
+                          Navigator.pop(context);
+                      },
+                      onTapConfirm: () {
+                          Navigator.pop(context);
+
+                          Future.delayed(const Duration(milliseconds: 100), () {
+                            Navigator.pop(context); // Kembali ke halaman sebelumnya
+                          });
+                      },
+                      panaraDialogType: PanaraDialogType.normal,
+                      barrierDismissible: false, // optional parameter (default is true)
+                  );
+                },
                 borderRadius: BorderRadius.all(Radius.circular(50)),
                 child: Ink(
                   width: MediaQuery.of(context).size.width,
@@ -374,8 +402,8 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
                     borderRadius: BorderRadius.all(Radius.circular(50)),
                     color: SimpklColor.darkBlue,
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(18.0),
+                  child: const Padding(
+                    padding: EdgeInsets.all(18.0),
                     child: Center(
                       child: Text(
                         "Submit Jurnal",
