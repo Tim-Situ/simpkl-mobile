@@ -1,22 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:simpkl_mobile/animation.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:simpkl_mobile/components/BottomNavBar.dart';
 import 'package:simpkl_mobile/pages/home_page.dart';
 import 'package:simpkl_mobile/pages/jurnal_page.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:simpkl_mobile/pages/presence_page.dart';
-import 'package:simpkl_mobile/pages/logIn.dart';
 import 'package:simpkl_mobile/pages/nilaiAkhir.dart';
 import 'package:simpkl_mobile/pages/wellcomePage1.dart';
 import 'package:simpkl_mobile/pages/Profile.dart';
-import 'package:simpkl_mobile/pages/dataSiswa.dart';
-import 'package:simpkl_mobile/pages/dataPembimbing.dart';
-import 'package:simpkl_mobile/pages/dataPerusahaan.dart';
 
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDateFormatting('id_ID', null);
+  
   runApp(const MyApp());
 }
 

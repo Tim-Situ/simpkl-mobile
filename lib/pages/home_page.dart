@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:simpkl_mobile/contstants/colors.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   final List<String> imgList = [
     'https://fileserver.telkomuniversity.ac.id/mytelu/banners/photo_2022-01-27_10-13-02_1643253212901.jpeg',
     'https://fileserver.telkomuniversity.ac.id/mytelu/banners/banner1_1632211918017_1643253030279.jpeg',
@@ -11,6 +18,64 @@ class HomePage extends StatelessWidget {
   ];
 
   DateTime selectedDate = DateTime.now();
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeNotification();
+  }
+
+  // Fungsi untuk inisialisasi notifikasi
+  void _initializeNotification() async {
+    const AndroidInitializationSettings androidInitializationSettings =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
+    const DarwinInitializationSettings iosInitializationSettings =
+        DarwinInitializationSettings();
+
+    const InitializationSettings initializationSettings = InitializationSettings(
+      android: androidInitializationSettings,
+      iOS: iosInitializationSettings,
+    );
+
+    await flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+      onDidReceiveNotificationResponse: (NotificationResponse response) {
+        print('Notifikasi diklik: ${response.payload}');
+      },
+    );
+  }
+
+  // Fungsi untuk menampilkan notifikasi
+  Future<void> _showNotification() async {
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails(
+      'general_notifications',
+      'General Notifications',
+      channelDescription: 'Channel untuk notifikasi umum aplikasi',
+      importance: Importance.max,
+      priority: Priority.high,
+    );
+
+    const NotificationDetails platformChannelSpecifics = NotificationDetails(
+      android: androidPlatformChannelSpecifics,
+      iOS: DarwinNotificationDetails(),
+    );
+
+    await flutterLocalNotificationsPlugin.show(
+      0,
+      'PRAKERAN',
+      'Selamat, Jurnal Kamu Diterima Oleh Pembimbing',
+      platformChannelSpecifics,
+      payload: 'data tambahan',
+    ).then((_) {
+      print("Notifikasi berhasil dikirim");
+    }).catchError((error) {
+      print("Error saat mengirim notifikasi: $error");
+    });
+  }
+
 
   String getFormattedDate(DateTime date) {
     return DateFormat('dd MMMM yyyy', 'id_ID').format(date);
@@ -19,7 +84,6 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
       body: SafeArea(
         child: Column(
           children: [
@@ -43,25 +107,27 @@ class HomePage extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Container(
-                    height: 50,
-                    width: 50,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(12)),
-                      boxShadow: [
-                        BoxShadow(
-                          color: const Color(0xFFD3D1D8).withOpacity(0.3),
-                          offset: const Offset(5, 10),
-                          blurRadius: 20,
-                        ),
-                      ],
-                    ),
-                    child: const Icon(
-                      Icons.notifications_none_outlined,
-                      color: Colors.black,
-                      size: 25,
+                  GestureDetector(
+                    onTap: _showNotification, // Menampilkan notifikasi saat ikon ditekan
+                    child: Container(
+                      height: 50,
+                      width: 50,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: const BorderRadius.all(Radius.circular(12)),
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color(0xFFD3D1D8).withOpacity(0.3),
+                            offset: const Offset(5, 10),
+                            blurRadius: 20,
+                          ),
+                        ],
+                      ),
+                      child: const Icon(
+                        Icons.notifications_none_outlined,
+                        color: Colors.black,
+                        size: 25,
+                      ),
                     ),
                   ),
                 ],
@@ -96,7 +162,7 @@ class HomePage extends StatelessWidget {
                   borderRadius: BorderRadius.all(Radius.circular(8)),
                   border: Border.all(
                     width: 1,
-                    color: SimpklColor.darkRed
+                    color: Colors.red,
                   ),
                   boxShadow: [
                     BoxShadow(
@@ -105,20 +171,20 @@ class HomePage extends StatelessWidget {
                       blurRadius: 20,
                     ),
                   ],
-                  color: SimpklColor.darkRed.withOpacity(0.4),
+                  color: Colors.red.withOpacity(0.4),
                 ),
-                child: Center(
+                child: const Center(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(
+                    padding: EdgeInsets.symmetric(
                       vertical: 20,
-                      horizontal: 53
+                      horizontal: 53,
                     ),
                     child: Text(
                       "Kamu belum mengumpulkan Jurnal\nuntuk kehadiran Hari ini",
                       style: TextStyle(
                         fontSize: 12,
-                        color: SimpklColor.darkRed,
-                        fontWeight: FontWeight.w500
+                        color: Colors.red,
+                        fontWeight: FontWeight.w700,
                       ),
                       textAlign: TextAlign.center,
                     ),
