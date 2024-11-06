@@ -54,7 +54,7 @@ class DataPerusahaanPage extends StatelessWidget {
                 height: 224,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage('assets/ikea.jpg'),
+                    image: AssetImage('assets/img/perusahaan.jpeg'),
                     fit: BoxFit.cover,
                   ),
                   borderRadius: BorderRadius.circular(12),

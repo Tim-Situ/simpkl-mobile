@@ -52,7 +52,7 @@ class DataPembimbingPage extends StatelessWidget {
               padding: EdgeInsets.all(16.0),
               child: CircleAvatar(
                 radius: 60,
-                backgroundImage: AssetImage('assets/profile.jpg'),
+                backgroundImage: AssetImage('assets/img/pembimbing.JPG'),
               ),
             ),
 
