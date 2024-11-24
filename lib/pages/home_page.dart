@@ -24,6 +24,22 @@ class _HomePageState extends State<HomePage> {
     'https://smb.telkomuniversity.ac.id/cerita-telutizen/cara-agar-tidak-salah-jurusan-calon-mahasiswa-baru-harus-baca/',
   ];
 
+  final List<Map<String, String>> pemberitahuan = [
+    {
+      'text':
+          'Peserta magang harap segera melakukan konfirmasi kepada guru pembimbing terkait perusahaannya.',
+      'date': '24 November 2024',
+    },
+    {
+      'text': 'Peserta magang harap segera mengumpulkan laporan mingguan.',
+      'date': '23 November 2024',
+    },
+    {
+      'text': 'Jadwal sidang akhir magang akan diumumkan minggu depan.',
+      'date': '22 November 2024',
+    },
+  ];
+
   DateTime selectedDate = DateTime.now();
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
@@ -124,6 +140,22 @@ class _HomePageState extends State<HomePage> {
                           style: TextStyle(
                               fontSize: 24, fontWeight: FontWeight.bold),
                         ),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.blue,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          child: Text(
+                            "Tokyo, Inazuma No. 21",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -155,6 +187,7 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
+            SizedBox(height: 20),
             CarouselSlider(
               options: CarouselOptions(
                 height: 120.0,
@@ -186,44 +219,176 @@ class _HomePageState extends State<HomePage> {
                 );
               }).toList(),
             ),
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(8)),
-                  border: Border.all(
-                    width: 1,
-                    color: Colors.red,
+            SizedBox(height: 20),
+            Container(
+              margin: EdgeInsets.symmetric(
+                  horizontal: 15.0, vertical: 10.0), // Margin luar card
+              decoration: BoxDecoration(
+                color: Colors.white, // Background putih
+                borderRadius: BorderRadius.circular(8.0), // Sudut melengkung
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.3), // Bayangan card
+                    blurRadius: 10,
+                    offset: Offset(0, 4),
                   ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: const Color(0xFFD8D1D1).withOpacity(0.3),
-                      offset: const Offset(5, 10),
-                      blurRadius: 20,
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                              width: 5.0,
+                              height: 20.0,
+                              color: Colors.blue,
+                              margin: EdgeInsets.only(right: 8.0),
+                            ),
+                            Text(
+                              "Pemberitahuan",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Icon(
+                          Icons.notifications,
+                          color: Colors.grey,
+                        ),
+                      ],
                     ),
-                  ],
-                  color: Colors.red.withOpacity(0.4),
-                ),
-                child: const Center(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(
-                      vertical: 20,
-                      horizontal: 53,
-                    ),
-                    child: Text(
-                      "Kamu belum mengumpulkan Jurnal\nuntuk kehadiran Hari ini",
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.red,
-                        fontWeight: FontWeight.w700,
+                  ),
+                  Divider(
+                    color: Colors.grey.shade300,
+                    thickness: 1.0,
+                    height: 1.0,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: CarouselSlider(
+                      options: CarouselOptions(
+                        height: 80.0,
+                        autoPlay: true,
+                        enlargeCenterPage: true,
+                        autoPlayInterval: Duration(seconds: 3),
                       ),
-                      textAlign: TextAlign.center,
+                      items: pemberitahuan.map((item) {
+                        return Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          padding: EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                item['text'] ??
+                                    '', // Menampilkan teks pemberitahuan
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.black87,
+                                ),
+                              ),
+                              SizedBox(
+                                  height: 4.0), // Spasi antara teks dan tanggal
+                              Text(
+                                item['date'] ?? '', // Menampilkan tanggal
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey,
+                                  fontStyle: FontStyle.italic,
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }).toList(),
                     ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 20),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Fitur Aplikasi",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
                   ),
                 ),
               ),
-            )
+            ),
+            GridView.count(
+              crossAxisCount: 4, // 4 kolom
+              shrinkWrap: true, // Tidak scroll
+              physics: NeverScrollableScrollPhysics(), // Tidak bisa di-scroll
+              padding: EdgeInsets.all(16),
+              children: [
+                {"icon": Icons.book, "label": "Panduan PKL"},
+                {"icon": Icons.report, "label": "Keluhan"},
+                {"icon": Icons.calendar_today, "label": "Kalender Akademik"},
+                {"icon": Icons.poll, "label": "Survey"},
+              ].map((feature) {
+                return GestureDetector(
+                  onTap: () {
+                    print("Menu ${feature['label']} ditekan");
+                  },
+                  child: Container(
+                    // margin: EdgeInsets.all(8),
+                    // padding: EdgeInsets.all(12),
+                    child: Column(
+                      children: [
+                        Container(
+                          margin: EdgeInsets.all(8),
+                          padding: EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(
+                              color: Colors.grey.shade300,
+                              width: 1.0,
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.3),
+                                blurRadius: 6,
+                                offset: Offset(2, 4),
+                              ),
+                            ],
+                          ),
+                          child: Icon(
+                            feature['icon'] as IconData,
+                            size: 40,
+                            color: Colors.blue,
+                          ),
+                        ),
+                        Text(
+                          feature['label'] as String,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 12, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
           ],
         ),
       ),

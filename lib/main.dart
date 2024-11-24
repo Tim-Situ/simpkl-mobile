@@ -8,6 +8,7 @@ import 'package:simpkl_mobile/pages/presence_page.dart';
 import 'package:simpkl_mobile/pages/nilaiAkhir.dart';
 import 'package:simpkl_mobile/pages/wellcomePage1.dart';
 import 'package:simpkl_mobile/pages/Profile.dart';
+import 'package:simpkl_mobile/pages/notifikasi.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
