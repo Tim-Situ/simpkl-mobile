@@ -5,47 +5,43 @@ class NotificationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Row(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: Padding(
-                      padding:
-                          const EdgeInsets.only(left: 20, top: 10, bottom: 10),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.all(Radius.circular(50)),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Color(0xFFD3D1D8).withOpacity(0.3),
-                              offset: Offset(5, 10),
-                              blurRadius: 20,
-                            ),
-                          ],
-                        ),
-                        child: const Icon(
-                          Icons.arrow_back_ios_new_rounded,
-                          color: SimpklColor.darkYellow,
-                          size: 16,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const Text(
-                    "Notifikasi",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+      appBar: AppBar(
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Padding(
+            padding: const EdgeInsets.only(left: 20, top: 10, bottom: 10),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.all(Radius.circular(50)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Color(0xFFD3D1D8).withOpacity(0.3),
+                    offset: Offset(5, 10),
+                    blurRadius: 20,
                   ),
                 ],
               ),
+              child: const Icon(
+                Icons.arrow_back_ios_new_rounded,
+                color: Colors.black,
+                size: 16,
+              ),
             ),
+          ),
+        ),
+        title: const Text(
+          "Notifikasi",
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+        ),
+        backgroundColor: Colors.transparent, // Menghapus warna latar belakang
+        elevation: 0,
+      ),
+      body: SafeArea(
+        child: Column(
+          children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Container(
@@ -66,7 +62,7 @@ class NotificationScreen extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: Colors.blue,
+                        color: SimpklColor.darkBlue,
                         shape: BoxShape.circle,
                       ),
                       child: const Icon(

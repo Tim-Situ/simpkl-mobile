@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:simpkl_mobile/components/BottomNavBar.dart';
 import 'package:simpkl_mobile/pages/home_page.dart';
 import 'package:simpkl_mobile/pages/jurnal_page.dart';
@@ -7,7 +8,6 @@ import 'package:simpkl_mobile/pages/presence_page.dart';
 import 'package:simpkl_mobile/pages/nilaiAkhir.dart';
 import 'package:simpkl_mobile/pages/wellcomePage1.dart';
 import 'package:simpkl_mobile/pages/Profile.dart';
-import 'package:simpkl_mobile/pages/notifikasi.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
