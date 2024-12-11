@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:intl/intl.dart';
-import 'package:simpkl_mobile/contstants/colors.dart';
+import 'package:simpkl_mobile/core/contstants/colors.dart';
 import 'package:simpkl_mobile/pages/notifikasi.dart';
 import 'package:simpkl_mobile/pages/webView_page.dart';
 import 'package:url_launcher/url_launcher.dart';

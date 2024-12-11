@@ -1,11 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:simpkl_mobile/pages/logIn.dart';
+import 'package:simpkl_mobile/services/auth_service.dart';
 import 'dataSiswa.dart';
 import 'dataPembimbing.dart';
 import 'dataPerusahaan.dart';
 
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
+  // const ProfilePage({super.key});
+  final AuthService _authService = AuthService();
+
+  void _logout(BuildContext context) async {
+    await _authService.logout();
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => logIn()),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -116,12 +126,7 @@ class ProfilePage extends StatelessWidget {
                   iconColor: const Color.fromARGB(255, 255, 17, 0),
                   circleColor: const Color.fromARGB(74, 255, 82, 82),
                   arrowColor: const Color.fromARGB(255, 255, 17, 0),
-                  onTap: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => const logIn()),
-                    );
-                  },
+                  onTap: () => _logout(context),
                 ),
               ],
             ),
