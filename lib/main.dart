@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:simpkl_mobile/components/BottomNavBar.dart';
+import 'package:simpkl_mobile/database/database_helper.dart';
+import 'package:simpkl_mobile/models/profile_model.dart';
 import 'package:simpkl_mobile/pages/home_page.dart';
 import 'package:simpkl_mobile/pages/jurnal_page.dart';
 import 'package:intl/date_symbol_data_local.dart';

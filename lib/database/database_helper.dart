@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:path/path.dart';
+import 'package:simpkl_mobile/models/profile_model.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DatabaseHelper {
@@ -30,6 +31,15 @@ class DatabaseHelper {
             access_token TEXT
           )
         ''');
+
+        await db.execute('''
+          CREATE TABLE profile (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nisn TEXT,
+            nama TEXT,
+            jurusan TEXT
+          )
+        ''');
       },
     );
   }
@@ -38,6 +48,28 @@ class DatabaseHelper {
     final db = await database;
     return db.insert('token', {'access_token': token});
   }
+
+  Future<int> insertProfile(ProfileModel profile) async {
+    final db = await database;
+    return db.insert('profile', 
+      {
+        'nisn': profile.nisn,
+        'nama': profile.nama,
+        'jurusan': profile.jurusan
+      });
+  }
+
+  Future<ProfileModel> getProfile() async {
+    final db = await database;
+    final result = await db.query('profile', limit: 1, orderBy: 'id DESC');
+    
+    // Periksa jika result tidak kosong dan konversi data ke ProfileModel
+
+      return ProfileModel.fromMap(result.first); // Ambil data pertama jika ada
+    
+  // Atau kembalikan ProfileModel kosong sesuai kebutuhan
+  }
+
 
   Future<String?> getToken() async {
     final db = await database;

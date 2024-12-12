@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:intl/intl.dart';
 import 'package:simpkl_mobile/core/contstants/colors.dart';
+import 'package:simpkl_mobile/database/database_helper.dart';
+import 'package:simpkl_mobile/models/profile_model.dart';
 import 'package:simpkl_mobile/pages/notifikasi.dart';
 import 'package:simpkl_mobile/pages/webView_page.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -17,6 +19,13 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   String _currentLocation = "Loading location...";
+
+  ProfileModel? dataDariDb;
+
+  void getProfile() async {
+    dataDariDb = await DatabaseHelper().getProfile();
+    setState(() {});
+  }
 
   final List<String> imgList = [
     'https://fileserver.telkomuniversity.ac.id/mytelu/banners/photo_2022-01-27_10-13-02_1643253212901.jpeg',
@@ -69,6 +78,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _fetchLocation();
+    getProfile();
   }
 
   String getFormattedDate(DateTime date) {
@@ -153,8 +163,8 @@ class _HomePageState extends State<HomePage> {
                             getFormattedDate(selectedDate),
                             style: TextStyle(fontSize: 15),
                           ),
-                          const Text(
-                            "Haloo, Belvanaufal",
+                          Text(
+                            dataDariDb?.nama ?? "Not Found",
                             style: TextStyle(
                               fontSize: 24, 
                               fontWeight: FontWeight.bold

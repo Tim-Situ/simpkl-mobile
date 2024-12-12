@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:simpkl_mobile/database/database_helper.dart';
+import 'package:simpkl_mobile/models/profile_model.dart';
 import 'package:simpkl_mobile/pages/logIn.dart';
 import 'package:simpkl_mobile/services/auth_service.dart';
 import 'dataSiswa.dart';
 import 'dataPembimbing.dart';
 import 'dataPerusahaan.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
+  @override
+  _ProfilePageState createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
   // const ProfilePage({super.key});
   final AuthService _authService = AuthService();
+
+  ProfileModel? dataDariDb;
 
   void _logout(BuildContext context) async {
     await _authService.logout();
@@ -15,6 +24,18 @@ class ProfilePage extends StatelessWidget {
       context,
       MaterialPageRoute(builder: (context) => logIn()),
     );
+  }
+
+  void getProfile() async {
+    dataDariDb = await DatabaseHelper().getProfile();
+    print(dataDariDb?.nama);
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getProfile(); // Panggil getProfile() saat halaman dimuat
   }
 
   @override
@@ -49,7 +70,7 @@ class ProfilePage extends StatelessWidget {
           const SizedBox(height: 18),
 
           // Profile Picture and Name
-          const Column(
+          Column(
             children: [
               CircleAvatar(
                 radius: 50,
@@ -57,7 +78,7 @@ class ProfilePage extends StatelessWidget {
               ),
               SizedBox(height: 15),
               Text(
-                'MGhaziveda Belvanaufal',
+                dataDariDb?.nama ?? "Not Found",
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w500,

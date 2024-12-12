@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:simpkl_mobile/core/contstants/api_constants.dart';
 import 'package:simpkl_mobile/database/database_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:simpkl_mobile/models/profile_model.dart';
 
 class AuthService with ChangeNotifier {
   final String _baseUrl = ApiConstants.baseUrl;
@@ -24,10 +25,28 @@ class AuthService with ChangeNotifier {
       final data = json.decode(response.body);
       if (data['success']) {
         final token = data['data']['accessToken'];
-        print(token);
 
         // Save token to SQLite
         await DatabaseHelper().insertToken(token);
+
+
+        //Simpan Profile ke DBLocal
+        final response = await http.get(
+          Uri.parse(_baseUrl + "/auth/profile"),
+          headers: {
+            'Authorization': 'Bearer $token',
+          }
+        );
+
+        if (response.statusCode == 200) {
+          final Map<String, dynamic> responseData = jsonDecode(response.body);
+
+          if (responseData['data'] != null) {
+            final dynamic jsonDataPenggua = responseData['data']['dataPengguna'];
+            ProfileModel _dataProfile = ProfileModel.fromJson(jsonDataPenggua);
+            await DatabaseHelper().insertProfile(_dataProfile);
+          }
+        }
 
         // Save login status to SharedPreferences
         final prefs = await SharedPreferences.getInstance();
