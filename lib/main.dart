@@ -52,7 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
     HomePage(),
     const JurnalPage(),
     const PresencePage(),
-    // const NilaiAkhir(),
+    const NilaiAkhir(),
     ProfilePage(),
   ];
 
