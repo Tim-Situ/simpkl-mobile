@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
-import 'package:simpkl_mobile/contstants/colors.dart';
+import 'package:simpkl_mobile/core/contstants/colors.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:panara_dialogs/panara_dialogs.dart';
 
@@ -17,8 +17,16 @@ class CreateJournalPage extends StatefulWidget {
 class _CreateJournalPageState extends State<CreateJournalPage> {
   File? _image;
 
-  List<String> dataJenisPekerjaan = <String>['Sesuai Kompetensi Keahlian', 'Pekerjaan Lain'];
-  List<String> dataBentukKegiatan = <String>['Mandiri', 'Bimbingan', 'Ditugaskan', 'Inisiatif'];
+  List<String> dataJenisPekerjaan = <String>[
+    'Sesuai Kompetensi Keahlian',
+    'Pekerjaan Lain'
+  ];
+  List<String> dataBentukKegiatan = <String>[
+    'Mandiri',
+    'Bimbingan',
+    'Ditugaskan',
+    'Inisiatif'
+  ];
 
   TextEditingController _dateController = TextEditingController();
   TextEditingController _startTimeController = TextEditingController();
@@ -36,7 +44,8 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
 
     if (pickedDate != null) {
       setState(() {
-        _dateController.text = "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}"; // Format tanggal yang diinginkan
+        _dateController.text =
+            "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}"; // Format tanggal yang diinginkan
       });
     }
   }
@@ -71,7 +80,8 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
 
   Future<void> _pickImage() async {
     try {
-      final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+      final XFile? pickedFile =
+          await _picker.pickImage(source: ImageSource.gallery);
       if (pickedFile != null) {
         setState(() {
           _image = File(pickedFile.path);
@@ -97,7 +107,7 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
       appBar: AppBar(
         leading: GestureDetector(
           onTap: () {
-            Navigator.pop(context); 
+            Navigator.pop(context);
           },
           child: Padding(
             padding: const EdgeInsets.only(left: 20, top: 10, bottom: 10),
@@ -123,10 +133,7 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
         ),
         title: const Text(
           "Tambah Jurnal",
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w500
-          ),  
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
         ),
         backgroundColor: Colors.transparent, // Menghapus warna latar belakang
         elevation: 0,
@@ -137,16 +144,20 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
           child: Column(
             children: [
               const Text(
-                "Masukkan Data Jurnal yang yang sesuai dengan tugas Anda."
+                  "Masukkan Data Jurnal yang yang sesuai dengan tugas Anda."),
+              SizedBox(
+                height: 10,
               ),
-              SizedBox(height: 10,),
               Container(
                 margin: EdgeInsets.symmetric(vertical: 10),
                 child: TextFormField(
-                  controller: _dateController, // Mengontrol teks dalam TextFormField
-                  readOnly: true, // Membuat field hanya bisa dibuka, tidak bisa diketik manual
+                  controller:
+                      _dateController, // Mengontrol teks dalam TextFormField
+                  readOnly:
+                      true, // Membuat field hanya bisa dibuka, tidak bisa diketik manual
                   onTap: () async {
-                    _selectDate(context); // Memunculkan date picker saat field di-tap
+                    _selectDate(
+                        context); // Memunculkan date picker saat field di-tap
                   },
                   decoration: InputDecoration(
                     labelText: 'Tanggal',
@@ -154,11 +165,14 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: SimpklColor.darkBlue), // Border warna grey saat normal
+                      borderSide: const BorderSide(
+                          color: SimpklColor
+                              .darkBlue), // Border warna grey saat normal
                       borderRadius: BorderRadius.circular(12),
                     ),
                     suffixIcon: Padding(
-                      padding: const EdgeInsets.only(right: 20, top: 10, bottom: 10),
+                      padding:
+                          const EdgeInsets.only(right: 20, top: 10, bottom: 10),
                       child: Container(
                         decoration: BoxDecoration(
                           color: Colors.white,
@@ -185,18 +199,22 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
                 margin: EdgeInsets.symmetric(vertical: 10),
                 child: DropdownButtonFormField<String>(
                   decoration: InputDecoration(
-                    labelText: 'Jenis Pekerjaan', // Label dropdown sama dengan TextFormField
+                    labelText:
+                        'Jenis Pekerjaan', // Label dropdown sama dengan TextFormField
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: SimpklColor.darkBlue), // Border warna grey saat normal
+                      borderSide: const BorderSide(
+                          color: SimpklColor
+                              .darkBlue), // Border warna grey saat normal
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
                   value: null,
                   onChanged: (String? value) {},
-                  items: dataJenisPekerjaan.map<DropdownMenuItem<String>>((String value) {
+                  items: dataJenisPekerjaan
+                      .map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
                       child: Text(value),
@@ -215,7 +233,9 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: SimpklColor.darkBlue), // Border warna grey saat normal
+                      borderSide: const BorderSide(
+                          color: SimpklColor
+                              .darkBlue), // Border warna grey saat normal
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
@@ -225,18 +245,22 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
                 margin: EdgeInsets.symmetric(vertical: 10),
                 child: DropdownButtonFormField<String>(
                   decoration: InputDecoration(
-                    labelText: 'Bentuk Kegiatan', // Label dropdown sama dengan TextFormField
+                    labelText:
+                        'Bentuk Kegiatan', // Label dropdown sama dengan TextFormField
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: SimpklColor.darkBlue), // Border warna grey saat normal
+                      borderSide: const BorderSide(
+                          color: SimpklColor
+                              .darkBlue), // Border warna grey saat normal
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
                   value: null,
                   onChanged: (String? value) {},
-                  items: dataBentukKegiatan.map<DropdownMenuItem<String>>((String value) {
+                  items: dataBentukKegiatan
+                      .map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
                       child: Text(value),
@@ -247,10 +271,13 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
               Container(
                 margin: EdgeInsets.symmetric(vertical: 10),
                 child: TextFormField(
-                  controller: _startTimeController, // Mengontrol teks dalam TextFormField
-                  readOnly: true, // Membuat field hanya bisa dibuka, tidak bisa diketik manual
+                  controller:
+                      _startTimeController, // Mengontrol teks dalam TextFormField
+                  readOnly:
+                      true, // Membuat field hanya bisa dibuka, tidak bisa diketik manual
                   onTap: () async {
-                    _selectStartTime(context); // Memunculkan time picker saat field di-tap
+                    _selectStartTime(
+                        context); // Memunculkan time picker saat field di-tap
                   },
                   decoration: InputDecoration(
                     labelText: 'Jam Mulai',
@@ -258,11 +285,14 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: SimpklColor.darkBlue), // Border warna grey saat normal
+                      borderSide: const BorderSide(
+                          color: SimpklColor
+                              .darkBlue), // Border warna grey saat normal
                       borderRadius: BorderRadius.circular(12),
                     ),
                     suffixIcon: Padding(
-                      padding: const EdgeInsets.only(right: 20, top: 10, bottom: 10),
+                      padding:
+                          const EdgeInsets.only(right: 20, top: 10, bottom: 10),
                       child: Container(
                         decoration: BoxDecoration(
                           color: Colors.white,
@@ -276,7 +306,8 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
                           ],
                         ),
                         child: const Icon(
-                          Icons.access_time_outlined, // Mengganti ikon menjadi ikon jam
+                          Icons
+                              .access_time_outlined, // Mengganti ikon menjadi ikon jam
                           color: SimpklColor.darkBlue,
                           size: 16,
                         ),
@@ -288,10 +319,13 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
               Container(
                 margin: EdgeInsets.symmetric(vertical: 10),
                 child: TextFormField(
-                  controller: _endTimeController, // Mengontrol teks dalam TextFormField
-                  readOnly: true, // Membuat field hanya bisa dibuka, tidak bisa diketik manual
+                  controller:
+                      _endTimeController, // Mengontrol teks dalam TextFormField
+                  readOnly:
+                      true, // Membuat field hanya bisa dibuka, tidak bisa diketik manual
                   onTap: () async {
-                    _selectEndTime(context); // Memunculkan time picker saat field di-tap
+                    _selectEndTime(
+                        context); // Memunculkan time picker saat field di-tap
                   },
                   decoration: InputDecoration(
                     labelText: 'Jam Selesai',
@@ -299,11 +333,14 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: SimpklColor.darkBlue), // Border warna grey saat normal
+                      borderSide: const BorderSide(
+                          color: SimpklColor
+                              .darkBlue), // Border warna grey saat normal
                       borderRadius: BorderRadius.circular(12),
                     ),
                     suffixIcon: Padding(
-                      padding: const EdgeInsets.only(right: 20, top: 10, bottom: 10),
+                      padding:
+                          const EdgeInsets.only(right: 20, top: 10, bottom: 10),
                       child: Container(
                         decoration: BoxDecoration(
                           color: Colors.white,
@@ -317,7 +354,8 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
                           ],
                         ),
                         child: const Icon(
-                          Icons.access_time_outlined, // Mengganti ikon menjadi ikon jam
+                          Icons
+                              .access_time_outlined, // Mengganti ikon menjadi ikon jam
                           color: SimpklColor.darkBlue,
                           size: 16,
                         ),
@@ -335,7 +373,9 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: SimpklColor.darkBlue), // Border warna grey saat normal
+                      borderSide: const BorderSide(
+                          color: SimpklColor
+                              .darkBlue), // Border warna grey saat normal
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
@@ -356,15 +396,18 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
                         ? const Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Icons.cloud_upload_outlined, size: 50, color: SimpklColor.darkBlue),
+                              Icon(Icons.cloud_upload_outlined,
+                                  size: 50, color: SimpklColor.darkBlue),
                               SizedBox(height: 10),
                               Text(
                                 'Click to upload',
-                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                style: TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.bold),
                               ),
                               Text(
                                 'choose your photo from your file',
-                                style: TextStyle(fontSize: 14, color: SimpklColor.darkBlue),
+                                style: TextStyle(
+                                    fontSize: 14, color: SimpklColor.darkBlue),
                               ),
                             ],
                           )
@@ -372,27 +415,31 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
                   ),
                 ),
               ),
-              SizedBox(height: 10,),
+              SizedBox(
+                height: 10,
+              ),
               InkWell(
-                onTap: (){
+                onTap: () {
                   PanaraConfirmDialog.show(
-                      context,
-                      title: "Apakah Kamu Yakin?",
-                      message: "Jurnal tidak bisa diedit atau dihapus setelah disimpan!",
-                      confirmButtonText: "Yakin",
-                      cancelButtonText: "Batal",
-                      onTapCancel: () {
-                          Navigator.pop(context);
-                      },
-                      onTapConfirm: () {
-                          Navigator.pop(context);
+                    context,
+                    title: "Apakah Kamu Yakin?",
+                    message:
+                        "Jurnal tidak bisa diedit atau dihapus setelah disimpan!",
+                    confirmButtonText: "Yakin",
+                    cancelButtonText: "Batal",
+                    onTapCancel: () {
+                      Navigator.pop(context);
+                    },
+                    onTapConfirm: () {
+                      Navigator.pop(context);
 
-                          Future.delayed(const Duration(milliseconds: 100), () {
-                            Navigator.pop(context); // Kembali ke halaman sebelumnya
-                          });
-                      },
-                      panaraDialogType: PanaraDialogType.normal,
-                      barrierDismissible: false, // optional parameter (default is true)
+                      Future.delayed(const Duration(milliseconds: 100), () {
+                        Navigator.pop(context); // Kembali ke halaman sebelumnya
+                      });
+                    },
+                    panaraDialogType: PanaraDialogType.normal,
+                    barrierDismissible:
+                        false, // optional parameter (default is true)
                   );
                 },
                 borderRadius: BorderRadius.all(Radius.circular(50)),
@@ -408,10 +455,9 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
                       child: Text(
                         "Submit Jurnal",
                         style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 15
-                        ),
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 15),
                       ),
                     ),
                   ),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:simpkl_mobile/contstants/colors.dart';
+import 'package:simpkl_mobile/core/contstants/colors.dart';
 
 class JournalCard extends StatelessWidget {
   final String title;
@@ -8,6 +8,7 @@ class JournalCard extends StatelessWidget {
   final String date;
   final String typeOfWork;
   final String typeOfActivity;
+  final String photo;
 
 
   const JournalCard({
@@ -17,7 +18,8 @@ class JournalCard extends StatelessWidget {
     required this.timeRange,
     required this.date,
     required this.typeOfWork,
-    required this.typeOfActivity
+    required this.typeOfActivity,
+    required this.photo,
   });
 
   Color getStatusColor(String status) {
@@ -85,7 +87,7 @@ class JournalCard extends StatelessWidget {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(5.0),  // Sesuaikan dengan radius yang diinginkan
                   child: Image.network(
-                    'https://awsimages.detik.net.id/community/media/visual/2023/05/26/yuk-serbu-ada-pendidikan-dan-pelatihan-kerja-gratis_169.jpeg?w=600&q=90',
+                    photo,
                     width: 40,
                     height: 40,
                     fit: BoxFit.cover,  // Menjaga agar gambar sesuai dengan kotak
