@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:simpkl_mobile/models/daftarNilai.dart';
+import 'package:simpkl_mobile/services/nilai_akhir_service.dart';
 import 'package:simpkl_mobile/utils/dataDummy.dart';
 
 class NilaiAkhir extends StatefulWidget {
@@ -10,9 +11,27 @@ class NilaiAkhir extends StatefulWidget {
 }
 
 class _NilaiAkhirState extends State<NilaiAkhir> {
+  List<daftarNilai> results = [];
+
+  @override
+  void initState() {
+    super.initState();
+    getdata();
+  }
+
+  Future<void> getdata() async {
+    try {
+      final fetchedData = await NilaiAkhirService().fetchNilai();
+      setState(() {
+        results = fetchedData;
+      });
+    } catch (e) {
+      print("Error fetching data: $e");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-
     // Mendapatkan ukuran layar
     final size = MediaQuery.of(context).size;
 
@@ -26,7 +45,7 @@ class _NilaiAkhirState extends State<NilaiAkhir> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 50),
-            
+
                 // Header dengan Teks dan Icon Lonceng
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -54,18 +73,18 @@ class _NilaiAkhirState extends State<NilaiAkhir> {
                         ],
                       ),
                     ),
-            
+
                     // Tombol Lonceng Notif
                     IconButton(
                       icon: Container(
                         decoration: BoxDecoration(
-                          color: Colors.white, // Background 
+                          color: Colors.white, // Background
                           borderRadius:
                               BorderRadius.circular(10), // Border radius 10
                           boxShadow: [
                             BoxShadow(
-                              color:
-                                  Colors.grey.withOpacity(0.5), // Warna bayangan
+                              color: Colors.grey
+                                  .withOpacity(0.5), // Warna bayangan
                               blurRadius: 5,
                               spreadRadius: 2,
                             ),
@@ -90,22 +109,17 @@ class _NilaiAkhirState extends State<NilaiAkhir> {
                     ),
                   ],
                 ),
-            
+
                 const SizedBox(height: 50),
-            
+
                 // ListView Builder untuk Daftar Nilai
                 ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: dataDummyDaftarNilai.length,
+                  itemCount: results.length,
                   itemBuilder: (context, index) {
-                    final nilai = daftarNilai(
-                      aspek: dataDummyDaftarNilai[index]['aspek'],
-                      subAspek: dataDummyDaftarNilai[index]['subAspek'],
-                      nilai: dataDummyDaftarNilai[index]['nilai'],
-                      deskripsi: dataDummyDaftarNilai[index]['deskripsi'],
-                    );
-            
+                    final nilai = results[index];
+
                     return NilaiCard(nilai: nilai);
                   },
                 ),
@@ -151,12 +165,11 @@ class _NilaiCardState extends State<NilaiCard> {
         children: [
           Row(
             children: [
-              // Kolom untuk Aspek dan Sub Aspek
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildAspek(widget.nilai.aspek),
+                    _buildAspek(widget.nilai.aspekPenilaian.kelompokPenilaian),
                     const SizedBox(height: 8.0),
                     Text(
                       "Sub Aspek Penilaian",
@@ -166,21 +179,17 @@ class _NilaiCardState extends State<NilaiCard> {
                       ),
                     ),
                     Text(
-                      '    ${widget.nilai.subAspek}',
+                      '${widget.nilai.aspekPenilaian.judul}',
                       style: const TextStyle(fontSize: 16.0),
                     ),
                   ],
                 ),
               ),
-
-              // Divider Vertikal
               const VerticalDivider(
                 width: 32.0,
                 thickness: 1.0,
                 color: Colors.grey,
               ),
-
-              // Kolom untuk Nilai dan Tombol Expand
               Column(
                 children: [
                   Text(
@@ -208,23 +217,30 @@ class _NilaiCardState extends State<NilaiCard> {
               ),
             ],
           ),
-          // Konten yang akan ditampilkan ketika _isExpanded bernilai true
           if (_isExpanded) ...[
-            const SizedBox(height: 10), // Jarak sebelum konten tambahan
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-            Text("Deskripsi Penilaian", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
-            Text(
-              '${widget.nilai.deskripsi}',
-              style: const TextStyle(
+            const SizedBox(height: 20),
+            Container(
+              alignment:
+                  Alignment.topLeft, // Pastikan teks mulai dari kiri atas
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Deskripsi Penilaian",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  ),
+                  Text(
+                    '${widget.nilai.keterangan}',
+                    style: const TextStyle(
                       color: Colors.black,
                       fontSize: 13.0,
                       fontWeight: FontWeight.w500,
                     ),
+                  ),
+                ],
+              ),
             )
-          ],)
-          ], 
+          ],
         ],
       ),
     );
