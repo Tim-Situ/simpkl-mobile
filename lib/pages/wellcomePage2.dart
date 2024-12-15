@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:simpkl_mobile/contstants/colors.dart';
+import 'package:simpkl_mobile/core/contstants/colors.dart';
 import 'package:simpkl_mobile/pages/logIn.dart';
 import 'package:simpkl_mobile/pages/wellcomePage1.dart';
 

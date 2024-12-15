@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:simpkl_mobile/contstants/colors.dart';
+import 'package:simpkl_mobile/core/contstants/colors.dart';
 import 'package:simpkl_mobile/main.dart';
+import 'package:simpkl_mobile/services/auth_service.dart';
 
 class logIn extends StatefulWidget {
   const logIn({super.key});
@@ -13,9 +14,25 @@ class _LogInState extends State<logIn> {
   final _formKey = GlobalKey<FormState>(); // Key untuk Form
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  String emailErrMassage = '';
-  String passErrMassage = '';
-  void CheckLogIn(String email, String password) {}
+
+  final _authService = AuthService();
+
+  void _login() async {
+    final username = _usernameController.text;
+    final password = _passwordController.text;
+
+    final success = await _authService.login(username, password);
+    if (success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Login berhasil!')),
+      );
+      Navigator.pushReplacementNamed(context, '/home');
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Login gagal.')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -117,20 +134,7 @@ class _LogInState extends State<logIn> {
                     width: double.infinity,
                     height: 50, // Tinggi tombol login
                     child: ElevatedButton(
-                      onPressed: () {
-                        // Validasi form, jika tidak valid munculkan pesan peringatan
-                        if (_formKey.currentState!.validate()) {
-                          // Jika form valid, eksekusi logika login
-                          // ScaffoldMessenger.of(context).showSnackBar(
-                          //   const SnackBar(content: Text('Processing Data')),
-                          // );
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const MyHomePage()),
-                          );
-                        }
-                      },
+                      onPressed: _login,
                       style: ElevatedButton.styleFrom(
                         backgroundColor:
                             SimpklColor.darkBlue, // Warna background biru

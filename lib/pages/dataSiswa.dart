@@ -1,7 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:simpkl_mobile/models/profile_model.dart';
+import 'package:simpkl_mobile/database/database_helper.dart';
 
-class DataSiswaPage extends StatelessWidget {
+
+class DataSiswaPage extends StatefulWidget {
   const DataSiswaPage({super.key});
+
+  @override
+  _DataSiswaPageState createState() => _DataSiswaPageState();
+}
+
+class _DataSiswaPageState extends State<DataSiswaPage> {
+  ProfileModel? dataDariDb;
+
+  void getProfile() async {
+    dataDariDb = await DatabaseHelper().getProfile();
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getProfile();
+  }
+
+  String getFormattedDate(DateTime date) {
+    return DateFormat('dd MMMM yyyy', 'id_ID').format(date);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,14 +85,16 @@ class DataSiswaPage extends StatelessWidget {
 
             const SizedBox(height: 20),
             // Data Items
-            _buildDataItem(Icons.person, 'MGhaziveda Belvanaufal'),
-            _buildDataItem(Icons.person_outline, 'belvaaa'),
-            _buildDataItem(Icons.credit_card, '123321456 / 654123321'),
-            _buildDataItem(Icons.school, 'Rekayasa Perangkat Lunak'),
-            _buildDataItem(Icons.email, 'mgbelvanaufal@gmail.com'),
-            _buildDataItem(Icons.phone, '082295903760'),
-            _buildDataItem(Icons.calendar_today, '21/04/2021'),
-            _buildDataItem(Icons.location_on, 'Pesona Bali, Bojongsoang'),
+            _buildDataItem(Icons.credit_card, dataDariDb?.nisn ?? "Not Found"),
+            _buildDataItem(Icons.person, dataDariDb?.nama ?? "Not Found"),
+            _buildDataItem(Icons.mail, dataDariDb?.alamat ?? "Not Found"),
+            _buildDataItem(Icons.call, dataDariDb?.no_hp ?? "Not Found"),
+            _buildDataItem(Icons.place, dataDariDb?.tempat_lahir ?? "Not Found"),
+            _buildDataItem(Icons.date_range, dataDariDb?.tanggal_lahir != null
+              ? getFormattedDate(dataDariDb!.tanggal_lahir)
+              : "Not Found"),
+            _buildDataItem(Icons.school, dataDariDb?.jurusan ?? "Not Found"),
+            _buildDataItem(Icons.power_settings_new_sharp, dataDariDb?.status_aktif == true ? "Aktif" : "Tidak Aktif"),
           ],
         ),
       ),

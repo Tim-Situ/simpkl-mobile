@@ -1,18 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
-import 'package:simpkl_mobile/contstants/colors.dart';
+import 'package:simpkl_mobile/core/contstants/colors.dart';
+import 'package:simpkl_mobile/models/jurnal_harian_model.dart';
 
 class DetailJurnalPage extends StatefulWidget {
-  const DetailJurnalPage({super.key});
+  final JurnalHarianModel jurnal;
+
+  const DetailJurnalPage({super.key, required this.jurnal});
 
   @override
   State<StatefulWidget> createState() => _DetailJurnalPageState();
 }
 
 class _DetailJurnalPageState extends State<DetailJurnalPage> {
+
+  String getFormattedDate(DateTime date) {
+    return DateFormat('dd MMMM yyyy', 'id_ID').format(date);
+  }
+
   @override
   Widget build(BuildContext context) {
+    final jurnal = widget.jurnal;
+
     return Scaffold(
       appBar: AppBar(
         leading: GestureDetector(
@@ -70,7 +80,7 @@ class _DetailJurnalPageState extends State<DetailJurnalPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Column(
+                      Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
@@ -79,7 +89,7 @@ class _DetailJurnalPageState extends State<DetailJurnalPage> {
                                 fontSize: 15, fontWeight: FontWeight.w500),
                           ),
                           Text(
-                            "24 November 2024",
+                            getFormattedDate(jurnal.tanggal),
                             style: TextStyle(fontSize: 11),
                           ),
                         ],
@@ -111,7 +121,7 @@ class _DetailJurnalPageState extends State<DetailJurnalPage> {
                         blurRadius: 20,
                       ),
                     ]),
-                child: const Padding(
+                child: Padding(
                     padding: EdgeInsets.all(10),
                     child: Column(
                       children: [
@@ -124,7 +134,7 @@ class _DetailJurnalPageState extends State<DetailJurnalPage> {
                                   fontSize: 13, fontWeight: FontWeight.w500),
                             ),
                             Text(
-                              ": Sesuai Kompetensi",
+                              ": ${jurnal.jenisPekerjaan}",
                               style: TextStyle(fontSize: 11),
                             ),
                           ],
@@ -141,7 +151,7 @@ class _DetailJurnalPageState extends State<DetailJurnalPage> {
                                   fontSize: 13, fontWeight: FontWeight.w500),
                             ),
                             Text(
-                              ": Ditugaskan",
+                              ": ${jurnal.bentukKegiatan}",
                               style: TextStyle(fontSize: 11),
                             ),
                           ],
@@ -158,7 +168,7 @@ class _DetailJurnalPageState extends State<DetailJurnalPage> {
                                   fontSize: 13, fontWeight: FontWeight.w500),
                             ),
                             Text(
-                              ": 07:30 - 16:30",
+                              ": ${jurnal.jamMulai.format(context)} - ${jurnal.jamSelesai.format(context)}",
                               style: TextStyle(fontSize: 11),
                             ),
                           ],
@@ -175,7 +185,7 @@ class _DetailJurnalPageState extends State<DetailJurnalPage> {
                                   fontSize: 13, fontWeight: FontWeight.w500),
                             ),
                             Text(
-                              ": Mas Nur",
+                              ": ${jurnal.staf}",
                               style: TextStyle(fontSize: 11),
                             ),
                           ],
@@ -195,7 +205,7 @@ class _DetailJurnalPageState extends State<DetailJurnalPage> {
                         blurRadius: 20,
                       ),
                     ]),
-                child: const Padding(
+                child: Padding(
                     padding: EdgeInsets.all(10),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -209,7 +219,7 @@ class _DetailJurnalPageState extends State<DetailJurnalPage> {
                           height: 5,
                         ),
                         Text(
-                          "Saya merancang dan mengembangkan website responsif untuk perusahaan Online Media. Website ini akan berfungsi sebagai platform utama untuk mempromosikan layanan digital kami kepada pelaku bisnis.",
+                          jurnal.deskripsiPekerjaan,
                           style: TextStyle(
                             fontSize: 11,
                           ),
@@ -251,7 +261,7 @@ class _DetailJurnalPageState extends State<DetailJurnalPage> {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(8),
                               child: Image.network(
-                                'https://awsimages.detik.net.id/community/media/visual/2023/05/26/yuk-serbu-ada-pendidikan-dan-pelatihan-kerja-gratis_169.jpeg?w=600&q=90',
+                                jurnal.foto,
                               ),
                             ))
                       ],
@@ -271,7 +281,7 @@ class _DetailJurnalPageState extends State<DetailJurnalPage> {
                         blurRadius: 20,
                       ),
                     ]),
-                child: const Padding(
+                child: Padding(
                     padding: EdgeInsets.all(10),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -285,7 +295,7 @@ class _DetailJurnalPageState extends State<DetailJurnalPage> {
                           height: 5,
                         ),
                         Text(
-                          "Terima kasih atas laporan yang telah kamu sampaikan mengenai proyek pembuatan website untuk Online Media. Saya sangat senang melihat perkembangan dan usaha yang telah kamu tunjukkan selama masa PKL ini.",
+                          "Belum Ada Catatan",
                           style: TextStyle(
                             fontSize: 11,
                           ),

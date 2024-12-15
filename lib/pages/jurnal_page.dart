@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:simpkl_mobile/components/JournalCard.dart';
-
-import 'package:simpkl_mobile/contstants/colors.dart';
+import 'package:simpkl_mobile/core/contstants/colors.dart';
 import 'package:simpkl_mobile/pages/create_journal_page.dart';
 import 'package:simpkl_mobile/pages/detail_jurnal_page.dart';
+import 'package:simpkl_mobile/services/jurnal_harian_service.dart';
+import 'package:simpkl_mobile/models/jurnal_harian_model.dart';
 
 class JurnalPage extends StatefulWidget {
   const JurnalPage({super.key});
@@ -15,6 +16,10 @@ class JurnalPage extends StatefulWidget {
 
 class _JurnalPageState extends State<JurnalPage> {
   DateTime selectedDate = DateTime.now();
+  bool _isLoading = false;
+  List<JurnalHarianModel> _jurnalData = [];
+
+  final JurnalHarianService _jurnalHarianService = JurnalHarianService();
 
   // Method untuk memilih tanggal
   Future<void> _selectDate(BuildContext context) async {
@@ -28,6 +33,7 @@ class _JurnalPageState extends State<JurnalPage> {
       setState(() {
         selectedDate = picked;
       });
+      _fetchData(); // Fetch data again after date change
     }
   }
 
@@ -36,12 +42,40 @@ class _JurnalPageState extends State<JurnalPage> {
     return DateFormat('dd MMMM yyyy', 'id_ID').format(date);
   }
 
+  // Fetch data from API
+  Future<void> _fetchData() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      String formattedDate = DateFormat('yyyy-MM-dd').format(selectedDate);
+      await _jurnalHarianService.getJurnal(formattedDate);
+      setState(() {
+        _jurnalData = _jurnalHarianService.dataJurnalHarian;
+      });
+    } catch (e) {
+      setState(() {
+        _jurnalData = [];
+      });
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchData(); // Fetch data when the page is loaded
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding:
-            const EdgeInsets.only(top: 50, right: 20, left: 20, bottom: 20),
+        padding: const EdgeInsets.only(top: 50, right: 20, left: 20, bottom: 20),
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -64,7 +98,6 @@ class _JurnalPageState extends State<JurnalPage> {
                               Icon(Icons.keyboard_arrow_down)
                             ],
                           ),
-                          // Menampilkan tanggal dengan format yang diinginkan
                           Text(
                             getFormattedDate(selectedDate),
                             style: const TextStyle(
@@ -108,44 +141,77 @@ class _JurnalPageState extends State<JurnalPage> {
               const SizedBox(
                 height: 35,
               ),
-              JournalCard(
-                title: "Piket Pagi",
-                status: "Ditolak",
-                timeRange: "08:00 - 08:30",
-                date: getFormattedDate(selectedDate),
-                typeOfWork: "Pekerjaan Lain",
-                typeOfActivity: "Inisiatif",
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              JournalCard(
-                title: "Daily Scrum",
-                status: "Diterima",
-                timeRange: "08:30 - 09:00",
-                date: getFormattedDate(selectedDate),
-                typeOfWork: "Sesuai Kompetensi",
-                typeOfActivity: "Bimbingan",
-              ),
-              SizedBox(
-                height: 15,
-              ),
-              InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => DetailJurnalPage()),
-                  );
-                },
-                child: JournalCard(
-                  title: "Membuat Website",
-                  status: "Menunggu",
-                  timeRange: "09:00 - 16:00",
-                  date: getFormattedDate(selectedDate),
-                  typeOfWork: "Sesuai Kompetensi",
-                  typeOfActivity: "Ditugaskan",
-                ),
-              ),
+              _isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : _jurnalData.length > 0
+                    ? Column(
+                        children: _jurnalData.map((jurnal) {
+                          return Column(
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+        
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => DetailJurnalPage(jurnal: jurnal),
+                                    ),
+                                  );
+                                },
+                                child: JournalCard(
+                                  title: jurnal.deskripsiPekerjaan,
+                                  status: "Menunggu",
+                                  timeRange:
+                                      '${jurnal.jamMulai.format(context)} - ${jurnal.jamSelesai.format(context)}',
+                                  date: getFormattedDate(jurnal.tanggal),
+                                  typeOfWork: jurnal.jenisPekerjaan,
+                                  typeOfActivity: jurnal.bentukKegiatan,
+                                  photo: jurnal.foto,
+                                ),
+                              ),
+                              const SizedBox(height: 15),
+                            ],
+                          );
+                        }).toList(),
+                      )
+                    : Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
+                            border: Border.all(
+                              width: 1,
+                              color: Colors.red,
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: const Color(0xFFD8D1D1).withOpacity(0.3),
+                                offset: const Offset(5, 10),
+                                blurRadius: 20,
+                              ),
+                            ],
+                            color: Colors.red.withOpacity(0.4),
+                          ),
+                          child: const Center(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                vertical: 20,
+                                horizontal: 53,
+                              ),
+                              child: Text(
+                                "Kamu belum mengumpulkan Jurnal\nuntuk kehadiran Hari ini",
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.red,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
             ],
           ),
         ),
