@@ -29,7 +29,6 @@ class AuthService with ChangeNotifier {
         // Save token to SQLite
         await DatabaseHelper().insertToken(token);
 
-
         //Simpan Profile ke DBLocal
         final response = await http.get(
           Uri.parse(_baseUrl + "/auth/profile"),
@@ -39,11 +38,11 @@ class AuthService with ChangeNotifier {
         );
 
         if (response.statusCode == 200) {
-          final Map<String, dynamic> responseData = jsonDecode(response.body);
-
+          final Map<String, dynamic> responseData = jsonDecode(response.body);   
           if (responseData['data'] != null) {
             final dynamic jsonDataPengguna = responseData['data']['dataPengguna'];
             ProfileModel _dataProfile = ProfileModel.fromJson(jsonDataPengguna);
+            print(_dataProfile.nama);
             await DatabaseHelper().insertProfile(_dataProfile);
           }
         }
@@ -73,6 +72,7 @@ class AuthService with ChangeNotifier {
   Future<void> logout() async {
     // Delete token from SQLite
     await DatabaseHelper().deleteToken();
+    await DatabaseHelper().deleteProfile();
 
     // Remove login status from SharedPreferences
     final prefs = await SharedPreferences.getInstance();

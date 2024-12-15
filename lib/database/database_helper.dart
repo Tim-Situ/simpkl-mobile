@@ -42,8 +42,8 @@ class DatabaseHelper {
             no_hp TEXT,
             tempat_lahir TEXT,
             tanggal_lahir TEXT,
-            status_aktif INTEGER,
-            jurusan TEXT
+            jurusan TEXT,
+            status_aktif INTEGER
           )
         ''');
 
@@ -74,8 +74,8 @@ class DatabaseHelper {
         'alamat': profile.alamat,
         'no_hp': profile.no_hp,
         'tempat_lahir': profile.tempat_lahir,
-        'tanggal_lahir': profile.tanggal_lahir,
-        'status_aktif': profile.status_aktif==true?1:0,
+        'tanggal_lahir': profile.tanggal_lahir.toIso8601String(),
+        'status_aktif': profile.status_aktif == true ? 1:0,
         'jurusan': profile.jurusan
       });
   }
@@ -94,12 +94,8 @@ class DatabaseHelper {
   Future<ProfileModel> getProfile() async {
     final db = await database;
     final result = await db.query('profile', limit: 1, orderBy: 'id DESC');
-    
-    // Periksa jika result tidak kosong dan konversi data ke ProfileModel
-
-      return ProfileModel.fromMap(result.first); // Ambil data pertama jika ada
-    
-  // Atau kembalikan ProfileModel kosong sesuai kebutuhan
+  
+    return ProfileModel.fromMap(result.first);
   }
 
   Future<PembimbingModel> getPembimbing() async {
@@ -126,6 +122,11 @@ class DatabaseHelper {
   Future<int> deleteToken() async {
     final db = await database;
     return db.delete('token');
+  }
+
+  Future<int> deleteProfile() async {
+    final db = await database;
+    return db.delete('profile');
   }
   
 }

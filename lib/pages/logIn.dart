@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:simpkl_mobile/core/contstants/colors.dart';
 import 'package:simpkl_mobile/main.dart';
-import 'package:simpkl_mobile/pages/homepage_page.dart';
 import 'package:simpkl_mobile/services/auth_service.dart';
 
 class logIn extends StatefulWidget {

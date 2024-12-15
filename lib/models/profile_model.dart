@@ -29,7 +29,7 @@ class ProfileModel {
       no_hp: json['no_hp'],
       tempat_lahir: json['tempat_lahir'],
       tanggal_lahir: DateTime.parse(json['tanggal_lahir']),
-      status_aktif: json['status_aktif']==true,
+      status_aktif: json['status_aktif'] == true,
       jurusan: json['jurusan']['bidang_keahlian'],
     );
   }
@@ -41,21 +41,20 @@ class ProfileModel {
       alamat: map['alamat'],
       no_hp: map['no_hp'],
       tempat_lahir: map['tempat_lahir'],
-      tanggal_lahir: map['tanggal_lahir'],
+      tanggal_lahir: DateTime.parse(map['tanggal_lahir']),
       status_aktif: map['status_aktif']==1,
       jurusan: map['jurusan'],
     );
   }
 
-  Map<String, dynamic> toJson() {
-
+  Map<String, dynamic> toMap() {
     return {
       'nisn': nisn,
       'nama': nama,
       'alamat': alamat,
       'no_hp': no_hp,
       'tempat_lahir': tempat_lahir,
-      'tanggal_lahir': tanggal_lahir,
+      'tanggal_lahir': tanggal_lahir.toIso8601String(),
       'status_aktif': status_aktif,
       'jurusan': jurusan
     };
