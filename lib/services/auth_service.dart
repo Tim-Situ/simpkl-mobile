@@ -42,8 +42,8 @@ class AuthService with ChangeNotifier {
           final Map<String, dynamic> responseData = jsonDecode(response.body);
 
           if (responseData['data'] != null) {
-            final dynamic jsonDataPenggua = responseData['data']['dataPengguna'];
-            ProfileModel _dataProfile = ProfileModel.fromJson(jsonDataPenggua);
+            final dynamic jsonDataPengguna = responseData['data']['dataPengguna'];
+            ProfileModel _dataProfile = ProfileModel.fromJson(jsonDataPengguna);
             await DatabaseHelper().insertProfile(_dataProfile);
           }
         }

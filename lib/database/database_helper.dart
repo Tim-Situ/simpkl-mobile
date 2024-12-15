@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:path/path.dart';
+import 'package:simpkl_mobile/models/pembimbing_model.dart';
 import 'package:simpkl_mobile/models/profile_model.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -37,9 +38,24 @@ class DatabaseHelper {
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             nisn TEXT,
             nama TEXT,
+            alamat TEXT,
+            no_hp TEXT,
+            tempat_lahir TEXT,
+            tanggal_lahir TEXT,
+            status_aktif INTEGER,
             jurusan TEXT
           )
         ''');
+
+        // await db.execute('''
+        //   CREATE TABLE pembimbing (
+        //     id INTEGER PRIMARY KEY AUTOINCREMENT,
+        //     nip TEXT,
+        //     nama TEXT,
+        //     alamat TEXT,
+        //     no_hp TEXT,
+        //   )
+        // ''');
       },
     );
   }
@@ -55,7 +71,23 @@ class DatabaseHelper {
       {
         'nisn': profile.nisn,
         'nama': profile.nama,
+        'alamat': profile.alamat,
+        'no_hp': profile.no_hp,
+        'tempat_lahir': profile.tempat_lahir,
+        'tanggal_lahir': profile.tanggal_lahir,
+        'status_aktif': profile.status_aktif==true?1:0,
         'jurusan': profile.jurusan
+      });
+  }
+
+  Future<int> insertPembimbing(PembimbingModel pembimbing) async {
+    final db = await database;
+    return db.insert('pembimbing', 
+      {
+        'nisn': pembimbing.nip,
+        'nama': pembimbing.nama,
+        'alamat': pembimbing.alamat,
+        'no_hp': pembimbing.no_hp
       });
   }
 
@@ -66,6 +98,17 @@ class DatabaseHelper {
     // Periksa jika result tidak kosong dan konversi data ke ProfileModel
 
       return ProfileModel.fromMap(result.first); // Ambil data pertama jika ada
+    
+  // Atau kembalikan ProfileModel kosong sesuai kebutuhan
+  }
+
+  Future<PembimbingModel> getPembimbing() async {
+    final db = await database;
+    final result = await db.query('pembimbing', limit: 1, orderBy: 'id DESC');
+    
+    // Periksa jika result tidak kosong dan konversi data ke ProfileModel
+
+      return PembimbingModel.fromMap(result.first); // Ambil data pertama jika ada
     
   // Atau kembalikan ProfileModel kosong sesuai kebutuhan
   }

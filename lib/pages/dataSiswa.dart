@@ -1,7 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:simpkl_mobile/models/profile_model.dart';
+import 'package:simpkl_mobile/database/database_helper.dart';
 
-class DataSiswaPage extends StatelessWidget {
+class DataSiswaPage extends StatefulWidget {
   const DataSiswaPage({super.key});
+
+  @override
+  _DataSiswaPageState createState() => _DataSiswaPageState();
+}
+
+class _DataSiswaPageState extends State<DataSiswaPage> {
+  ProfileModel? dataDariDb;
+
+  @override
+  void initState() {
+    super.initState();
+    getProfile();
+  }
+
+  void getProfile() async {
+    dataDariDb = await DatabaseHelper().getProfile();
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,14 +79,13 @@ class DataSiswaPage extends StatelessWidget {
 
             const SizedBox(height: 20),
             // Data Items
-            _buildDataItem(Icons.person, 'MGhaziveda Belvanaufal'),
-            _buildDataItem(Icons.person_outline, 'belvaaa'),
-            _buildDataItem(Icons.credit_card, '123321456 / 654123321'),
-            _buildDataItem(Icons.school, 'Rekayasa Perangkat Lunak'),
-            _buildDataItem(Icons.email, 'mgbelvanaufal@gmail.com'),
-            _buildDataItem(Icons.phone, '082295903760'),
-            _buildDataItem(Icons.calendar_today, '21/04/2021'),
-            _buildDataItem(Icons.location_on, 'Pesona Bali, Bojongsoang'),
+            _buildDataItem(Icons.credit_card, dataDariDb!.nisn),
+            _buildDataItem(Icons.person, dataDariDb!.nama),
+            _buildDataItem(Icons.mail, dataDariDb!.alamat),
+            _buildDataItem(Icons.call, dataDariDb!.no_hp),
+            _buildDataItem(Icons.place, dataDariDb!.tempat_lahir),
+            _buildDataItem(Icons.date_range, dataDariDb!.tanggal_lahir.toString()),
+            _buildDataItem(Icons.school, dataDariDb!.jurusan),
           ],
         ),
       ),
