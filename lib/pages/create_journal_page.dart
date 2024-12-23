@@ -436,10 +436,10 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
                     onTapConfirm: () {
                       Navigator.pop(context);
 
-                      // Future.delayed(const Duration(milliseconds: 100), () {
-                      //   Navigator.of(context)
-                      //       .pop(); // Kembali ke halaman sebelumnya
-                      // });
+                      Future.delayed(const Duration(milliseconds: 100), () {
+                        Navigator.of(context)
+                            .pop(); // Kembali ke halaman sebelumnya
+                      });
                     },
                     panaraDialogType: PanaraDialogType.normal,
                     barrierDismissible:
