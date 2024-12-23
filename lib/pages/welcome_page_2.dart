@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:simpkl_mobile/core/contstants/colors.dart';
-import 'package:simpkl_mobile/pages/logIn.dart';
-import 'package:simpkl_mobile/pages/wellcomePage1.dart';
+import 'package:simpkl_mobile/pages/login.dart';
+import 'package:simpkl_mobile/pages/welcome_page_1.dart';
 
-class wellcomePage2 extends StatelessWidget {
-  const wellcomePage2({super.key});
+class WelcomePage2 extends StatelessWidget {
+  const WelcomePage2({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -149,7 +149,7 @@ class wellcomePage2 extends StatelessWidget {
                       child: IconButton(
                         onPressed: () {
                           Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => const logIn(),
+                            builder: (context) => const Login(),
                           ));
                         },
                         icon: const Icon(

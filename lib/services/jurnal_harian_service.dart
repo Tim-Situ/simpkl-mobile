@@ -5,7 +5,6 @@ import 'package:simpkl_mobile/core/contstants/api_constants.dart';
 import 'package:simpkl_mobile/models/jurnal_harian_model.dart';
 import 'package:simpkl_mobile/services/auth_service.dart';
 
-
 class JurnalHarianService with ChangeNotifier {
   List<JurnalHarianModel> _dataJurnalHarian = [];
   bool _isLoading = false;
@@ -27,11 +26,10 @@ class JurnalHarianService with ChangeNotifier {
       }
 
       final response = await http.get(
-        Uri.parse(_baseUrl + "/jurnal-harian/siswa/get-new?tanggal=" + tanggal),
-        headers: {
-          'Authorization': 'Bearer $token',
-        }
-      );
+          Uri.parse('$_baseUrl/jurnal-harian/siswa/get-new?tanggal=$tanggal'),
+          headers: {
+            'Authorization': 'Bearer $token',
+          });
 
       // print("Response Jurnal : ${_dataJurnalHarian}");
 
@@ -39,11 +37,12 @@ class JurnalHarianService with ChangeNotifier {
         final Map<String, dynamic> responseData = jsonDecode(response.body);
         if (responseData['data'] != null) {
           final List<dynamic> jsonData = responseData['data'];
-          _dataJurnalHarian = jsonData.map((item) => JurnalHarianModel.fromJson(item)).toList();
+          _dataJurnalHarian =
+              jsonData.map((item) => JurnalHarianModel.fromJson(item)).toList();
         } else {
           _dataJurnalHarian = [];
         }
-      }else{
+      } else {
         _dataJurnalHarian = [];
       }
     } catch (e) {

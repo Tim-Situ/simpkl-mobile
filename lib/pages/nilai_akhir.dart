@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:simpkl_mobile/models/daftarNilai.dart';
+import 'package:simpkl_mobile/models/daftar_nilai.dart';
 import 'package:simpkl_mobile/services/nilai_akhir_service.dart';
-import 'package:simpkl_mobile/utils/dataDummy.dart';
 
 class NilaiAkhir extends StatefulWidget {
   const NilaiAkhir({super.key});
@@ -11,7 +10,7 @@ class NilaiAkhir extends StatefulWidget {
 }
 
 class _NilaiAkhirState extends State<NilaiAkhir> {
-  List<daftarNilai> results = [];
+  List<DaftarNilai> results = [];
 
   @override
   void initState() {
@@ -26,15 +25,12 @@ class _NilaiAkhirState extends State<NilaiAkhir> {
         results = fetchedData;
       });
     } catch (e) {
-      print("Error fetching data: $e");
+      // print("Error fetching data: $e");
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    // Mendapatkan ukuran layar
-    final size = MediaQuery.of(context).size;
-
     return Scaffold(
       body: SafeArea(
         bottom: false,
@@ -51,10 +47,10 @@ class _NilaiAkhirState extends State<NilaiAkhir> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     // Kontainer untuk teks "Nilai Akhir" dan deskripsinya
-                    Expanded(
+                    const Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
+                        children: [
                           Text(
                             'Nilai Akhir',
                             style: TextStyle(
@@ -134,15 +130,15 @@ class _NilaiAkhirState extends State<NilaiAkhir> {
 
 // Card untuk setiap nilai dengan garis vertikal dan layout interaktif
 class NilaiCard extends StatefulWidget {
-  final daftarNilai nilai;
+  final DaftarNilai nilai;
 
   const NilaiCard({super.key, required this.nilai});
 
   @override
-  _NilaiCardState createState() => _NilaiCardState();
+  NilaiCardState createState() => NilaiCardState();
 }
 
-class _NilaiCardState extends State<NilaiCard> {
+class NilaiCardState extends State<NilaiCard> {
   bool _isExpanded = false;
 
   @override
@@ -171,15 +167,15 @@ class _NilaiCardState extends State<NilaiCard> {
                   children: [
                     _buildAspek(widget.nilai.aspekPenilaian.kelompokPenilaian),
                     const SizedBox(height: 8.0),
-                    Text(
+                    const Text(
                       "Sub Aspek Penilaian",
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
                     Text(
-                      '${widget.nilai.aspekPenilaian.judul}',
+                      widget.nilai.aspekPenilaian.judul,
                       style: const TextStyle(fontSize: 16.0),
                     ),
                   ],
@@ -225,12 +221,12 @@ class _NilaiCardState extends State<NilaiCard> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     "Deskripsi Penilaian",
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                   ),
                   Text(
-                    '${widget.nilai.keterangan}',
+                    widget.nilai.keterangan,
                     style: const TextStyle(
                       color: Colors.black,
                       fontSize: 13.0,

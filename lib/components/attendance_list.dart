@@ -5,10 +5,10 @@ class AttendanceList extends StatefulWidget {
   const AttendanceList({super.key});
 
   @override
-  _AttendanceListState createState() => _AttendanceListState();
+  AttendanceListState createState() => AttendanceListState();
 }
 
-class _AttendanceListState extends State<AttendanceList> {
+class AttendanceListState extends State<AttendanceList> {
   final List<Map<String, String>> attendanceData = [
     {'no': '1', 'tanggal': '24 September 2024', 'status': 'Hadir'},
     {'no': '2', 'tanggal': '25 September 2024', 'status': 'Hadir'},

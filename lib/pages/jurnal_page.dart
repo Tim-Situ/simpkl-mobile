@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:simpkl_mobile/components/JournalCard.dart';
+import 'package:simpkl_mobile/components/journal_card.dart';
 import 'package:simpkl_mobile/core/contstants/colors.dart';
 import 'package:simpkl_mobile/pages/create_journal_page.dart';
 import 'package:simpkl_mobile/pages/detail_jurnal_page.dart';
@@ -143,7 +143,7 @@ class _JurnalPageState extends State<JurnalPage> {
               ),
               _isLoading
                   ? const Center(child: CircularProgressIndicator())
-                  : _jurnalData.length > 0
+                  : _jurnalData.isNotEmpty
                     ? Column(
                         children: _jurnalData.map((jurnal) {
                           return Column(
@@ -179,7 +179,7 @@ class _JurnalPageState extends State<JurnalPage> {
                         child: Container(
                           width: MediaQuery.of(context).size.width,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(8)),
+                            borderRadius: const BorderRadius.all(Radius.circular(8)),
                             border: Border.all(
                               width: 1,
                               color: Colors.red,
@@ -223,7 +223,7 @@ class _JurnalPageState extends State<JurnalPage> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => CreateJournalPage()),
+            MaterialPageRoute(builder: (context) => const CreateJournalPage()),
           );
         },
         backgroundColor: Colors.white,

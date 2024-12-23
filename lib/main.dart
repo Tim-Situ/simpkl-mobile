@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:simpkl_mobile/components/BottomNavBar.dart';
-import 'package:simpkl_mobile/database/database_helper.dart';
-import 'package:simpkl_mobile/models/profile_model.dart';
+import 'package:simpkl_mobile/components/bottom_navbar.dart';
 import 'package:simpkl_mobile/pages/home_page.dart';
 import 'package:simpkl_mobile/pages/jurnal_page.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:simpkl_mobile/pages/logIn.dart';
+import 'package:simpkl_mobile/pages/login.dart';
 import 'package:simpkl_mobile/pages/presence_page.dart';
-import 'package:simpkl_mobile/pages/nilaiAkhir.dart';
-import 'package:simpkl_mobile/pages/wellcomePage1.dart';
-import 'package:simpkl_mobile/pages/Profile.dart';
+import 'package:simpkl_mobile/pages/nilai_akhir.dart';
+import 'package:simpkl_mobile/pages/profile.dart';
 import 'package:simpkl_mobile/services/auth_service.dart';
 
 void main() async {
@@ -32,7 +28,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/home',
       routes: {
-        '/login': (context) => const logIn(),
+        '/login': (context) => const Login(),
         '/home': (context) => const MyHomePage(),
       },
     );
@@ -51,11 +47,11 @@ class _MyHomePageState extends State<MyHomePage> {
   final _authService = AuthService();
 
   final List<Widget> _pages = <Widget>[
-    HomePage(),
+    const HomePage(),
     const JurnalPage(),
     const PresencePage(),
     const NilaiAkhir(),
-    ProfilePage(),
+    const ProfilePage(),
   ];
 
   void _onItemTapped(int index) {
@@ -66,10 +62,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _checkLoginStatus() async {
     final isLoggedIn = await _authService.isLoggedIn();
-    if (!isLoggedIn) {
+    if (!isLoggedIn && mounted) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => logIn()),
+        MaterialPageRoute(builder: (context) => const Login()),
       );
     }
   }

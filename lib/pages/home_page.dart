@@ -5,7 +5,7 @@ import 'package:simpkl_mobile/core/contstants/colors.dart';
 import 'package:simpkl_mobile/database/database_helper.dart';
 import 'package:simpkl_mobile/models/profile_model.dart';
 import 'package:simpkl_mobile/pages/notifikasi.dart';
-import 'package:simpkl_mobile/pages/webView_page.dart';
+import 'package:simpkl_mobile/pages/webview_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
@@ -41,7 +41,8 @@ class _HomePageState extends State<HomePage> {
 
   final List<Map<String, String>> pemberitahuan = [
     {
-      'text': 'Peserta magang harap segera melakukan konfirmasi kepada guru pembimbing terkait perusahaannya.',
+      'text':
+          'Peserta magang harap segera melakukan konfirmasi kepada guru pembimbing terkait perusahaannya.',
       'date': '24 November 2024',
     },
     {
@@ -56,17 +57,20 @@ class _HomePageState extends State<HomePage> {
 
   final List<Map<String, String>> cardData = [
     {
-      'imageUrl': 'https://smktelkom-bdg.sch.id/wp-content/uploads/2024/12/Kunjin-2024.jpg',
+      'imageUrl':
+          'https://smktelkom-bdg.sch.id/wp-content/uploads/2024/12/Kunjin-2024.jpg',
       'title': 'Kunjungan Industri Tingkatkan Wawasan Siswa SMK Telkom Bandung',
       'date': '20 November 2024',
     },
     {
-      'imageUrl': 'https://smktelkom-bdg.sch.id/wp-content/uploads/2024/12/Kunjin-2024.jpg',
+      'imageUrl':
+          'https://smktelkom-bdg.sch.id/wp-content/uploads/2024/12/Kunjin-2024.jpg',
       'title': 'Kunjungan Industri Tingkatkan Wawasan Siswa SMK Telkom Bandung',
       'date': '20 November 2024',
     },
     {
-      'imageUrl': 'https://smktelkom-bdg.sch.id/wp-content/uploads/2024/12/Kunjin-2024.jpg',
+      'imageUrl':
+          'https://smktelkom-bdg.sch.id/wp-content/uploads/2024/12/Kunjin-2024.jpg',
       'title': 'Kunjungan Industri Tingkatkan Wawasan Siswa SMK Telkom Bandung',
       'date': '20 November 2024',
     }
@@ -92,7 +96,7 @@ class _HomePageState extends State<HomePage> {
         throw Exception('Could not launch $uri');
       }
     } catch (e) {
-      print("Error membuka tautan: $e");
+      // print("Error membuka tautan: $e");
     }
   }
 
@@ -126,16 +130,23 @@ class _HomePageState extends State<HomePage> {
       }
 
       // Dapatkan lokasi terkini
+      LocationSettings locationSettings = const LocationSettings(
+        accuracy: LocationAccuracy.high,
+        distanceFilter: 10, // Optional: Set a distance filter if needed
+      );
+
       Position position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high);
+        locationSettings: locationSettings,
+      );
 
       // Convert coordinate to address
-      List<Placemark> placemarks = await placemarkFromCoordinates(
-          position.latitude, position.longitude);
+      List<Placemark> placemarks =
+          await placemarkFromCoordinates(position.latitude, position.longitude);
       Placemark place = placemarks[0];
 
       setState(() {
-        _currentLocation = "${place.locality}, ${place.country}"; // Misalnya: Bandung, Indonesia
+        _currentLocation =
+            "${place.locality}, ${place.country}"; // Misalnya: Bandung, Indonesia
       });
     } catch (e) {
       setState(() {
@@ -161,24 +172,23 @@ class _HomePageState extends State<HomePage> {
                         children: [
                           Text(
                             getFormattedDate(selectedDate),
-                            style: TextStyle(fontSize: 15),
+                            style: const TextStyle(fontSize: 15),
                           ),
                           Text(
                             dataDariDb?.nama ?? "Not Found",
-                            style: TextStyle(
-                              fontSize: 24, 
-                              fontWeight: FontWeight.bold
-                            ),
+                            style: const TextStyle(
+                                fontSize: 24, fontWeight: FontWeight.bold),
                           ),
                           Container(
                             decoration: BoxDecoration(
                               color: SimpklColor.darkBlue,
                               borderRadius: BorderRadius.circular(8),
                             ),
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 5),
                             child: Text(
                               _currentLocation,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
@@ -189,10 +199,11 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     GestureDetector(
-                      onTap:(){
+                      onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => NotificationScreen()),
+                          MaterialPageRoute(
+                              builder: (context) => const NotificationScreen()),
                         );
                       },
                       child: Container(
@@ -200,7 +211,8 @@ class _HomePageState extends State<HomePage> {
                         width: 50,
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: const BorderRadius.all(Radius.circular(12)),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(12)),
                           boxShadow: [
                             BoxShadow(
                               color: const Color(0xFFD3D1D8).withOpacity(0.3),
@@ -226,8 +238,8 @@ class _HomePageState extends State<HomePage> {
                   autoPlay: true,
                   enlargeCenterPage: true,
                   aspectRatio: 16 / 9,
-                  autoPlayInterval: Duration(seconds: 3),
-                  autoPlayAnimationDuration: Duration(milliseconds: 800),
+                  autoPlayInterval: const Duration(seconds: 3),
+                  autoPlayAnimationDuration: const Duration(milliseconds: 800),
                   enableInfiniteScroll: true,
                 ),
                 items: imgList.asMap().entries.map((entry) {
@@ -237,14 +249,12 @@ class _HomePageState extends State<HomePage> {
                     onTap: () {
                       _launchURL(linkImg[index]);
                     },
-                    child: Container(
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(15.0),
-                        child: Image.network(
-                          item,
-                          fit: BoxFit.cover,
-                          width: 1000.0,
-                        ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(15.0),
+                      child: Image.network(
+                        item,
+                        fit: BoxFit.cover,
+                        width: 1000.0,
                       ),
                     ),
                   );
@@ -253,26 +263,21 @@ class _HomePageState extends State<HomePage> {
               const SizedBox(height: 20),
               Container(
                 margin: const EdgeInsets.symmetric(
-                  horizontal: 15.0,
-                  vertical: 10.0
-                ), // Margin luar card
+                    horizontal: 15.0, vertical: 10.0), // Margin luar card
                 decoration: BoxDecoration(
-                  color: Colors.white, // Background putih
-                  borderRadius: BorderRadius.circular(8.0), // Sudut melengkung
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.3), // Bayangan card
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                  border: const Border(
-                    left: BorderSide(
-                      width: 6, 
-                      color: SimpklColor.darkBlue
-                    )
-                  )
-                ),
+                    color: Colors.white, // Background putih
+                    borderRadius:
+                        BorderRadius.circular(8.0), // Sudut melengkung
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.3), // Bayangan card
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                    border: const Border(
+                        left:
+                            BorderSide(width: 6, color: SimpklColor.darkBlue))),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -303,7 +308,6 @@ class _HomePageState extends State<HomePage> {
                           height: 80.0,
                           autoPlay: false,
                           enlargeCenterPage: true,
-                          
                         ),
                         items: pemberitahuan.map((item) {
                           return Container(
@@ -325,7 +329,9 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                   ),
                                 ),
-                                const SizedBox(height: 4.0), // Spasi antara teks dan tanggal
+                                const SizedBox(
+                                    height:
+                                        4.0), // Spasi antara teks dan tanggal
                                 Text(
                                   item['date'] ?? '', // Menampilkan tanggal
                                   style: const TextStyle(
@@ -360,25 +366,47 @@ class _HomePageState extends State<HomePage> {
               GridView.count(
                 crossAxisCount: 4, // 4 kolom
                 shrinkWrap: true, // Tidak scroll
-                physics: const NeverScrollableScrollPhysics(), // Tidak bisa di-scroll
+                physics:
+                    const NeverScrollableScrollPhysics(), // Tidak bisa di-scroll
                 children: [
-                  {"icon": Icons.book, "label": "Panduan PKL", "url": "https://drive.google.com/file/d/1Yb_QBedWEVOj7C63uWGkop-P-H0owobY/view?usp=share_link"},
-                  {"icon": Icons.report, "label": "Keluhan", "url": "https://forms.gle/XftuJ3St5nJYuHhk8"},
-                  {"icon": Icons.calendar_today, "label": "Kalender Akademik", "url": "https://drive.google.com/file/d/1G1qycYmXNn3JxSbaSngRR4W6Wov2bMnm/view?usp=share_link"},
-                  {"icon": Icons.poll, "label": "Survey", "url": "https://forms.gle/zeX9F2giRQpyD1dV7"},
+                  {
+                    "icon": Icons.book,
+                    "label": "Panduan PKL",
+                    "url":
+                        "https://drive.google.com/file/d/1Yb_QBedWEVOj7C63uWGkop-P-H0owobY/view?usp=share_link"
+                  },
+                  {
+                    "icon": Icons.report,
+                    "label": "Keluhan",
+                    "url": "https://forms.gle/XftuJ3St5nJYuHhk8"
+                  },
+                  {
+                    "icon": Icons.calendar_today,
+                    "label": "Kalender Akademik",
+                    "url":
+                        "https://drive.google.com/file/d/1G1qycYmXNn3JxSbaSngRR4W6Wov2bMnm/view?usp=share_link"
+                  },
+                  {
+                    "icon": Icons.poll,
+                    "label": "Survey",
+                    "url": "https://forms.gle/zeX9F2giRQpyD1dV7"
+                  },
                 ].map((feature) {
                   return GestureDetector(
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => WebViewPage(title: feature['label'].toString(), url: feature['url'].toString())),
+                        MaterialPageRoute(
+                            builder: (context) => WebViewPage(
+                                title: feature['label'].toString(),
+                                url: feature['url'].toString())),
                       );
                     },
                     child: Column(
                       children: [
                         Container(
-                          margin: EdgeInsets.all(8),
-                          padding: EdgeInsets.all(12),
+                          margin: const EdgeInsets.all(8),
+                          padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(8),
@@ -396,9 +424,7 @@ class _HomePageState extends State<HomePage> {
                           feature['label'] as String,
                           textAlign: TextAlign.center,
                           style: const TextStyle(
-                            fontSize: 12, 
-                            fontWeight: FontWeight.bold
-                          ),
+                              fontSize: 12, fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
@@ -419,17 +445,19 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
-              const SizedBox(height: 20,),
+              const SizedBox(
+                height: 20,
+              ),
               CarouselSlider(
                 options: CarouselOptions(
-                  height: 260, // Tinggi card
-                  enableInfiniteScroll: false,// Looping
-                  viewportFraction: 0.7,
-                  padEnds: false
-                ),
+                    height: 260, // Tinggi card
+                    enableInfiniteScroll: false, // Looping
+                    viewportFraction: 0.7,
+                    padEnds: false),
                 items: cardData.map((data) {
                   return Container(
-                    margin: EdgeInsets.symmetric(horizontal: 8), // Jarak antar card
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: 8), // Jarak antar card
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(16),
@@ -448,7 +476,8 @@ class _HomePageState extends State<HomePage> {
                         Container(
                           height: 120,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                            borderRadius: const BorderRadius.vertical(
+                                top: Radius.circular(16)),
                             image: DecorationImage(
                               image: NetworkImage(data['imageUrl'].toString()),
                               fit: BoxFit.cover,
@@ -470,7 +499,7 @@ class _HomePageState extends State<HomePage> {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              SizedBox(height: 8),
+                              const SizedBox(height: 8),
                               Text(
                                 data['date'].toString(),
                                 style: TextStyle(
@@ -486,7 +515,9 @@ class _HomePageState extends State<HomePage> {
                   );
                 }).toList(),
               ),
-              const SizedBox(height: 20,),
+              const SizedBox(
+                height: 20,
+              ),
             ],
           ),
         ),

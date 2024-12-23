@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:simpkl_mobile/core/contstants/colors.dart';
-import 'package:simpkl_mobile/pages/wellcomePage2.dart';
+import 'package:simpkl_mobile/pages/welcome_page_2.dart';
 
 class WellcomePage1 extends StatelessWidget {
   const WellcomePage1({super.key});
@@ -19,8 +19,7 @@ class WellcomePage1 extends StatelessWidget {
               children: [
                 // Teks yang ditengah
                 RichText(
-                  textAlign:
-                      TextAlign.center, // Menjaga agar teks rata tengah
+                  textAlign: TextAlign.center, // Menjaga agar teks rata tengah
                   text: const TextSpan(
                     children: [
                       TextSpan(
@@ -42,16 +41,16 @@ class WellcomePage1 extends StatelessWidget {
                     ],
                   ),
                 ), // Jarak antara teks dan gambar
-      
+
                 // Gambar di bawah teks
                 Image.asset(
                   'assets/img/IlustrasiBelajar.png', // Ganti dengan path gambar Anda
                   width: 300, // Sesuaikan ukuran gambar
                   height: 300,
                 ), // Jarak antara gambar dan teks di bawahnya
-      
+
                 const SizedBox(height: 20), // Jarak antara gambar dan teks
-      
+
                 // Text di bawah gambar dengan padding dan lebar yang diatur
                 Container(
                   width: 400, // Sesuaikan lebar kontainer
@@ -90,16 +89,16 @@ class WellcomePage1 extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 10), // Jarak
-      
+
                 // Deskripsi tambahan
                 const Text(
                   "Unggah jurnal harianmu dengan mudah untuk mendokumentasikan setiap aktivitas yang kamu lakukan selama PKL.",
                   textAlign: TextAlign.start,
                   style: TextStyle(fontSize: 16),
                 ),
-      
+
                 const SizedBox(height: 40), // Jarak sebelum tombol
-      
+
                 // Row untuk tombol Back dan panah
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -117,10 +116,10 @@ class WellcomePage1 extends StatelessWidget {
                         ),
                       ),
                     ),
-      
+
                     // Spacer untuk memberi jarak
                     const Spacer(),
-      
+
                     // Tombol panah di sebelah kanan dengan lingkaran hijau
                     Container(
                       decoration: const BoxDecoration(
@@ -131,7 +130,7 @@ class WellcomePage1 extends StatelessWidget {
                       child: IconButton(
                         onPressed: () {
                           Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => const wellcomePage2(),
+                            builder: (context) => const WelcomePage2(),
                           ));
                         },
                         icon: const Icon(
