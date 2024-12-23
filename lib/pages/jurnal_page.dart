@@ -29,6 +29,7 @@ class _JurnalPageState extends State<JurnalPage> {
       firstDate: DateTime(2020),
       lastDate: DateTime(2025),
     );
+    
     if (picked != null && picked != selectedDate) {
       setState(() {
         selectedDate = picked;
@@ -160,7 +161,7 @@ class _JurnalPageState extends State<JurnalPage> {
                                 },
                                 child: JournalCard(
                                   title: jurnal.deskripsiPekerjaan,
-                                  status: "Menunggu",
+                                  status: jurnal.status,
                                   timeRange:
                                       '${jurnal.jamMulai.format(context)} - ${jurnal.jamSelesai.format(context)}',
                                   date: getFormattedDate(jurnal.tanggal),

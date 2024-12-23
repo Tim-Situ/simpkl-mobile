@@ -19,6 +19,18 @@ class _DetailJurnalPageState extends State<DetailJurnalPage> {
     return DateFormat('dd MMMM yyyy', 'id_ID').format(date);
   }
 
+  Color getStatusColor(String status) {
+    if (status == "DITERIMA") {
+      return SimpklColor.darkGreen;
+    } else if (status == "DITOLAK") {
+      return SimpklColor.darkRed;
+    } else if (status == "MENUNGGU") {
+      return SimpklColor.darkYellow;
+    } else {
+      return Colors.grey; // Default color
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final jurnal = widget.jurnal;
@@ -80,29 +92,25 @@ class _DetailJurnalPageState extends State<DetailJurnalPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Membuat Website",
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.w500),
-                          ),
-                          Text(
-                            getFormattedDate(jurnal.tanggal),
-                            style: TextStyle(fontSize: 11),
-                          ),
-                        ],
+                      Text(
+                        getFormattedDate(jurnal.tanggal),
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold
+                        ),
                       ),
                       Container(
                         padding:
                             EdgeInsets.symmetric(vertical: 4, horizontal: 18),
                         decoration: BoxDecoration(
-                            color: SimpklColor.darkRed,
+                            color: getStatusColor(jurnal.status),
                             borderRadius: BorderRadius.circular(8)),
-                        child: const Text(
-                          "Ditolak",
-                          style: TextStyle(fontSize: 12, color: Colors.white),
+                        child: Text(
+                          "${jurnal.status}",
+                          style: TextStyle(
+                            fontSize: 12, 
+                            color: Colors.white
+                          ),
                         ),
                       )
                     ],
@@ -131,11 +139,11 @@ class _DetailJurnalPageState extends State<DetailJurnalPage> {
                             Text(
                               "Jenis Pekerjaan",
                               style: TextStyle(
-                                  fontSize: 13, fontWeight: FontWeight.w500),
+                                  fontSize: 16, fontWeight: FontWeight.w500),
                             ),
                             Text(
                               ": ${jurnal.jenisPekerjaan}",
-                              style: TextStyle(fontSize: 11),
+                              style: TextStyle(fontSize: 15),
                             ),
                           ],
                         ),
@@ -148,11 +156,11 @@ class _DetailJurnalPageState extends State<DetailJurnalPage> {
                             Text(
                               "Bentuk Kegiatan",
                               style: TextStyle(
-                                  fontSize: 13, fontWeight: FontWeight.w500),
+                                  fontSize: 16, fontWeight: FontWeight.w500),
                             ),
                             Text(
                               ": ${jurnal.bentukKegiatan}",
-                              style: TextStyle(fontSize: 11),
+                              style: TextStyle(fontSize: 15),
                             ),
                           ],
                         ),
@@ -165,11 +173,11 @@ class _DetailJurnalPageState extends State<DetailJurnalPage> {
                             Text(
                               "Jam Pekerjaan",
                               style: TextStyle(
-                                  fontSize: 13, fontWeight: FontWeight.w500),
+                                  fontSize: 16, fontWeight: FontWeight.w500),
                             ),
                             Text(
                               ": ${jurnal.jamMulai.format(context)} - ${jurnal.jamSelesai.format(context)}",
-                              style: TextStyle(fontSize: 11),
+                              style: TextStyle(fontSize: 15),
                             ),
                           ],
                         ),
@@ -179,14 +187,18 @@ class _DetailJurnalPageState extends State<DetailJurnalPage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
+                            const Text(
                               "Staff yang Menugaskan",
                               style: TextStyle(
-                                  fontSize: 13, fontWeight: FontWeight.w500),
+                                  fontSize: 16, fontWeight: FontWeight.w500),
                             ),
-                            Text(
-                              ": ${jurnal.staf}",
-                              style: TextStyle(fontSize: 11),
+                            // SizedBox(width: 15),
+                            Expanded(
+                              child: Text(
+                                ": ${jurnal.staf}",
+                                style: TextStyle(fontSize: 15),
+                                
+                              ),
                             ),
                           ],
                         )
@@ -213,7 +225,7 @@ class _DetailJurnalPageState extends State<DetailJurnalPage> {
                         Text(
                           "Deskripsi Pekerjaan",
                           style: TextStyle(
-                              fontSize: 13, fontWeight: FontWeight.w500),
+                              fontSize: 16, fontWeight: FontWeight.w500),
                         ),
                         SizedBox(
                           height: 5,
@@ -221,7 +233,7 @@ class _DetailJurnalPageState extends State<DetailJurnalPage> {
                         Text(
                           jurnal.deskripsiPekerjaan,
                           style: TextStyle(
-                            fontSize: 11,
+                            fontSize: 15,
                           ),
                           textAlign: TextAlign.justify,
                         ),
@@ -249,14 +261,14 @@ class _DetailJurnalPageState extends State<DetailJurnalPage> {
                     child: ExpansionTile(
                       backgroundColor: Colors.white,
                       collapsedBackgroundColor: Colors.white,
-                      title: Text(
+                      title: const Text(
                         'Foto Kegiatan',
                         style: TextStyle(
-                            fontSize: 13, fontWeight: FontWeight.w500),
+                            fontSize: 16, fontWeight: FontWeight.w500),
                       ),
                       children: <Widget>[
                         Padding(
-                            padding: EdgeInsets.only(
+                            padding: const EdgeInsets.only(
                                 right: 12, left: 12, bottom: 12),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(8),
@@ -281,7 +293,7 @@ class _DetailJurnalPageState extends State<DetailJurnalPage> {
                         blurRadius: 20,
                       ),
                     ]),
-                child: Padding(
+                child: const Padding(
                     padding: EdgeInsets.all(10),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -289,7 +301,7 @@ class _DetailJurnalPageState extends State<DetailJurnalPage> {
                         Text(
                           "Catatan Pembimbing",
                           style: TextStyle(
-                              fontSize: 13, fontWeight: FontWeight.w500),
+                              fontSize: 16, fontWeight: FontWeight.w500),
                         ),
                         SizedBox(
                           height: 5,
@@ -297,7 +309,7 @@ class _DetailJurnalPageState extends State<DetailJurnalPage> {
                         Text(
                           "Belum Ada Catatan",
                           style: TextStyle(
-                            fontSize: 11,
+                            fontSize: 15,
                           ),
                           textAlign: TextAlign.justify,
                         ),

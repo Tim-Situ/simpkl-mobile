@@ -1,7 +1,12 @@
+// File: android/build.gradle
+plugins {
+    id("com.google.gms.google-services") version "4.3.15" apply false // Versi plugin Google Services yang lebih baru
+}
+
 allprojects {
     repositories {
-        google()
-        mavenCentral()
+        google()  // Menambahkan repositori Google
+        mavenCentral()  // Repositori Maven Central
     }
 }
 
@@ -18,5 +23,5 @@ tasks.register("clean", Delete) {
 }
 
 ext {
-    kotlin_version = '1.9.0'
+    kotlin_version = '1.9.0'  // Versi Kotlin terbaru yang digunakan
 }

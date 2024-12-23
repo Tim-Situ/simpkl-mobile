@@ -12,13 +12,20 @@ import 'package:simpkl_mobile/pages/nilaiAkhir.dart';
 import 'package:simpkl_mobile/pages/wellcomePage1.dart';
 import 'package:simpkl_mobile/pages/Profile.dart';
 import 'package:simpkl_mobile/services/auth_service.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_core/firebase_core.dart';  // Import Firebase core
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  // Initialize Firebase
+  await Firebase.initializeApp();  // Add this line to initialize Firebase
   await initializeDateFormatting('id_ID', null);
 
   runApp(const MyApp());
 }
+
+late FlutterLocalNotificationsPlugin localNotifications;
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -58,6 +65,54 @@ class _MyHomePageState extends State<MyHomePage> {
     ProfilePage(),
   ];
 
+  @override
+  void initState() {
+    super.initState();
+    _checkLoginStatus();
+    _initializeFirebaseMessaging();
+    _setupLocalNotifications();
+  }
+
+  void _initializeFirebaseMessaging() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+    // Dapatkan token perangkat untuk debugging
+    String? token = await messaging.getToken();
+    print("FCM Token: $token");
+
+    // Tangani pesan masuk saat aplikasi aktif
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      if (message.notification != null) {
+        _showNotification(message.notification!.title, message.notification!.body);
+      }
+    });
+
+    // Tangani pesan masuk saat aplikasi di latar belakang
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print("Notification clicked: ${message.notification?.title}");
+    });
+  }
+
+  void _setupLocalNotifications() {
+    localNotifications = FlutterLocalNotificationsPlugin();
+
+    const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
+    const settings = InitializationSettings(android: androidSettings);
+
+    localNotifications.initialize(settings);
+  }
+
+  void _showNotification(String? title, String? body) {
+    const androidDetails = AndroidNotificationDetails(
+      'default_channel',
+      'Default Notifications',
+      importance: Importance.high,
+    );
+    const notificationDetails = NotificationDetails(android: androidDetails);
+
+    localNotifications.show(0, title, body, notificationDetails);
+  }
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -74,11 +129,6 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _checkLoginStatus();
-  }
 
   @override
   Widget build(BuildContext context) {

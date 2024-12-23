@@ -392,12 +392,14 @@ class _HomePageState extends State<HomePage> {
                             color: SimpklColor.darkYellow,
                           ),
                         ),
-                        Text(
-                          feature['label'] as String,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            fontSize: 12, 
-                            fontWeight: FontWeight.bold
+                        Expanded(
+                          child: Text(
+                            feature['label'] as String,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              fontSize: 12, 
+                              fontWeight: FontWeight.bold
+                            ),
                           ),
                         ),
                       ],
@@ -419,10 +421,10 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
-              const SizedBox(height: 20,),
+              const SizedBox(height: 15,),
               CarouselSlider(
                 options: CarouselOptions(
-                  height: 260, // Tinggi card
+                  height: 230,
                   enableInfiniteScroll: false,// Looping
                   viewportFraction: 0.7,
                   padEnds: false

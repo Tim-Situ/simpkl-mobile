@@ -80,21 +80,47 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
 
   Future<void> _pickImage() async {
     try {
-      final XFile? pickedFile =
-          await _picker.pickImage(source: ImageSource.gallery);
-      if (pickedFile != null) {
-        setState(() {
-          _image = File(pickedFile.path);
-        });
+      // Menampilkan dialog untuk memilih galeri atau kamera
+      final ImageSource? source = await showDialog<ImageSource>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Pilih Sumber Gambar'),
+            content: const Text('Pilih sumber gambar:'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context, ImageSource.camera);
+                },
+                child: const Text('Kamera'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context, ImageSource.gallery);
+                },
+                child: const Text('Galeri'),
+              ),
+            ],
+          );
+        },
+      );
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Dokumentasi berhasil diupload!'),
-            duration: Duration(seconds: 2), // Durasi tampilan Snackbar
-          ),
-        );
-      } else {
-        print("No image selected.");
+      if (source != null) {
+        final XFile? pickedFile = await _picker.pickImage(source: source);
+        if (pickedFile != null) {
+          setState(() {
+            _image = File(pickedFile.path);
+          });
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Dokumentasi berhasil diupload!'),
+              duration: Duration(seconds: 2), // Durasi tampilan Snackbar
+            ),
+          );
+        } else {
+          print("No image selected.");
+        }
       }
     } catch (e) {
       print("Error picking image: $e");
