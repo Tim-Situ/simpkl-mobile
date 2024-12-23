@@ -1,4 +1,4 @@
-class daftarNilai {
+class DaftarNilai {
   String id;
   String idSiswa;
   String idAspekPenilaian;
@@ -6,7 +6,7 @@ class daftarNilai {
   String keterangan;
   AspekPenilaian aspekPenilaian;
 
-  daftarNilai({
+  DaftarNilai({
     required this.id,
     required this.idSiswa,
     required this.idAspekPenilaian,
@@ -15,8 +15,8 @@ class daftarNilai {
     required this.aspekPenilaian,
   });
 
-  factory daftarNilai.fromJson(Map<String, dynamic> json) {
-    return daftarNilai(
+  factory DaftarNilai.fromJson(Map<String, dynamic> json) {
+    return DaftarNilai(
       id: json['id'],
       idSiswa: json['id_siswa'],
       idAspekPenilaian: json['id_aspek_penilaian'],

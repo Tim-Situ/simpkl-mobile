@@ -16,7 +16,6 @@ class _PresencePageState extends State<PresencePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     _initializeNotification();
@@ -38,7 +37,7 @@ class _PresencePageState extends State<PresencePage> {
     await flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
       onDidReceiveNotificationResponse: (NotificationResponse response) {
-        print('Notifikasi diklik: ${response.payload}');
+        // print('Notifikasi diklik: ${response.payload}');
       },
     );
   }
@@ -68,9 +67,9 @@ class _PresencePageState extends State<PresencePage> {
       payload: 'data tambahan',
     )
         .then((_) {
-      print("Notifikasi berhasil dikirim");
+      // print("Notifikasi berhasil dikirim");
     }).catchError((error) {
-      print("Error saat mengirim notifikasi: $error");
+      // print("Error saat mengirim notifikasi: $error");
     });
   }
 

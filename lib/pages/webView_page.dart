@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class WebViewPage extends StatefulWidget {
-  final String title; 
-  final String url; 
+  final String title;
+  final String url;
 
-  WebViewPage({required this.title, required this.url});
+  const WebViewPage({super.key, required this.title, required this.url});
 
   @override
-  _WebViewPageState createState() => _WebViewPageState();
+  WebViewPageState createState() => WebViewPageState();
 }
 
-class _WebViewPageState extends State<WebViewPage> {
-
-  late WebViewController _webViewController; // Controller yang akan diinisialisasi
+class WebViewPageState extends State<WebViewPage> {
+  late WebViewController
+      _webViewController; // Controller yang akan diinisialisasi
 
   @override
   void initState() {
@@ -24,10 +24,10 @@ class _WebViewPageState extends State<WebViewPage> {
       ..setNavigationDelegate(
         NavigationDelegate(
           onPageStarted: (String url) {
-            print("Page started: $url");
+            // print("Page started: $url");
           },
           onPageFinished: (String url) {
-            print("Page finished: $url");
+            // print("Page finished: $url");
           },
         ),
       );
@@ -47,11 +47,11 @@ class _WebViewPageState extends State<WebViewPage> {
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(50)),
+                borderRadius: const BorderRadius.all(Radius.circular(50)),
                 boxShadow: [
                   BoxShadow(
-                    color: Color(0xFFD3D1D8).withOpacity(0.3),
-                    offset: Offset(5, 10),
+                    color: const Color(0xFFD3D1D8).withOpacity(0.3),
+                    offset: const Offset(5, 10),
                     blurRadius: 20,
                   ),
                 ],
@@ -66,7 +66,7 @@ class _WebViewPageState extends State<WebViewPage> {
         ),
         title: Text(
           widget.title,
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
         ),
         backgroundColor: Colors.transparent, // Menghapus warna latar belakang
         elevation: 0,

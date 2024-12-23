@@ -1,33 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:simpkl_mobile/models/profile_model.dart';
-import 'package:simpkl_mobile/database/database_helper.dart';
 
-
-class DataSiswaPage extends StatefulWidget {
-  const DataSiswaPage({super.key});
-
-  @override
-  _DataSiswaPageState createState() => _DataSiswaPageState();
-}
-
-class _DataSiswaPageState extends State<DataSiswaPage> {
-  ProfileModel? dataDariDb;
-
-  void getProfile() async {
-    dataDariDb = await DatabaseHelper().getProfile();
-    setState(() {});
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getProfile();
-  }
-
-  String getFormattedDate(DateTime date) {
-    return DateFormat('dd MMMM yyyy', 'id_ID').format(date);
-  }
+class DataPerusahaanPage extends StatelessWidget {
+  const DataPerusahaanPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +11,7 @@ class _DataSiswaPageState extends State<DataSiswaPage> {
         elevation: 0,
         centerTitle: true,
         title: const Text(
-          'Data Siswa',
+          'Data Perusahaan',
           style: TextStyle(
             fontSize: 18,
             color: Colors.black,
@@ -73,28 +47,31 @@ class _DataSiswaPageState extends State<DataSiswaPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const SizedBox(height: 8),
+            const SizedBox(height: 20),
             // Profile Picture
-            const Padding(
-              padding: EdgeInsets.all(16.0),
-              child: CircleAvatar(
-                radius: 60,
-                backgroundImage: AssetImage('assets/img/profile.jpg'),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Container(
+                width: 370,
+                height: 224,
+                decoration: BoxDecoration(
+                  image: const DecorationImage(
+                    image: AssetImage('assets/img/perusahaan.jpeg'),
+                    fit: BoxFit.cover,
+                  ),
+                  borderRadius: BorderRadius.circular(12),
+                ),
               ),
             ),
 
             const SizedBox(height: 20),
             // Data Items
-            _buildDataItem(Icons.credit_card, dataDariDb?.nisn ?? "Not Found"),
-            _buildDataItem(Icons.person, dataDariDb?.nama ?? "Not Found"),
-            _buildDataItem(Icons.mail, dataDariDb?.alamat ?? "Not Found"),
-            _buildDataItem(Icons.call, dataDariDb?.no_hp ?? "Not Found"),
-            _buildDataItem(Icons.place, dataDariDb?.tempat_lahir ?? "Not Found"),
-            _buildDataItem(Icons.date_range, dataDariDb?.tanggal_lahir != null
-              ? getFormattedDate(dataDariDb!.tanggal_lahir)
-              : "Not Found"),
-            _buildDataItem(Icons.school, dataDariDb?.jurusan ?? "Not Found"),
-            _buildDataItem(Icons.power_settings_new_sharp, dataDariDb?.status_aktif == true ? "Aktif" : "Tidak Aktif"),
+            _buildDataItem(Icons.person, 'IKEA'),
+            _buildDataItem(Icons.person_outline, 'Ingvar Kamprad'),
+            _buildDataItem(Icons.credit_card, 'ikea.co.id'),
+            _buildDataItem(Icons.email, 'IngvarKampradIk@gmail.com'),
+            _buildDataItem(Icons.phone, '01288992212'),
+            _buildDataItem(Icons.location_on, 'Sukabirus, Bojongsoang'),
           ],
         ),
       ),

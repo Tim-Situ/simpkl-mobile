@@ -67,48 +67,45 @@ class DatabaseHelper {
 
   Future<int> insertProfile(ProfileModel profile) async {
     final db = await database;
-    return db.insert('profile', 
-      {
-        'nisn': profile.nisn,
-        'nama': profile.nama,
-        'alamat': profile.alamat,
-        'no_hp': profile.no_hp,
-        'tempat_lahir': profile.tempat_lahir,
-        'tanggal_lahir': profile.tanggal_lahir.toIso8601String(),
-        'status_aktif': profile.status_aktif == true ? 1:0,
-        'jurusan': profile.jurusan
-      });
+    return db.insert('profile', {
+      'nisn': profile.nisn,
+      'nama': profile.nama,
+      'alamat': profile.alamat,
+      'no_hp': profile.noHp,
+      'tempat_lahir': profile.tempatLahir,
+      'tanggal_lahir': profile.tanggalLahir.toIso8601String(),
+      'status_aktif': profile.statusAktif == true ? 1 : 0,
+      'jurusan': profile.jurusan
+    });
   }
 
   Future<int> insertPembimbing(PembimbingModel pembimbing) async {
     final db = await database;
-    return db.insert('pembimbing', 
-      {
-        'nisn': pembimbing.nip,
-        'nama': pembimbing.nama,
-        'alamat': pembimbing.alamat,
-        'no_hp': pembimbing.no_hp
-      });
+    return db.insert('pembimbing', {
+      'nisn': pembimbing.nip,
+      'nama': pembimbing.nama,
+      'alamat': pembimbing.alamat,
+      'no_hp': pembimbing.noHp
+    });
   }
 
   Future<ProfileModel> getProfile() async {
     final db = await database;
     final result = await db.query('profile', limit: 1, orderBy: 'id DESC');
-  
+
     return ProfileModel.fromMap(result.first);
   }
 
   Future<PembimbingModel> getPembimbing() async {
     final db = await database;
     final result = await db.query('pembimbing', limit: 1, orderBy: 'id DESC');
-    
+
     // Periksa jika result tidak kosong dan konversi data ke ProfileModel
 
-      return PembimbingModel.fromMap(result.first); // Ambil data pertama jika ada
-    
-  // Atau kembalikan ProfileModel kosong sesuai kebutuhan
-  }
+    return PembimbingModel.fromMap(result.first); // Ambil data pertama jika ada
 
+    // Atau kembalikan ProfileModel kosong sesuai kebutuhan
+  }
 
   Future<String?> getToken() async {
     final db = await database;
@@ -128,5 +125,4 @@ class DatabaseHelper {
     final db = await database;
     return db.delete('profile');
   }
-  
 }

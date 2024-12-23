@@ -1,32 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:simpkl_mobile/core/contstants/colors.dart';
-import 'package:simpkl_mobile/pages/wellcomePage1.dart';
+import 'package:simpkl_mobile/pages/welcome_page_1.dart';
 
-class animation extends StatefulWidget {
-  const animation({super.key});
+class Animation extends StatefulWidget {
+  const Animation({super.key});
 
   @override
-_AnimationScreenState createState() => _AnimationScreenState();
+  AnimationScreenState createState() => AnimationScreenState();
 }
 
-class _AnimationScreenState extends State<animation> {
+class AnimationScreenState extends State<Animation> {
   @override
   void initState() {
     super.initState();
 
     // Menunda navigasi ke halaman berikutnya selama 3 detik
     Future.delayed(const Duration(seconds: 3), () {
+      if (!mounted) return;
       // Pindah ke halaman selanjutnya dengan animasi fade
       Navigator.pushReplacement(
         context,
         PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) => const WellcomePage1(),
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              const WellcomePage1(),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             const begin = 0.0;
             const end = 1.0;
             const curve = Curves.easeInOut;
 
-            var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+            var tween =
+                Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
             return FadeTransition(
               opacity: animation.drive(tween),
               child: child,
@@ -84,7 +87,7 @@ class _AnimationScreenState extends State<animation> {
                 "Praktik Kerja Lapangan",
                 style: TextStyle(
                   fontSize: 20,
-                  color: SimpklColor.darkBlue, 
+                  color: SimpklColor.darkBlue,
                 ),
               ),
             ],

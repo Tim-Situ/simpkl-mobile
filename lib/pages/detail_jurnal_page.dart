@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:simpkl_mobile/core/contstants/colors.dart';
 import 'package:simpkl_mobile/models/jurnal_harian_model.dart';
@@ -46,11 +45,11 @@ class _DetailJurnalPageState extends State<DetailJurnalPage> {
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(50)),
+                borderRadius: const BorderRadius.all(Radius.circular(50)),
                 boxShadow: [
                   BoxShadow(
-                    color: Color(0xFFD3D1D8).withOpacity(0.3),
-                    offset: Offset(5, 10),
+                    color: const Color(0xFFD3D1D8).withOpacity(0.3),
+                    offset: const Offset(5, 10),
                     blurRadius: 20,
                   ),
                 ],
@@ -71,24 +70,24 @@ class _DetailJurnalPageState extends State<DetailJurnalPage> {
         elevation: 0,
       ),
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
         child: SingleChildScrollView(
           child: Column(
             children: [
               Container(
-                margin: EdgeInsets.symmetric(vertical: 5),
+                margin: const EdgeInsets.symmetric(vertical: 5),
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(8),
                     boxShadow: [
                       BoxShadow(
-                        color: Color(0xFFD3D1D8).withOpacity(0.3),
+                        color: const Color(0xFFD3D1D8).withOpacity(0.3),
                         blurRadius: 20,
                       ),
                     ]),
                 child: Padding(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -101,7 +100,7 @@ class _DetailJurnalPageState extends State<DetailJurnalPage> {
                       ),
                       Container(
                         padding:
-                            EdgeInsets.symmetric(vertical: 4, horizontal: 18),
+                            const EdgeInsets.symmetric(vertical: 4, horizontal: 18),
                         decoration: BoxDecoration(
                             color: getStatusColor(jurnal.status),
                             borderRadius: BorderRadius.circular(8)),
@@ -125,63 +124,63 @@ class _DetailJurnalPageState extends State<DetailJurnalPage> {
                     borderRadius: BorderRadius.circular(8),
                     boxShadow: [
                       BoxShadow(
-                        color: Color(0xFFD3D1D8).withOpacity(0.3),
+                        color: const Color(0xFFD3D1D8).withOpacity(0.3),
                         blurRadius: 20,
                       ),
                     ]),
                 child: Padding(
-                    padding: EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(10),
                     child: Column(
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
+                            const Text(
                               "Jenis Pekerjaan",
                               style: TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.w500),
                             ),
                             Text(
                               ": ${jurnal.jenisPekerjaan}",
-                              style: TextStyle(fontSize: 15),
+                              style: const TextStyle(fontSize: 15),
                             ),
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
+                            const Text(
                               "Bentuk Kegiatan",
                               style: TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.w500),
                             ),
                             Text(
                               ": ${jurnal.bentukKegiatan}",
-                              style: TextStyle(fontSize: 15),
+                              style: const TextStyle(fontSize: 15),
                             ),
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
+                            const Text(
                               "Jam Pekerjaan",
                               style: TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.w500),
                             ),
                             Text(
                               ": ${jurnal.jamMulai.format(context)} - ${jurnal.jamSelesai.format(context)}",
-                              style: TextStyle(fontSize: 15),
+                              style: const TextStyle(fontSize: 15),
                             ),
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         Row(
@@ -213,26 +212,26 @@ class _DetailJurnalPageState extends State<DetailJurnalPage> {
                     borderRadius: BorderRadius.circular(8),
                     boxShadow: [
                       BoxShadow(
-                        color: Color(0xFFD3D1D8).withOpacity(0.3),
+                        color: const Color(0xFFD3D1D8).withOpacity(0.3),
                         blurRadius: 20,
                       ),
                     ]),
                 child: Padding(
-                    padding: EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(10),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        const Text(
                           "Deskripsi Pekerjaan",
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.w500),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 5,
                         ),
                         Text(
                           jurnal.deskripsiPekerjaan,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 15,
                           ),
                           textAlign: TextAlign.justify,
@@ -247,7 +246,7 @@ class _DetailJurnalPageState extends State<DetailJurnalPage> {
                   borderRadius: BorderRadius.circular(8),
                   boxShadow: [
                     BoxShadow(
-                      color: Color(0xFFD3D1D8).withOpacity(0.3),
+                      color: const Color(0xFFD3D1D8).withOpacity(0.3),
                       blurRadius: 20,
                     ),
                   ],
@@ -289,7 +288,7 @@ class _DetailJurnalPageState extends State<DetailJurnalPage> {
                     borderRadius: BorderRadius.circular(8),
                     boxShadow: [
                       BoxShadow(
-                        color: Color(0xFFD3D1D8).withOpacity(0.3),
+                        color: const Color(0xFFD3D1D8).withOpacity(0.3),
                         blurRadius: 20,
                       ),
                     ]),
@@ -316,7 +315,7 @@ class _DetailJurnalPageState extends State<DetailJurnalPage> {
                       ],
                     )),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 15,
               )
             ],

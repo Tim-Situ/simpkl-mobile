@@ -1,8 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:intl/intl.dart';
 import 'package:simpkl_mobile/core/contstants/colors.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:panara_dialogs/panara_dialogs.dart';
@@ -28,9 +26,9 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
     'Inisiatif'
   ];
 
-  TextEditingController _dateController = TextEditingController();
-  TextEditingController _startTimeController = TextEditingController();
-  TextEditingController _endTimeController = TextEditingController();
+  final TextEditingController _dateController = TextEditingController();
+  final TextEditingController _startTimeController = TextEditingController();
+  final TextEditingController _endTimeController = TextEditingController();
 
   final ImagePicker _picker = ImagePicker();
 
@@ -111,19 +109,21 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
           setState(() {
             _image = File(pickedFile.path);
           });
+        }
 
+        if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text('Dokumentasi berhasil diupload!'),
               duration: Duration(seconds: 2), // Durasi tampilan Snackbar
             ),
           );
-        } else {
-          print("No image selected.");
         }
+      } else {
+        // print("No image selected.");
       }
     } catch (e) {
-      print("Error picking image: $e");
+      // print("Error picking image: $e");
     }
   }
 
@@ -140,11 +140,11 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(50)),
+                borderRadius: const BorderRadius.all(Radius.circular(50)),
                 boxShadow: [
                   BoxShadow(
-                    color: Color(0xFFD3D1D8).withOpacity(0.3),
-                    offset: Offset(5, 10),
+                    color: const Color(0xFFD3D1D8).withOpacity(0.3),
+                    offset: const Offset(5, 10),
                     blurRadius: 20,
                   ),
                 ],
@@ -165,17 +165,17 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
         elevation: 0,
       ),
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
         child: SingleChildScrollView(
           child: Column(
             children: [
               const Text(
                   "Masukkan Data Jurnal yang yang sesuai dengan tugas Anda."),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Container(
-                margin: EdgeInsets.symmetric(vertical: 10),
+                margin: const EdgeInsets.symmetric(vertical: 10),
                 child: TextFormField(
                   controller:
                       _dateController, // Mengontrol teks dalam TextFormField
@@ -202,11 +202,12 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
                       child: Container(
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.all(Radius.circular(50)),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(50)),
                           boxShadow: [
                             BoxShadow(
-                              color: Color(0xFFD3D1D8).withOpacity(0.3),
-                              offset: Offset(5, 10),
+                              color: const Color(0xFFD3D1D8).withOpacity(0.3),
+                              offset: const Offset(5, 10),
                               blurRadius: 20,
                             ),
                           ],
@@ -222,7 +223,7 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.symmetric(vertical: 10),
+                margin: const EdgeInsets.symmetric(vertical: 10),
                 child: DropdownButtonFormField<String>(
                   decoration: InputDecoration(
                     labelText:
@@ -249,7 +250,7 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.symmetric(vertical: 10),
+                margin: const EdgeInsets.symmetric(vertical: 10),
                 child: TextFormField(
                   maxLines: null,
                   minLines: 4,
@@ -268,7 +269,7 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.symmetric(vertical: 10),
+                margin: const EdgeInsets.symmetric(vertical: 10),
                 child: DropdownButtonFormField<String>(
                   decoration: InputDecoration(
                     labelText:
@@ -295,7 +296,7 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.symmetric(vertical: 10),
+                margin: const EdgeInsets.symmetric(vertical: 10),
                 child: TextFormField(
                   controller:
                       _startTimeController, // Mengontrol teks dalam TextFormField
@@ -322,11 +323,12 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
                       child: Container(
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.all(Radius.circular(50)),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(50)),
                           boxShadow: [
                             BoxShadow(
-                              color: Color(0xFFD3D1D8).withOpacity(0.3),
-                              offset: Offset(5, 10),
+                              color: const Color(0xFFD3D1D8).withOpacity(0.3),
+                              offset: const Offset(5, 10),
                               blurRadius: 20,
                             ),
                           ],
@@ -343,7 +345,7 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.symmetric(vertical: 10),
+                margin: const EdgeInsets.symmetric(vertical: 10),
                 child: TextFormField(
                   controller:
                       _endTimeController, // Mengontrol teks dalam TextFormField
@@ -370,11 +372,12 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
                       child: Container(
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.all(Radius.circular(50)),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(50)),
                           boxShadow: [
                             BoxShadow(
-                              color: Color(0xFFD3D1D8).withOpacity(0.3),
-                              offset: Offset(5, 10),
+                              color: const Color(0xFFD3D1D8).withOpacity(0.3),
+                              offset: const Offset(5, 10),
                               blurRadius: 20,
                             ),
                           ],
@@ -391,7 +394,7 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.symmetric(vertical: 10),
+                margin: const EdgeInsets.symmetric(vertical: 10),
                 child: TextFormField(
                   decoration: InputDecoration(
                     labelText: 'Staff yang Menugaskan',
@@ -408,7 +411,7 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.symmetric(vertical: 10),
+                margin: const EdgeInsets.symmetric(vertical: 10),
                 height: 200,
                 width: double.infinity,
                 decoration: BoxDecoration(
@@ -441,7 +444,7 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               InkWell(
@@ -460,7 +463,8 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
                       Navigator.pop(context);
 
                       Future.delayed(const Duration(milliseconds: 100), () {
-                        Navigator.pop(context); // Kembali ke halaman sebelumnya
+                        Navigator.of(context)
+                            .pop(); // Kembali ke halaman sebelumnya
                       });
                     },
                     panaraDialogType: PanaraDialogType.normal,
@@ -468,10 +472,10 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
                         false, // optional parameter (default is true)
                   );
                 },
-                borderRadius: BorderRadius.all(Radius.circular(50)),
+                borderRadius: const BorderRadius.all(Radius.circular(50)),
                 child: Ink(
                   width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(50)),
                     color: SimpklColor.darkBlue,
                   ),
@@ -489,7 +493,7 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 50,
               )
             ],
