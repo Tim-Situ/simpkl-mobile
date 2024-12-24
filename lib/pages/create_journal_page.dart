@@ -1,9 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:simpkl_mobile/core/contstants/colors.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:panara_dialogs/panara_dialogs.dart';
+import 'package:simpkl_mobile/services/jurnal_harian_service.dart';
 
 class CreateJournalPage extends StatefulWidget {
   const CreateJournalPage({super.key});
@@ -29,8 +31,13 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
   final TextEditingController _dateController = TextEditingController();
   final TextEditingController _startTimeController = TextEditingController();
   final TextEditingController _endTimeController = TextEditingController();
+  String? selectedJobType;
+  String? selectedActivityForm;
+  final TextEditingController _jobDescriptionController = TextEditingController();
+  final TextEditingController _staffController = TextEditingController();
 
   final ImagePicker _picker = ImagePicker();
+  final JurnalHarianService _journalService = JurnalHarianService();
 
   Future<void> _selectDate(BuildContext context) async {
     DateTime? pickedDate = await showDatePicker(
@@ -42,8 +49,7 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
 
     if (pickedDate != null) {
       setState(() {
-        _dateController.text =
-            "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}"; // Format tanggal yang diinginkan
+        _dateController.text = DateFormat('yyyy-MM-dd').format(pickedDate); // Format tanggal yang diinginkan
       });
     }
   }
@@ -56,8 +62,9 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
 
     if (pickedTime != null) {
       setState(() {
-        // Format waktu dalam jam dan menit (misalnya: 14:30)
-        _startTimeController.text = pickedTime.format(context);
+        // Format waktu menjadi HH:mm:ss (jam:menit:detik)
+        _startTimeController.text =
+            "${pickedTime.hour.toString().padLeft(2, '0')}:${pickedTime.minute.toString().padLeft(2, '0')}:00";
       });
     }
   }
@@ -70,8 +77,9 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
 
     if (pickedTime != null) {
       setState(() {
-        // Format waktu dalam jam dan menit (misalnya: 14:30)
-        _endTimeController.text = pickedTime.format(context);
+        // Format waktu menjadi HH:mm:ss (jam:menit:detik)
+        _endTimeController.text =
+            "${pickedTime.hour.toString().padLeft(2, '0')}:${pickedTime.minute.toString().padLeft(2, '0')}:00";
       });
     }
   }
@@ -125,6 +133,78 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
     } catch (e) {
       // print("Error picking image: $e");
     }
+  }
+
+  Future<void> _submitForm() async {
+    if (_dateController.text.isEmpty ||
+        selectedJobType == null ||
+        selectedActivityForm == null ||
+        _jobDescriptionController.text.isEmpty ||
+        _startTimeController.text.isEmpty ||
+        _endTimeController.text.isEmpty ||
+        _staffController.text.isEmpty ||
+        _image == null) {
+          print("KOSONG");
+          PanaraInfoDialog.show(
+            context,
+            title: "Peringatan",
+            message: "Semua data harus diisi dengan lengkap.",
+            buttonText: "Okay",
+            onTapDismiss: () {
+                Navigator.pop(context);
+            },
+            panaraDialogType: PanaraDialogType.normal,
+          );
+          return;
+        }
+
+    try {
+      await _journalService.addJournal(
+        hari: _dateController.text,
+        tanggal: _dateController.text,
+        jenisPekerjaan: selectedJobType!,
+        deskripsiPekerjaan: _jobDescriptionController.text,
+        bentukKegiatan: selectedActivityForm!,
+        jamMulai: _startTimeController.text,
+        jamSelesai: _endTimeController.text,
+        staf: _staffController.text,
+        fileFoto: _image!,
+      );
+
+      // Clear fields after submission
+      setState(() {
+        _image = null;
+        _dateController.clear();
+        _startTimeController.clear();
+        _endTimeController.clear();
+        _jobDescriptionController.clear();
+        _staffController.clear();
+        selectedJobType = null;
+        selectedActivityForm = null;
+      });
+
+      Navigator.pop(context, true);
+
+    } catch (e) {
+      // Handle error submitting form
+      PanaraInfoDialog.show(
+        context,
+        title: "Gagal",
+        message: "Terjadi kesalahan saat menyimpan jurnal.",
+        buttonText: "Okay",
+        onTapDismiss: () {
+            Navigator.pop(context);
+        },
+        panaraDialogType: PanaraDialogType.normal,
+      );
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // Set default date to today
+    _dateController.text = DateFormat('yyyy-MM-dd').format(DateTime.now());
   }
 
   @override
@@ -181,10 +261,6 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
                       _dateController, // Mengontrol teks dalam TextFormField
                   readOnly:
                       true, // Membuat field hanya bisa dibuka, tidak bisa diketik manual
-                  onTap: () async {
-                    _selectDate(
-                        context); // Memunculkan date picker saat field di-tap
-                  },
                   decoration: InputDecoration(
                     labelText: 'Tanggal',
                     border: OutlineInputBorder(
@@ -238,8 +314,12 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  value: null,
-                  onChanged: (String? value) {},
+                  value: selectedJobType,
+                  onChanged: (String? value) {
+                    setState(() {
+                      selectedJobType = value;
+                    });
+                  },
                   items: dataJenisPekerjaan
                       .map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
@@ -252,6 +332,7 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
               Container(
                 margin: const EdgeInsets.symmetric(vertical: 10),
                 child: TextFormField(
+                  controller: _jobDescriptionController,
                   maxLines: null,
                   minLines: 4,
                   decoration: InputDecoration(
@@ -284,8 +365,12 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  value: null,
-                  onChanged: (String? value) {},
+                  value: selectedActivityForm,
+                  onChanged: (String? value) {
+                    setState(() {
+                      selectedActivityForm = value;
+                    });
+                  },
                   items: dataBentukKegiatan
                       .map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
@@ -396,6 +481,7 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
               Container(
                 margin: const EdgeInsets.symmetric(vertical: 10),
                 child: TextFormField(
+                  controller: _staffController,
                   decoration: InputDecoration(
                     labelText: 'Staff yang Menugaskan',
                     border: OutlineInputBorder(
@@ -460,12 +546,8 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
                       Navigator.pop(context);
                     },
                     onTapConfirm: () {
+                      _submitForm();
                       Navigator.pop(context);
-
-                      Future.delayed(const Duration(milliseconds: 100), () {
-                        Navigator.of(context)
-                            .pop(); // Kembali ke halaman sebelumnya
-                      });
                     },
                     panaraDialogType: PanaraDialogType.normal,
                     barrierDismissible:

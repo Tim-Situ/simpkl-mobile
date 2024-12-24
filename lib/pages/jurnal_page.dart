@@ -29,7 +29,7 @@ class _JurnalPageState extends State<JurnalPage> {
       firstDate: DateTime(2020),
       lastDate: DateTime(2025),
     );
-    
+
     if (picked != null && picked != selectedDate) {
       setState(() {
         selectedDate = picked;
@@ -72,18 +72,23 @@ class _JurnalPageState extends State<JurnalPage> {
     _fetchData(); // Fetch data when the page is loaded
   }
 
+  // Fungsi untuk melakukan refresh
+  Future<void> _refreshData() async {
+    await _fetchData();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.only(top: 50, right: 20, left: 20, bottom: 20),
-        child: SingleChildScrollView(
-          child: Column(
+        padding: const EdgeInsets.only(right: 20, left: 20, bottom: 20),
+        child: RefreshIndicator(
+          onRefresh: _refreshData, // Menyambungkan fungsi refresh
+          child: ListView(
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const SizedBox(width: 100),
                   Expanded(
                     child: GestureDetector(
                       onTap: () => _selectDate(context),
@@ -108,111 +113,96 @@ class _JurnalPageState extends State<JurnalPage> {
                       ),
                     ),
                   ),
-                  SizedBox(
-                    width: 100,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Container(
-                          height: 50,
-                          width: 50,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(12)),
-                            boxShadow: [
-                              BoxShadow(
-                                color: const Color(0xFFD3D1D8).withOpacity(0.3),
-                                offset: const Offset(5, 10),
-                                blurRadius: 20,
-                              ),
-                            ],
-                          ),
-                          child: const Icon(
-                            Icons.notifications_none_outlined,
-                            color: Colors.black,
-                            size: 25,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
                 ],
               ),
               const SizedBox(
-                height: 35,
+                height: 20,
               ),
               _isLoading
-                  ? const Center(child: CircularProgressIndicator())
-                  : _jurnalData.isNotEmpty
-                    ? Column(
-                        children: _jurnalData.map((jurnal) {
-                          return Column(
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-        
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => DetailJurnalPage(jurnal: jurnal),
-                                    ),
-                                  );
-                                },
-                                child: JournalCard(
-                                  title: jurnal.deskripsiPekerjaan,
-                                  status: jurnal.status,
-                                  timeRange:
-                                      '${jurnal.jamMulai.format(context)} - ${jurnal.jamSelesai.format(context)}',
-                                  date: getFormattedDate(jurnal.tanggal),
-                                  typeOfWork: jurnal.jenisPekerjaan,
-                                  typeOfActivity: jurnal.bentukKegiatan,
-                                  photo: jurnal.foto,
-                                ),
-                              ),
-                              const SizedBox(height: 15),
-                            ],
-                          );
-                        }).toList(),
-                      )
-                    : Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.all(Radius.circular(8)),
-                            border: Border.all(
-                              width: 1,
-                              color: Colors.red,
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: const Color(0xFFD8D1D1).withOpacity(0.3),
-                                offset: const Offset(5, 10),
-                                blurRadius: 20,
-                              ),
-                            ],
-                            color: Colors.red.withOpacity(0.4),
-                          ),
-                          child: const Center(
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                vertical: 20,
-                                horizontal: 53,
-                              ),
-                              child: Text(
-                                "Kamu belum mengumpulkan Jurnal\nuntuk kehadiran Hari ini",
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.red,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ),
-                        ),
-                      )
+    ? const Center(child: CircularProgressIndicator())
+    : _jurnalData.isNotEmpty
+        ? Column(
+            children: _jurnalData.map((jurnal) {
+              return Dismissible(
+                key: Key(jurnal.id.toString()), // Gunakan ID unik untuk setiap item
+                direction: DismissDirection.endToStart, // Arah tariknya dari kanan ke kiri
+                onDismissed: (direction) async {
+                  // Aksi ketika item dihapus
+                  await _jurnalHarianService.deleteJournal(jurnal.id);
+                  _fetchData();
+
+                  // Tampilkan snackbar sebagai konfirmasi
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('${jurnal.deskripsiPekerjaan} dihapus')),
+                  );
+                },
+                background: Container(
+                  alignment: Alignment.centerRight,
+                  padding: const EdgeInsets.only(right: 20),
+                  color: Colors.red,
+                  child: const Icon(Icons.delete, color: Colors.white),
+                ),
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DetailJurnalPage(jurnal: jurnal),
+                      ),
+                    );
+                  },
+                  child: JournalCard(
+                    title: jurnal.deskripsiPekerjaan,
+                    status: jurnal.status,
+                    timeRange:
+                        '${jurnal.jamMulai.format(context)} - ${jurnal.jamSelesai.format(context)}',
+                    date: getFormattedDate(jurnal.tanggal),
+                    typeOfWork: jurnal.jenisPekerjaan,
+                    typeOfActivity: jurnal.bentukKegiatan,
+                    photo: jurnal.foto,
+                  ),
+                ),
+              );
+            }).toList(),
+          )
+        : Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(Radius.circular(8)),
+                border: Border.all(
+                  width: 1,
+                  color: Colors.red,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xFFD8D1D1).withOpacity(0.3),
+                    offset: const Offset(5, 10),
+                    blurRadius: 20,
+                  ),
+                ],
+                color: Colors.red.withOpacity(0.4),
+              ),
+              child: const Center(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    vertical: 20,
+                    horizontal: 53,
+                  ),
+                  child: Text(
+                    "Kamu belum mengumpulkan Jurnal\nuntuk kehadiran Hari ini",
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.red,
+                      fontWeight: FontWeight.w700,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            ),
+          ),
             ],
           ),
         ),
@@ -221,11 +211,18 @@ class _JurnalPageState extends State<JurnalPage> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(50),
         ),
-        onPressed: () {
-          Navigator.push(
+        onPressed: () async {
+          final result = await Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const CreateJournalPage()),
+            MaterialPageRoute(builder: (context) => CreateJournalPage()),
           );
+
+          if (result == true) {
+            _fetchData();
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Jurnal berhasil ditambahkan!')),
+            );
+          }
         },
         backgroundColor: Colors.white,
         child: const Icon(

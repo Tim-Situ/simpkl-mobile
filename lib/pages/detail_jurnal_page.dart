@@ -292,22 +292,22 @@ class _DetailJurnalPageState extends State<DetailJurnalPage> {
                         blurRadius: 20,
                       ),
                     ]),
-                child: const Padding(
+                child: Padding(
                     padding: EdgeInsets.all(10),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        const Text(
                           "Catatan Pembimbing",
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.w500),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 5,
                         ),
                         Text(
-                          "Belum Ada Catatan",
-                          style: TextStyle(
+                          jurnal.catatanPembimbing ?? 'Tidak ada catatan pembimbing.',
+                          style: const TextStyle(
                             fontSize: 15,
                           ),
                           textAlign: TextAlign.justify,

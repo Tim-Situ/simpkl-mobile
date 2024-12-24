@@ -53,6 +53,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
   final _authService = AuthService();
+  String? messageToken = "";
 
   final List<Widget> _pages = <Widget>[
     const HomePage(),
@@ -70,12 +71,19 @@ class _MyHomePageState extends State<MyHomePage> {
     _setupLocalNotifications();
   }
 
-  void _initializeFirebaseMessaging() async {
+  Future<void> _initializeFirebaseMessaging() async {
     FirebaseMessaging messaging = FirebaseMessaging.instance;
 
     // Dapatkan token perangkat untuk debugging
     String? token = await messaging.getToken();
-    print("FCM Token: $token");
+    if (token != null) {
+      setState(() {
+        messageToken = token;
+      });
+      print("FCM Token: $token");
+    } else {
+      print("FCM Token gagal diperoleh");
+    }
 
     // Tangani pesan masuk saat aplikasi aktif
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
@@ -86,7 +94,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
     // Tangani pesan masuk saat aplikasi di latar belakang
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      print("Notification clicked: ${message.notification?.title}");
+      if (message.notification != null) {
+        _showNotification(message.notification!.title, message.notification!.body);
+      }
     });
   }
 
@@ -118,7 +128,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _checkLoginStatus() async {
     final isLoggedIn = await _authService.isLoggedIn();
-    if (!isLoggedIn && mounted) {
+    if (isLoggedIn) {
+      // Inisialisasi Firebase Messaging setelah login
+      await _initializeFirebaseMessaging();
+      if (messageToken != null) {
+        await _authService.setMessageToken(messageToken!);
+        print("Token berhasil disimpan ke API");
+      }
+    } else if (mounted) {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const Login()),

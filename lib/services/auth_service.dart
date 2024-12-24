@@ -21,9 +21,10 @@ class AuthService with ChangeNotifier {
     );
 
     if (response.statusCode == 200) {
+
       final data = json.decode(response.body);
-      if (data['success']) {
-        final token = data['data']['accessToken'];
+        if (data['success']) {
+          final token = data['data']['accessToken'];
 
         // Save token to SQLite
         await DatabaseHelper().insertToken(token);
@@ -63,6 +64,21 @@ class AuthService with ChangeNotifier {
   Future<bool> isLoggedIn() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getBool('isLoggedIn') ?? false;
+  }
+
+  Future<void> setMessageToken(String token) async {
+    final bearerToken = await getToken();
+    final response = await http.post(
+      Uri.parse('$_baseUrl/auth/set-message-token'),
+      headers: {
+        'Authorization': 'Bearer $bearerToken',
+      },
+      body: {
+        'token': token,
+      },
+    );
+
+    print(response.body);
   }
 
   // Logout method
