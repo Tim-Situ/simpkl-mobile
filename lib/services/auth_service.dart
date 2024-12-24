@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:simpkl_mobile/core/contstants/api_constants.dart';
 import 'package:simpkl_mobile/database/database_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:simpkl_mobile/models/pembimbing_model.dart';
 import 'package:simpkl_mobile/models/profile_model.dart';
 
 class AuthService with ChangeNotifier {
@@ -41,9 +42,14 @@ class AuthService with ChangeNotifier {
           final Map<String, dynamic> responseData = jsonDecode(response.body);   
           if (responseData['data'] != null) {
             final dynamic jsonDataPengguna = responseData['data']['dataPengguna'];
+            // final dynamic jsonDataPembimbing = responseData['data']['dataPengguna']['kelompok_bimbingan']['guru_pembimbing'];
             ProfileModel _dataProfile = ProfileModel.fromJson(jsonDataPengguna);
+            // PembimbingModel _dataPembimbing = PembimbingModel.fromJson(jsonDataPembimbing);
             print(_dataProfile.nama);
+            // print(_dataPembimbing.nama);
             await DatabaseHelper().insertProfile(_dataProfile);
+            // await DatabaseHelper().insertPembimbing(_dataPembimbing);
+            
           }
         }
 

@@ -44,30 +44,30 @@ class _ProfilePageState extends State<ProfilePage> {
       child: Column(
         children: [
           // Account Selector
-          Padding(
-            padding:
-                const EdgeInsets.only(top: 60, right: 20, left: 20, bottom: 20),
-            child: Column(
-              children: [
-                Text(
-                  'Choose Account',
-                  style: TextStyle(
-                    color: Colors.grey[600],
-                    fontSize: 14,
-                  ),
-                ),
-                const Text(
-                  'mgbelvanaufal@gmail.com',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.normal,
-                  ),
-                ),
-              ],
-            ),
-          ),
+          // Padding(
+          //   padding:
+          //       const EdgeInsets.only(top: 60, right: 20, left: 20, bottom: 20),
+          //   child: Column(
+          //     children: [
+          //       Text(
+          //         'Your Account',
+          //         style: TextStyle(
+          //           color: Colors.grey[600],
+          //           fontSize: 14,
+          //         ),
+          //       ),
+          //       const Text(
+          //         'mgbelvanaufal@gmail.com',
+          //         style: TextStyle(
+          //           fontSize: 16,
+          //           fontWeight: FontWeight.normal,
+          //         ),
+          //       ),
+          //     ],
+          //   ),
+          // ),
 
-          const SizedBox(height: 18),
+          const SizedBox(height: 60),
 
           // Profile Picture and Name
           Column(

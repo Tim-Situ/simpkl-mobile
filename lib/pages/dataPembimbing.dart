@@ -1,6 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:simpkl_mobile/models/pembimbing_model.dart';
+import 'package:simpkl_mobile/models/profile_model.dart';
+import 'package:simpkl_mobile/database/database_helper.dart';
 
-class DataPembimbingPage extends StatelessWidget {
+class DataPembimbingPage extends StatefulWidget  {
+  const DataPembimbingPage({super.key});
+
+  @override
+  _DataPembimbingPageState createState() => _DataPembimbingPageState();
+}
+
+class _DataPembimbingPageState extends State<DataPembimbingPage> {
+  PembimbingModel? dataDariDb;
+
+  // void getPembimbing() async {
+  //   dataDariDb = await DatabaseHelper().getPembimbing();
+  //   setState(() {});
+  // }
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   getPembimbing();
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,12 +82,11 @@ class DataPembimbingPage extends StatelessWidget {
 
             const SizedBox(height: 20),
             // Data Items
-            _buildDataItem(Icons.person, 'Ghaziveda'),
-            _buildDataItem(Icons.person_outline, 'Ahmad'),
-            _buildDataItem(Icons.credit_card, '1302220011'),
-            _buildDataItem(Icons.email, 'mgbelvanaufal@gmail.com'),
-            _buildDataItem(Icons.phone, '082295903760'),
-            _buildDataItem(Icons.location_on, 'Pesona Bali, Bojongsoang'),
+            _buildDataItem(Icons.credit_card, dataDariDb?.nip ?? "Not Bel"),
+            _buildDataItem(Icons.person, dataDariDb?.nama ?? "Not Found"),
+            _buildDataItem(Icons.mail, dataDariDb?.alamat ?? "Not Found"),
+            _buildDataItem(Icons.call, dataDariDb?.no_hp ?? "Not Found"),
+            
           ],
         ),
       ),

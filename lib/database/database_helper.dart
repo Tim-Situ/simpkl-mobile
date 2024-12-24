@@ -47,15 +47,15 @@ class DatabaseHelper {
           )
         ''');
 
-        // await db.execute('''
-        //   CREATE TABLE pembimbing (
-        //     id INTEGER PRIMARY KEY AUTOINCREMENT,
-        //     nip TEXT,
-        //     nama TEXT,
-        //     alamat TEXT,
-        //     no_hp TEXT,
-        //   )
-        // ''');
+        await db.execute('''
+          CREATE TABLE pembimbing (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nip TEXT,
+            nama TEXT,
+            alamat TEXT,
+            no_hp TEXT
+          )
+        ''');
       },
     );
   }
@@ -80,16 +80,16 @@ class DatabaseHelper {
       });
   }
 
-  Future<int> insertPembimbing(PembimbingModel pembimbing) async {
-    final db = await database;
-    return db.insert('pembimbing', 
-      {
-        'nisn': pembimbing.nip,
-        'nama': pembimbing.nama,
-        'alamat': pembimbing.alamat,
-        'no_hp': pembimbing.no_hp
-      });
-  }
+  // Future<int> insertPembimbing(PembimbingModel pembimbing) async {
+  //   final db = await database;
+  //   return db.insert('pembimbing', 
+  //     {
+  //       'nip': pembimbing.nip,
+  //       'nama': pembimbing.nama,
+  //       'alamat': pembimbing.alamat,
+  //       'no_hp': pembimbing.no_hp
+  //     });
+  // }
 
   Future<ProfileModel> getProfile() async {
     final db = await database;
@@ -98,16 +98,16 @@ class DatabaseHelper {
     return ProfileModel.fromMap(result.first);
   }
 
-  Future<PembimbingModel> getPembimbing() async {
-    final db = await database;
-    final result = await db.query('pembimbing', limit: 1, orderBy: 'id DESC');
+  // Future<PembimbingModel> getPembimbing() async {
+  //   final db = await database;
+  //   final result = await db.query('pembimbing', limit: 1, orderBy: 'id DESC');
     
-    // Periksa jika result tidak kosong dan konversi data ke ProfileModel
+  //   // Periksa jika result tidak kosong dan konversi data ke ProfileModel
 
-      return PembimbingModel.fromMap(result.first); // Ambil data pertama jika ada
+  //     return PembimbingModel.fromMap(result.first); // Ambil data pertama jika ada
     
-  // Atau kembalikan ProfileModel kosong sesuai kebutuhan
-  }
+  // // Atau kembalikan ProfileModel kosong sesuai kebutuhan
+  // }
 
 
   Future<String?> getToken() async {
