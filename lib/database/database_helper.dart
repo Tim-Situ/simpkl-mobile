@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:path/path.dart';
 import 'package:simpkl_mobile/models/pembimbing_model.dart';
+import 'package:simpkl_mobile/models/perusahaan_model.dart';
 import 'package:simpkl_mobile/models/profile_model.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -47,15 +48,28 @@ class DatabaseHelper {
           )
         ''');
 
-        // await db.execute('''
-        //   CREATE TABLE pembimbing (
-        //     id INTEGER PRIMARY KEY AUTOINCREMENT,
-        //     nip TEXT,
-        //     nama TEXT,
-        //     alamat TEXT,
-        //     no_hp TEXT,
-        //   )
-        // ''');
+        await db.execute('''
+          CREATE TABLE pembimbing (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nip TEXT,
+            nama TEXT,
+            alamat TEXT,
+            no_hp TEXT,
+            status_aktif INTEGER
+          )
+        ''');
+
+        await db.execute('''
+          CREATE TABLE perusahaan (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nama_perusahaan TEXT,
+            pimpinan TEXT,
+            alamat TEXT,
+            no_hp TEXT,
+            email TEXT,
+            website TEXT
+          )
+        ''');
       },
     );
   }
@@ -82,10 +96,23 @@ class DatabaseHelper {
   Future<int> insertPembimbing(PembimbingModel pembimbing) async {
     final db = await database;
     return db.insert('pembimbing', {
-      'nisn': pembimbing.nip,
+      'nip': pembimbing.nip,
       'nama': pembimbing.nama,
       'alamat': pembimbing.alamat,
-      'no_hp': pembimbing.noHp
+      'no_hp': pembimbing.noHp,
+      'status_aktif': pembimbing.statusAktif == true ? 1 : 0
+    });
+  }
+
+  Future<int> insertPerusahaan(PerusahaanModel perusahaan) async {
+    final db = await database;
+    return db.insert('perusahaan', {
+      'nama_perusahaan': perusahaan.nama_perusahaan,
+      'pimpinan': perusahaan.pimpinan,
+      'alamat': perusahaan.alamat,
+      'no_hp': perusahaan.no_hp,
+      'email': perusahaan.email,
+      'website': perusahaan.website
     });
   }
 
@@ -100,11 +127,20 @@ class DatabaseHelper {
     final db = await database;
     final result = await db.query('pembimbing', limit: 1, orderBy: 'id DESC');
 
-    // Periksa jika result tidak kosong dan konversi data ke ProfileModel
+    if (result.isNotEmpty) {
+      print("Data Pembimbing dari DB: ${result.first}");
+      return PembimbingModel.fromMap(result.first);
+    } else {
+      print("Tidak ada data pembimbing di DB");
+      throw Exception("Pembimbing not found");
+  }
+  }
 
-    return PembimbingModel.fromMap(result.first); // Ambil data pertama jika ada
+  Future<PerusahaanModel> getPerusahaan() async {
+    final db = await database;
+    final result = await db.query('perusahaan', limit: 1, orderBy: 'id DESC');
 
-    // Atau kembalikan ProfileModel kosong sesuai kebutuhan
+    return PerusahaanModel.fromMap(result.first); 
   }
 
   Future<String?> getToken() async {

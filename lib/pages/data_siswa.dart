@@ -86,13 +86,12 @@ class DataSiswaPageState extends State<DataSiswaPage> {
             // Data Items
             _buildDataItem(Icons.credit_card, dataDariDb?.nisn ?? "Not Found"),
             _buildDataItem(Icons.person, dataDariDb?.nama ?? "Not Found"),
-            _buildDataItem(Icons.mail, dataDariDb?.alamat ?? "Not Found"),
+            _buildDataItem(Icons.location_on, dataDariDb?.alamat ?? "Not Found"),
             _buildDataItem(Icons.call, dataDariDb?.noHp ?? "Not Found"),
-            _buildDataItem(Icons.place, dataDariDb?.tempatLahir ?? "Not Found"),
             _buildDataItem(
                 Icons.date_range,
                 dataDariDb?.tanggalLahir != null
-                    ? getFormattedDate(dataDariDb!.tanggalLahir)
+                    ? (dataDariDb?.tempatLahir ?? "Not Found") + ", " + getFormattedDate(dataDariDb!.tanggalLahir)
                     : "Not Found"),
             _buildDataItem(Icons.school, dataDariDb?.jurusan ?? "Not Found"),
             _buildDataItem(Icons.power_settings_new_sharp,
