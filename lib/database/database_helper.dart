@@ -127,13 +127,7 @@ class DatabaseHelper {
     final db = await database;
     final result = await db.query('pembimbing', limit: 1, orderBy: 'id DESC');
 
-    if (result.isNotEmpty) {
-      print("Data Pembimbing dari DB: ${result.first}");
-      return PembimbingModel.fromMap(result.first);
-    } else {
-      print("Tidak ada data pembimbing di DB");
-      throw Exception("Pembimbing not found");
-  }
+    return PembimbingModel.fromMap(result.first); 
   }
 
   Future<PerusahaanModel> getPerusahaan() async {

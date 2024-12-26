@@ -25,6 +25,12 @@ class DataPembimbingPageState extends State<DataPembimbingPage> {
 
   @override
   Widget build(BuildContext context) {
+    final bool isDataEmpty = dataPembimbing == null ||
+        (dataPembimbing?.nip == null &&
+            dataPembimbing?.nama == null &&
+            dataPembimbing?.alamat == null &&
+            dataPembimbing?.noHp == null);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -32,65 +38,73 @@ class DataPembimbingPageState extends State<DataPembimbingPage> {
         centerTitle: true,
         title: const Text(
           'Data Pembimbing',
-          style: TextStyle(
-            fontSize: 18,
-            color: Colors.black,
-          ),
+          style: TextStyle(fontSize: 18, color: Colors.black),
         ),
-        leading: GestureDetector(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: Padding(
-            padding: const EdgeInsets.only(left: 20, top: 10, bottom: 10),
+      ),
+      body: isDataEmpty
+        ? Padding(
+            padding: const EdgeInsets.all(20.0),
             child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.width * 0.2,
               decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: const BorderRadius.all(Radius.circular(50)),
+                borderRadius: const BorderRadius.all(Radius.circular(8)),
+                border: Border.all(
+                  width: 1,
+                  color: Colors.red,
+                ),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xFFD3D1D8).withOpacity(0.3),
+                    color: const Color(0xFFD8D1D1).withOpacity(0.3),
                     offset: const Offset(5, 10),
                     blurRadius: 20,
                   ),
                 ],
+                color: Colors.red.withOpacity(0.4),
               ),
-              child: const Icon(
-                Icons.arrow_back_ios_new_rounded,
-                color: Colors.black,
-                size: 16,
-              ),
-            ),
-          ),
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const SizedBox(height: 8),
-            // Profile Picture
-            const Padding(
-              padding: EdgeInsets.all(16.0),
-              child: CircleAvatar(
-                radius: 60,
-                backgroundImage: AssetImage('assets/img/pembimbing.JPG'),
+              child: const Center(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    vertical: 20,
+                    horizontal: 53,
+                  ),
+                  child: Text(
+                    "Data Pembimbing Anda Kosong",
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.red,
+                      fontWeight: FontWeight.w700,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
               ),
             ),
-
-            const SizedBox(height: 20),
-            // Data Items
-            _buildDataItem(Icons.credit_card, dataPembimbing?.nip ?? "Not"),
-            _buildDataItem(Icons.person, dataPembimbing?.nama ?? "Not Found"),
-            _buildDataItem(Icons.mail, dataPembimbing?.alamat ?? "Not Found"),
-            _buildDataItem(Icons.call, dataPembimbing?.noHp ?? "Not Found"),
-            _buildDataItem(Icons.power_settings_new_sharp, dataPembimbing?.statusAktif == true ? "Aktif" : "Tidak Aktif"),
-          ],
-        ),
-      ),
+          )
+          : SingleChildScrollView(
+              child: Column(
+                children: [
+                  const SizedBox(height: 8),
+                  const Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: CircleAvatar(
+                      radius: 60,
+                      backgroundImage: AssetImage('assets/img/pembimbing.JPG'),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  _buildDataItem(Icons.credit_card, dataPembimbing?.nip ?? "Not"),
+                  _buildDataItem(Icons.person, dataPembimbing?.nama ?? "Not Found"),
+                  _buildDataItem(Icons.mail, dataPembimbing?.alamat ?? "Not Found"),
+                  _buildDataItem(Icons.call, dataPembimbing?.noHp ?? "Not Found"),
+                  _buildDataItem(Icons.power_settings_new_sharp, dataPembimbing?.statusAktif == true ? "Aktif" : "Tidak Aktif"),
+                ],
+              ),
+            ),
     );
   }
 
-  Widget _buildDataItem(IconData icon, String? text) {
+  Widget _buildDataItem(IconData icon, String text) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: Container(
@@ -115,12 +129,11 @@ class DataPembimbingPageState extends State<DataPembimbingPage> {
             ),
           ),
           title: Text(
-            text ?? "Tidak Ada Data",
+            text,
             style: const TextStyle(fontSize: 16),
           ),
         ),
       ),
     );
   }
-
 }

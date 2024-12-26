@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class PembimbingModel {
   final String nip;
   final String nama;
