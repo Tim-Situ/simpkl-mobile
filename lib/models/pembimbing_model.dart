@@ -5,20 +5,14 @@ class PembimbingModel {
   final String nama;
   final String alamat;
   final String noHp;
-  // final String tempat_lahir;
-  // final String tanggal_lahir;
-  // final String status;
-  
+  final bool statusAktif;
 
   PembimbingModel({
     required this.nip,
     required this.nama,
     required this.alamat,
     required this.noHp,
-    // required this.tempat_lahir,
-    // required this.tanggal_lahir,
-    // required this.status,
-    
+    required this.statusAktif,
   });
 
   factory PembimbingModel.fromJson(Map<String, dynamic> json) {
@@ -26,11 +20,8 @@ class PembimbingModel {
       nip: json['nip'],
       nama: json['nama'],
       alamat: json['alamat'],
-      noHp: json['noHp'],
-      // tempat_lahir: json['tempat_lahir'],
-      // tanggal_lahir: json['tanggal_lahir'],
-      // status: json['status'],
-      
+      noHp: json['no_hp'],
+      statusAktif: json['status_aktif'] == true,
     );
   }
 
@@ -39,10 +30,8 @@ class PembimbingModel {
       nip: map['nip'],
       nama: map['nama'],
       alamat: map['alamat'],
-      noHp: map['noHp'],
-      // tempat_lahir: map['tempat_lahir'],
-      // tanggal_lahir: map['tanggal_lahir'],
-      // status: map['status'],
+      noHp: map['no_hp'],
+      statusAktif: map['status_aktif'] == 1,
     );
   }
 
@@ -52,10 +41,8 @@ class PembimbingModel {
       'nip': nip,
       'nama': nama,
       'alamat': alamat,
-      'noHp': noHp,
-      // 'tempat_lahir': tempat_lahir,
-      // 'tanggal_lahir': tanggal_lahir,
-      // 'status': status,
+      'no_hp': noHp,
+      'status_aktif': statusAktif
     };
   }
 }

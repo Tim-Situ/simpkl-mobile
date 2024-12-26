@@ -1,29 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:simpkl_mobile/models/pembimbing_model.dart';
-import 'package:simpkl_mobile/models/profile_model.dart';
 import 'package:simpkl_mobile/database/database_helper.dart';
 
-class DataPembimbingPage extends StatefulWidget  {
+class DataPembimbingPage extends StatefulWidget {
   const DataPembimbingPage({super.key});
 
   @override
-  _DataPembimbingPageState createState() => _DataPembimbingPageState();
+  DataPembimbingPageState createState() => DataPembimbingPageState();
 }
 
-class _DataPembimbingPageState extends State<DataPembimbingPage> {
-  PembimbingModel? dataDariDb;
+class DataPembimbingPageState extends State<DataPembimbingPage> {
+  PembimbingModel? dataPembimbing;
 
-  // void getPembimbing() async {
-  //   dataDariDb = await DatabaseHelper().getPembimbing();
-  //   setState(() {});
-  // }
+  void getPembimbing() async {
+    dataPembimbing = await DatabaseHelper().getPembimbing();
+    setState(() {});
+  }
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   getPembimbing();
-  // }
+  @override
+  void initState() {
+    super.initState();
+    getPembimbing();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,18 +79,18 @@ class _DataPembimbingPageState extends State<DataPembimbingPage> {
 
             const SizedBox(height: 20),
             // Data Items
-            _buildDataItem(Icons.credit_card, dataDariDb?.nip ?? "Not Bel"),
-            _buildDataItem(Icons.person, dataDariDb?.nama ?? "Not Found"),
-            _buildDataItem(Icons.mail, dataDariDb?.alamat ?? "Not Found"),
-            _buildDataItem(Icons.call, dataDariDb?.noHp ?? "Not Found"),
-            
+            _buildDataItem(Icons.credit_card, dataPembimbing?.nip ?? "Not"),
+            _buildDataItem(Icons.person, dataPembimbing?.nama ?? "Not Found"),
+            _buildDataItem(Icons.mail, dataPembimbing?.alamat ?? "Not Found"),
+            _buildDataItem(Icons.call, dataPembimbing?.noHp ?? "Not Found"),
+            _buildDataItem(Icons.power_settings_new_sharp, dataPembimbing?.statusAktif == true ? "Aktif" : "Tidak Aktif"),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildDataItem(IconData icon, String text) {
+  Widget _buildDataItem(IconData icon, String? text) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: Container(
@@ -117,11 +115,12 @@ class _DataPembimbingPageState extends State<DataPembimbingPage> {
             ),
           ),
           title: Text(
-            text,
+            text ?? "Tidak Ada Data",
             style: const TextStyle(fontSize: 16),
           ),
         ),
       ),
     );
   }
+
 }

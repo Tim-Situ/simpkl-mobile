@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:simpkl_mobile/database/database_helper.dart';
+import 'package:simpkl_mobile/models/pembimbing_model.dart';
 import 'package:simpkl_mobile/models/profile_model.dart';
 import 'package:simpkl_mobile/pages/login.dart';
 import 'package:simpkl_mobile/services/auth_service.dart';
@@ -17,6 +18,7 @@ class ProfilePageState extends State<ProfilePage> {
   final AuthService _authService = AuthService();
 
   ProfileModel? dataDariDb;
+  PembimbingModel? dataPembimbing;
 
   void _logout(BuildContext context) async {
     final navigator = Navigator.of(context);
@@ -44,32 +46,7 @@ class ProfilePageState extends State<ProfilePage> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          // Account Selector
-          // Padding(
-          //   padding:
-          //       const EdgeInsets.only(top: 60, right: 20, left: 20, bottom: 20),
-          //   child: Column(
-          //     children: [
-          //       Text(
-          //         'Your Account',
-          //         style: TextStyle(
-          //           color: Colors.grey[600],
-          //           fontSize: 14,
-          //         ),
-          //       ),
-          //       const Text(
-          //         'mgbelvanaufal@gmail.com',
-          //         style: TextStyle(
-          //           fontSize: 16,
-          //           fontWeight: FontWeight.normal,
-          //         ),
-          //       ),
-          //     ],
-          //   ),
-          // ),
-
-          const SizedBox(height: 60),
-
+          const SizedBox(height: 65),
           // Profile Picture and Name
           Column(
             children: [
