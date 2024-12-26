@@ -85,7 +85,7 @@ class _DataPembimbingPageState extends State<DataPembimbingPage> {
             _buildDataItem(Icons.credit_card, dataDariDb?.nip ?? "Not Bel"),
             _buildDataItem(Icons.person, dataDariDb?.nama ?? "Not Found"),
             _buildDataItem(Icons.mail, dataDariDb?.alamat ?? "Not Found"),
-            _buildDataItem(Icons.call, dataDariDb?.no_hp ?? "Not Found"),
+            _buildDataItem(Icons.call, dataDariDb?.noHp ?? "Not Found"),
             
           ],
         ),

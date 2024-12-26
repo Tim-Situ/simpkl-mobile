@@ -1,34 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:simpkl_mobile/database/database_helper.dart';
 import 'package:simpkl_mobile/models/profile_model.dart';
-import 'package:simpkl_mobile/pages/logIn.dart';
+import 'package:simpkl_mobile/pages/login.dart';
 import 'package:simpkl_mobile/services/auth_service.dart';
-import 'dataSiswa.dart';
-import 'dataPembimbing.dart';
-import 'dataPerusahaan.dart';
+import 'data_siswa.dart';
+import 'data_pembimbing.dart';
+import 'data_perusahaan.dart';
 
 class ProfilePage extends StatefulWidget {
+  const ProfilePage({super.key});
   @override
-  _ProfilePageState createState() => _ProfilePageState();
+  ProfilePageState createState() => ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
-  // const ProfilePage({super.key});
+class ProfilePageState extends State<ProfilePage> {
   final AuthService _authService = AuthService();
 
   ProfileModel? dataDariDb;
 
   void _logout(BuildContext context) async {
+    final navigator = Navigator.of(context);
     await _authService.logout();
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => logIn()),
-    );
+    if (mounted) {
+      navigator.pushReplacement(
+        MaterialPageRoute(builder: (context) => const Login()),
+      );
+    }
   }
 
   void getProfile() async {
     dataDariDb = await DatabaseHelper().getProfile();
-    print(dataDariDb?.nama);
     setState(() {});
   }
 
@@ -72,14 +73,14 @@ class _ProfilePageState extends State<ProfilePage> {
           // Profile Picture and Name
           Column(
             children: [
-              CircleAvatar(
+              const CircleAvatar(
                 radius: 50,
                 backgroundImage: AssetImage('assets/img/profile.jpg'),
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               Text(
                 dataDariDb?.nama ?? "Not Found",
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w500,
                 ),
@@ -103,7 +104,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => DataSiswaPage()),
+                      MaterialPageRoute(builder: (context) => const DataSiswaPage()),
                     );
                   },
                 ),
@@ -118,7 +119,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => DataPembimbingPage()),
+                          builder: (context) => const DataPembimbingPage()),
                     );
                   },
                 ),
@@ -133,7 +134,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => DataPerusahaanPage()),
+                          builder: (context) => const DataPerusahaanPage()),
                     );
                   },
                 ),

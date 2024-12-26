@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:simpkl_mobile/core/contstants/colors.dart';
-import 'package:simpkl_mobile/main.dart';
 import 'package:simpkl_mobile/services/auth_service.dart';
 
-class logIn extends StatefulWidget {
-  const logIn({super.key});
+class Login extends StatefulWidget {
+  const Login({super.key});
 
   @override
-  State<logIn> createState() => _LogInState();
+  State<Login> createState() => _LogInState();
 }
 
-class _LogInState extends State<logIn> {
+class _LogInState extends State<Login> {
   final _formKey = GlobalKey<FormState>(); // Key untuk Form
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -22,14 +21,15 @@ class _LogInState extends State<logIn> {
     final password = _passwordController.text;
 
     final success = await _authService.login(username, password);
+    if (!mounted) return;
     if (success) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Login berhasil!')),
+        const SnackBar(content: Text('Login berhasil!')),
       );
       Navigator.pushReplacementNamed(context, '/home');
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Login gagal.')),
+        const SnackBar(content: Text('Login gagal.')),
       );
     }
   }

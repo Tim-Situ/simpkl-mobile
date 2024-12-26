@@ -1,11 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:simpkl_mobile/core/contstants/colors.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:panara_dialogs/panara_dialogs.dart';
+import 'package:simpkl_mobile/services/jurnal_harian_service.dart';
 
 class CreateJournalPage extends StatefulWidget {
   const CreateJournalPage({super.key});
@@ -28,11 +28,16 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
     'Inisiatif'
   ];
 
-  TextEditingController _dateController = TextEditingController();
-  TextEditingController _startTimeController = TextEditingController();
-  TextEditingController _endTimeController = TextEditingController();
+  final TextEditingController _dateController = TextEditingController();
+  final TextEditingController _startTimeController = TextEditingController();
+  final TextEditingController _endTimeController = TextEditingController();
+  String? selectedJobType;
+  String? selectedActivityForm;
+  final TextEditingController _jobDescriptionController = TextEditingController();
+  final TextEditingController _staffController = TextEditingController();
 
   final ImagePicker _picker = ImagePicker();
+  final JurnalHarianService _journalService = JurnalHarianService();
 
   Future<void> _selectDate(BuildContext context) async {
     DateTime? pickedDate = await showDatePicker(
@@ -44,8 +49,7 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
 
     if (pickedDate != null) {
       setState(() {
-        _dateController.text =
-            "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}"; // Format tanggal yang diinginkan
+        _dateController.text = DateFormat('yyyy-MM-dd').format(pickedDate); // Format tanggal yang diinginkan
       });
     }
   }
@@ -58,8 +62,9 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
 
     if (pickedTime != null) {
       setState(() {
-        // Format waktu dalam jam dan menit (misalnya: 14:30)
-        _startTimeController.text = pickedTime.format(context);
+        // Format waktu menjadi HH:mm:ss (jam:menit:detik)
+        _startTimeController.text =
+            "${pickedTime.hour.toString().padLeft(2, '0')}:${pickedTime.minute.toString().padLeft(2, '0')}:00";
       });
     }
   }
@@ -72,33 +77,134 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
 
     if (pickedTime != null) {
       setState(() {
-        // Format waktu dalam jam dan menit (misalnya: 14:30)
-        _endTimeController.text = pickedTime.format(context);
+        // Format waktu menjadi HH:mm:ss (jam:menit:detik)
+        _endTimeController.text =
+            "${pickedTime.hour.toString().padLeft(2, '0')}:${pickedTime.minute.toString().padLeft(2, '0')}:00";
       });
     }
   }
 
   Future<void> _pickImage() async {
     try {
-      final XFile? pickedFile =
-          await _picker.pickImage(source: ImageSource.gallery);
-      if (pickedFile != null) {
-        setState(() {
-          _image = File(pickedFile.path);
-        });
+      // Menampilkan dialog untuk memilih galeri atau kamera
+      final ImageSource? source = await showDialog<ImageSource>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Pilih Sumber Gambar'),
+            content: const Text('Pilih sumber gambar:'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context, ImageSource.camera);
+                },
+                child: const Text('Kamera'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context, ImageSource.gallery);
+                },
+                child: const Text('Galeri'),
+              ),
+            ],
+          );
+        },
+      );
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Dokumentasi berhasil diupload!'),
-            duration: Duration(seconds: 2), // Durasi tampilan Snackbar
-          ),
-        );
+      if (source != null) {
+        final XFile? pickedFile = await _picker.pickImage(source: source);
+        if (pickedFile != null) {
+          setState(() {
+            _image = File(pickedFile.path);
+          });
+        }
+
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Dokumentasi berhasil diupload!'),
+              duration: Duration(seconds: 2), // Durasi tampilan Snackbar
+            ),
+          );
+        }
       } else {
-        print("No image selected.");
+        // print("No image selected.");
       }
     } catch (e) {
-      print("Error picking image: $e");
+      // print("Error picking image: $e");
     }
+  }
+
+  Future<void> _submitForm() async {
+    if (_dateController.text.isEmpty ||
+        selectedJobType == null ||
+        selectedActivityForm == null ||
+        _jobDescriptionController.text.isEmpty ||
+        _startTimeController.text.isEmpty ||
+        _endTimeController.text.isEmpty ||
+        _staffController.text.isEmpty ||
+        _image == null) {
+          print("KOSONG");
+          PanaraInfoDialog.show(
+            context,
+            title: "Peringatan",
+            message: "Semua data harus diisi dengan lengkap.",
+            buttonText: "Okay",
+            onTapDismiss: () {
+                Navigator.pop(context);
+            },
+            panaraDialogType: PanaraDialogType.normal,
+          );
+          return;
+        }
+
+    try {
+      await _journalService.addJournal(
+        hari: _dateController.text,
+        tanggal: _dateController.text,
+        jenisPekerjaan: selectedJobType!,
+        deskripsiPekerjaan: _jobDescriptionController.text,
+        bentukKegiatan: selectedActivityForm!,
+        jamMulai: _startTimeController.text,
+        jamSelesai: _endTimeController.text,
+        staf: _staffController.text,
+        fileFoto: _image!,
+      );
+
+      // Clear fields after submission
+      setState(() {
+        _image = null;
+        _dateController.clear();
+        _startTimeController.clear();
+        _endTimeController.clear();
+        _jobDescriptionController.clear();
+        _staffController.clear();
+        selectedJobType = null;
+        selectedActivityForm = null;
+      });
+
+      Navigator.pop(context, true);
+
+    } catch (e) {
+      // Handle error submitting form
+      PanaraInfoDialog.show(
+        context,
+        title: "Gagal",
+        message: "Terjadi kesalahan saat menyimpan jurnal.",
+        buttonText: "Okay",
+        onTapDismiss: () {
+            Navigator.pop(context);
+        },
+        panaraDialogType: PanaraDialogType.normal,
+      );
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // Set default date to today
+    _dateController.text = DateFormat('yyyy-MM-dd').format(DateTime.now());
   }
 
   @override
@@ -114,11 +220,11 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(50)),
+                borderRadius: const BorderRadius.all(Radius.circular(50)),
                 boxShadow: [
                   BoxShadow(
-                    color: Color(0xFFD3D1D8).withOpacity(0.3),
-                    offset: Offset(5, 10),
+                    color: const Color(0xFFD3D1D8).withOpacity(0.3),
+                    offset: const Offset(5, 10),
                     blurRadius: 20,
                   ),
                 ],
@@ -139,26 +245,22 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
         elevation: 0,
       ),
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
         child: SingleChildScrollView(
           child: Column(
             children: [
               const Text(
                   "Masukkan Data Jurnal yang yang sesuai dengan tugas Anda."),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Container(
-                margin: EdgeInsets.symmetric(vertical: 10),
+                margin: const EdgeInsets.symmetric(vertical: 10),
                 child: TextFormField(
                   controller:
                       _dateController, // Mengontrol teks dalam TextFormField
                   readOnly:
                       true, // Membuat field hanya bisa dibuka, tidak bisa diketik manual
-                  onTap: () async {
-                    _selectDate(
-                        context); // Memunculkan date picker saat field di-tap
-                  },
                   decoration: InputDecoration(
                     labelText: 'Tanggal',
                     border: OutlineInputBorder(
@@ -176,11 +278,12 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
                       child: Container(
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.all(Radius.circular(50)),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(50)),
                           boxShadow: [
                             BoxShadow(
-                              color: Color(0xFFD3D1D8).withOpacity(0.3),
-                              offset: Offset(5, 10),
+                              color: const Color(0xFFD3D1D8).withOpacity(0.3),
+                              offset: const Offset(5, 10),
                               blurRadius: 20,
                             ),
                           ],
@@ -196,7 +299,7 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.symmetric(vertical: 10),
+                margin: const EdgeInsets.symmetric(vertical: 10),
                 child: DropdownButtonFormField<String>(
                   decoration: InputDecoration(
                     labelText:
@@ -211,8 +314,12 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  value: null,
-                  onChanged: (String? value) {},
+                  value: selectedJobType,
+                  onChanged: (String? value) {
+                    setState(() {
+                      selectedJobType = value;
+                    });
+                  },
                   items: dataJenisPekerjaan
                       .map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
@@ -223,8 +330,9 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.symmetric(vertical: 10),
+                margin: const EdgeInsets.symmetric(vertical: 10),
                 child: TextFormField(
+                  controller: _jobDescriptionController,
                   maxLines: null,
                   minLines: 4,
                   decoration: InputDecoration(
@@ -242,7 +350,7 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.symmetric(vertical: 10),
+                margin: const EdgeInsets.symmetric(vertical: 10),
                 child: DropdownButtonFormField<String>(
                   decoration: InputDecoration(
                     labelText:
@@ -257,8 +365,12 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  value: null,
-                  onChanged: (String? value) {},
+                  value: selectedActivityForm,
+                  onChanged: (String? value) {
+                    setState(() {
+                      selectedActivityForm = value;
+                    });
+                  },
                   items: dataBentukKegiatan
                       .map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
@@ -269,7 +381,7 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.symmetric(vertical: 10),
+                margin: const EdgeInsets.symmetric(vertical: 10),
                 child: TextFormField(
                   controller:
                       _startTimeController, // Mengontrol teks dalam TextFormField
@@ -296,11 +408,12 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
                       child: Container(
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.all(Radius.circular(50)),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(50)),
                           boxShadow: [
                             BoxShadow(
-                              color: Color(0xFFD3D1D8).withOpacity(0.3),
-                              offset: Offset(5, 10),
+                              color: const Color(0xFFD3D1D8).withOpacity(0.3),
+                              offset: const Offset(5, 10),
                               blurRadius: 20,
                             ),
                           ],
@@ -317,7 +430,7 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.symmetric(vertical: 10),
+                margin: const EdgeInsets.symmetric(vertical: 10),
                 child: TextFormField(
                   controller:
                       _endTimeController, // Mengontrol teks dalam TextFormField
@@ -344,11 +457,12 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
                       child: Container(
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.all(Radius.circular(50)),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(50)),
                           boxShadow: [
                             BoxShadow(
-                              color: Color(0xFFD3D1D8).withOpacity(0.3),
-                              offset: Offset(5, 10),
+                              color: const Color(0xFFD3D1D8).withOpacity(0.3),
+                              offset: const Offset(5, 10),
                               blurRadius: 20,
                             ),
                           ],
@@ -365,8 +479,9 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.symmetric(vertical: 10),
+                margin: const EdgeInsets.symmetric(vertical: 10),
                 child: TextFormField(
+                  controller: _staffController,
                   decoration: InputDecoration(
                     labelText: 'Staff yang Menugaskan',
                     border: OutlineInputBorder(
@@ -382,7 +497,7 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.symmetric(vertical: 10),
+                margin: const EdgeInsets.symmetric(vertical: 10),
                 height: 200,
                 width: double.infinity,
                 decoration: BoxDecoration(
@@ -415,7 +530,7 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               InkWell(
@@ -431,21 +546,18 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
                       Navigator.pop(context);
                     },
                     onTapConfirm: () {
+                      _submitForm();
                       Navigator.pop(context);
-
-                      Future.delayed(const Duration(milliseconds: 100), () {
-                        Navigator.pop(context); // Kembali ke halaman sebelumnya
-                      });
                     },
                     panaraDialogType: PanaraDialogType.normal,
                     barrierDismissible:
                         false, // optional parameter (default is true)
                   );
                 },
-                borderRadius: BorderRadius.all(Radius.circular(50)),
+                borderRadius: const BorderRadius.all(Radius.circular(50)),
                 child: Ink(
                   width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(50)),
                     color: SimpklColor.darkBlue,
                   ),
@@ -463,7 +575,7 @@ class _CreateJournalPageState extends State<CreateJournalPage> {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 50,
               )
             ],

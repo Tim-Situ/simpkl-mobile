@@ -12,7 +12,7 @@ class AuthService with ChangeNotifier {
 
   // Login method
   Future<bool> login(String username, String password) async {
-    final url = Uri.parse(_baseUrl + "/auth/login-mobile");
+    final url = Uri.parse('$_baseUrl/auth/login-mobile');
     final response = await http.post(
       url,
       body: {
@@ -22,34 +22,27 @@ class AuthService with ChangeNotifier {
     );
 
     if (response.statusCode == 200) {
-      
+
       final data = json.decode(response.body);
-      if (data['success']) {
-        final token = data['data']['accessToken'];
+        if (data['success']) {
+          final token = data['data']['accessToken'];
 
         // Save token to SQLite
         await DatabaseHelper().insertToken(token);
 
         //Simpan Profile ke DBLocal
-        final response = await http.get(
-          Uri.parse(_baseUrl + "/auth/profile"),
-          headers: {
-            'Authorization': 'Bearer $token',
-          }
-        );
+        final response =
+            await http.get(Uri.parse('$_baseUrl/auth/profile'), headers: {
+          'Authorization': 'Bearer $token',
+        });
 
         if (response.statusCode == 200) {
-          final Map<String, dynamic> responseData = jsonDecode(response.body);   
+          final Map<String, dynamic> responseData = jsonDecode(response.body);
           if (responseData['data'] != null) {
-            final dynamic jsonDataPengguna = responseData['data']['dataPengguna'];
-            // final dynamic jsonDataPembimbing = responseData['data']['dataPengguna']['kelompok_bimbingan']['guru_pembimbing'];
-            ProfileModel _dataProfile = ProfileModel.fromJson(jsonDataPengguna);
-            // PembimbingModel _dataPembimbing = PembimbingModel.fromJson(jsonDataPembimbing);
-            print(_dataProfile.nama);
-            // print(_dataPembimbing.nama);
-            await DatabaseHelper().insertProfile(_dataProfile);
-            // await DatabaseHelper().insertPembimbing(_dataPembimbing);
-            
+            final dynamic jsonDataPengguna =
+                responseData['data']['dataPengguna'];
+            ProfileModel dataProfile = ProfileModel.fromJson(jsonDataPengguna);
+            await DatabaseHelper().insertProfile(dataProfile);
           }
         }
 
@@ -72,6 +65,21 @@ class AuthService with ChangeNotifier {
   Future<bool> isLoggedIn() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getBool('isLoggedIn') ?? false;
+  }
+
+  Future<void> setMessageToken(String token) async {
+    final bearerToken = await getToken();
+    final response = await http.post(
+      Uri.parse('$_baseUrl/auth/set-message-token'),
+      headers: {
+        'Authorization': 'Bearer $bearerToken',
+      },
+      body: {
+        'token': token,
+      },
+    );
+
+    print(response.body);
   }
 
   // Logout method

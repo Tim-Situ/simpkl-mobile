@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class DataPerusahaanPage extends StatelessWidget {
+  const DataPerusahaanPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -8,7 +10,7 @@ class DataPerusahaanPage extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
-        title: Text(
+        title: const Text(
           'Data Perusahaan',
           style: TextStyle(
             fontSize: 18,
@@ -24,11 +26,11 @@ class DataPerusahaanPage extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(50)),
+                borderRadius: const BorderRadius.all(Radius.circular(50)),
                 boxShadow: [
                   BoxShadow(
-                    color: Color(0xFFD3D1D8).withOpacity(0.3),
-                    offset: Offset(5, 10),
+                    color: const Color(0xFFD3D1D8).withOpacity(0.3),
+                    offset: const Offset(5, 10),
                     blurRadius: 20,
                   ),
                 ],
@@ -45,15 +47,15 @@ class DataPerusahaanPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             // Profile Picture
             Padding(
-              padding: EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16.0),
               child: Container(
                 width: 370,
                 height: 224,
                 decoration: BoxDecoration(
-                  image: DecorationImage(
+                  image: const DecorationImage(
                     image: AssetImage('assets/img/perusahaan.jpeg'),
                     fit: BoxFit.cover,
                   ),
@@ -81,28 +83,28 @@ class DataPerusahaanPage extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: Container(
         decoration: BoxDecoration(
-          color: Color(0xFFF0F5FF),
+          color: const Color(0xFFF0F5FF),
           borderRadius: BorderRadius.circular(50),
         ),
         child: ListTile(
           leading: Container(
             width: 36,
             height: 36,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Color(0xFFCDD9FF),
               shape: BoxShape.circle,
             ),
             child: Center(
               child: Icon(
                 icon,
-                color: Color(0xFF2C55D3),
+                color: const Color(0xFF2C55D3),
                 size: 20,
               ),
             ),
           ),
           title: Text(
             text,
-            style: TextStyle(fontSize: 16),
+            style: const TextStyle(fontSize: 16),
           ),
         ),
       ),

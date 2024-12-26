@@ -1,33 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:simpkl_mobile/models/pembimbing_model.dart';
 import 'package:simpkl_mobile/models/profile_model.dart';
 import 'package:simpkl_mobile/database/database_helper.dart';
 
-
-class DataSiswaPage extends StatefulWidget {
-  const DataSiswaPage({super.key});
+class DataPembimbingPage extends StatefulWidget  {
+  const DataPembimbingPage({super.key});
 
   @override
-  _DataSiswaPageState createState() => _DataSiswaPageState();
+  _DataPembimbingPageState createState() => _DataPembimbingPageState();
 }
 
-class _DataSiswaPageState extends State<DataSiswaPage> {
-  ProfileModel? dataDariDb;
+class _DataPembimbingPageState extends State<DataPembimbingPage> {
+  PembimbingModel? dataDariDb;
 
-  void getProfile() async {
-    dataDariDb = await DatabaseHelper().getProfile();
-    setState(() {});
-  }
+  // void getPembimbing() async {
+  //   dataDariDb = await DatabaseHelper().getPembimbing();
+  //   setState(() {});
+  // }
 
-  @override
-  void initState() {
-    super.initState();
-    getProfile();
-  }
-
-  String getFormattedDate(DateTime date) {
-    return DateFormat('dd MMMM yyyy', 'id_ID').format(date);
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   getPembimbing();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +33,7 @@ class _DataSiswaPageState extends State<DataSiswaPage> {
         elevation: 0,
         centerTitle: true,
         title: const Text(
-          'Data Siswa',
+          'Data Pembimbing',
           style: TextStyle(
             fontSize: 18,
             color: Colors.black,
@@ -79,22 +75,17 @@ class _DataSiswaPageState extends State<DataSiswaPage> {
               padding: EdgeInsets.all(16.0),
               child: CircleAvatar(
                 radius: 60,
-                backgroundImage: AssetImage('assets/img/profile.jpg'),
+                backgroundImage: AssetImage('assets/img/pembimbing.JPG'),
               ),
             ),
 
             const SizedBox(height: 20),
             // Data Items
-            _buildDataItem(Icons.credit_card, dataDariDb?.nisn ?? "Not Found"),
+            _buildDataItem(Icons.credit_card, dataDariDb?.nip ?? "Not Bel"),
             _buildDataItem(Icons.person, dataDariDb?.nama ?? "Not Found"),
             _buildDataItem(Icons.mail, dataDariDb?.alamat ?? "Not Found"),
             _buildDataItem(Icons.call, dataDariDb?.noHp ?? "Not Found"),
-            _buildDataItem(Icons.place, dataDariDb?.tempatLahir ?? "Not Found"),
-            _buildDataItem(Icons.date_range, dataDariDb?.tanggalLahir != null
-              ? getFormattedDate(dataDariDb!.tanggalLahir)
-              : "Not Found"),
-            _buildDataItem(Icons.school, dataDariDb?.jurusan ?? "Not Found"),
-            _buildDataItem(Icons.power_settings_new_sharp, dataDariDb?.statusAktif == true ? "Aktif" : "Tidak Aktif"),
+            
           ],
         ),
       ),

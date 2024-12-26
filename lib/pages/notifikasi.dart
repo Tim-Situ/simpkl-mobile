@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:simpkl_mobile/core/contstants/colors.dart';
 
 class NotificationScreen extends StatelessWidget {
+  const NotificationScreen({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,11 +16,11 @@ class NotificationScreen extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(50)),
+                borderRadius: const BorderRadius.all(Radius.circular(50)),
                 boxShadow: [
                   BoxShadow(
-                    color: Color(0xFFD3D1D8).withOpacity(0.3),
-                    offset: Offset(5, 10),
+                    color: const Color(0xFFD3D1D8).withOpacity(0.3),
+                    offset: const Offset(5, 10),
                     blurRadius: 20,
                   ),
                 ],
@@ -61,7 +62,7 @@ class NotificationScreen extends StatelessWidget {
                   children: [
                     Container(
                       padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: SimpklColor.darkBlue,
                         shape: BoxShape.circle,
                       ),
@@ -72,7 +73,7 @@ class NotificationScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 12),
-                    Expanded(
+                    const Expanded(
                       child: Text(
                         "Nilai Akhir PKL sudah tersedia di Penilaian Akhir",
                         style: TextStyle(fontSize: 16, color: Colors.black),
@@ -82,7 +83,7 @@ class NotificationScreen extends StatelessWidget {
                       onPressed: () {
                         // logika untuk menghapus notifikasi
                       },
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.close,
                         color: Colors.grey,
                       ),

@@ -1,24 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:simpkl_mobile/components/BottomNavBar.dart';
-import 'package:simpkl_mobile/database/database_helper.dart';
-import 'package:simpkl_mobile/models/profile_model.dart';
+import 'package:simpkl_mobile/components/bottom_navbar.dart';
 import 'package:simpkl_mobile/pages/home_page.dart';
 import 'package:simpkl_mobile/pages/jurnal_page.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:simpkl_mobile/pages/logIn.dart';
+import 'package:simpkl_mobile/pages/login.dart';
 import 'package:simpkl_mobile/pages/presence_page.dart';
-import 'package:simpkl_mobile/pages/nilaiAkhir.dart';
-import 'package:simpkl_mobile/pages/wellcomePage1.dart';
-import 'package:simpkl_mobile/pages/Profile.dart';
+import 'package:simpkl_mobile/pages/nilai_akhir.dart';
+import 'package:simpkl_mobile/pages/profile.dart';
 import 'package:simpkl_mobile/services/auth_service.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_core/firebase_core.dart';  // Import Firebase core
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  // Initialize Firebase
+  await Firebase.initializeApp();  // Add this line to initialize Firebase
   await initializeDateFormatting('id_ID', null);
 
   runApp(const MyApp());
 }
+
+late FlutterLocalNotificationsPlugin localNotifications;
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -32,7 +36,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/home',
       routes: {
-        '/login': (context) => const logIn(),
+        '/login': (context) => const Login(),
         '/home': (context) => const MyHomePage(),
       },
     );
@@ -49,14 +53,72 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
   final _authService = AuthService();
+  String? messageToken = "";
 
   final List<Widget> _pages = <Widget>[
-    HomePage(),
+    const HomePage(),
     const JurnalPage(),
     const PresencePage(),
     const NilaiAkhir(),
-    ProfilePage(),
+    const ProfilePage(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _checkLoginStatus();
+    _initializeFirebaseMessaging();
+    _setupLocalNotifications();
+  }
+
+  Future<void> _initializeFirebaseMessaging() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+    // Dapatkan token perangkat untuk debugging
+    String? token = await messaging.getToken();
+    if (token != null) {
+      setState(() {
+        messageToken = token;
+      });
+      print("FCM Token: $token");
+    } else {
+      print("FCM Token gagal diperoleh");
+    }
+
+    // Tangani pesan masuk saat aplikasi aktif
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      if (message.notification != null) {
+        _showNotification(message.notification!.title, message.notification!.body);
+      }
+    });
+
+    // Tangani pesan masuk saat aplikasi di latar belakang
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      if (message.notification != null) {
+        _showNotification(message.notification!.title, message.notification!.body);
+      }
+    });
+  }
+
+  void _setupLocalNotifications() {
+    localNotifications = FlutterLocalNotificationsPlugin();
+
+    const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
+    const settings = InitializationSettings(android: androidSettings);
+
+    localNotifications.initialize(settings);
+  }
+
+  void _showNotification(String? title, String? body) {
+    const androidDetails = AndroidNotificationDetails(
+      'default_channel',
+      'Default Notifications',
+      importance: Importance.high,
+    );
+    const notificationDetails = NotificationDetails(android: androidDetails);
+
+    localNotifications.show(0, title, body, notificationDetails);
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -66,19 +128,21 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _checkLoginStatus() async {
     final isLoggedIn = await _authService.isLoggedIn();
-    if (!isLoggedIn) {
+    if (isLoggedIn) {
+      // Inisialisasi Firebase Messaging setelah login
+      await _initializeFirebaseMessaging();
+      if (messageToken != null) {
+        await _authService.setMessageToken(messageToken!);
+        print("Token berhasil disimpan ke API");
+      }
+    } else if (mounted) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => logIn()),
+        MaterialPageRoute(builder: (context) => const Login()),
       );
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _checkLoginStatus();
-  }
 
   @override
   Widget build(BuildContext context) {

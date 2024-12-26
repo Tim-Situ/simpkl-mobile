@@ -10,7 +10,6 @@ class JournalCard extends StatelessWidget {
   final String typeOfActivity;
   final String photo;
 
-
   const JournalCard({
     super.key, 
     required this.title,
@@ -23,11 +22,11 @@ class JournalCard extends StatelessWidget {
   });
 
   Color getStatusColor(String status) {
-    if (status == "Diterima") {
+    if (status == "DITERIMA") {
       return SimpklColor.darkGreen;
-    } else if (status == "Ditolak") {
+    } else if (status == "DITOLAK") {
       return SimpklColor.darkRed;
-    } else if (status == "Menunggu") {
+    } else if (status == "MENUNGGU") {
       return SimpklColor.darkYellow;
     } else {
       return Colors.grey; // Default color
@@ -54,11 +53,15 @@ class JournalCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                Text(
-                  title,
-                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                Expanded(
+                  child: Text(
+                    title,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                  ),
                 ),
-                const Spacer(),
+                SizedBox(width: 20,),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                   decoration: BoxDecoration(
@@ -94,23 +97,27 @@ class JournalCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 16),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '$typeOfWork | $typeOfActivity',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 14
-                      )
-                    ),
-                    Text(
-                      timeRange,
-                      style: const TextStyle(
-                        fontSize: 12 
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '$typeOfWork | $typeOfActivity',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 14
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
                       ),
-                    ),
-                  ],
+                      Text(
+                        timeRange,
+                        style: const TextStyle(
+                          fontSize: 12 
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),

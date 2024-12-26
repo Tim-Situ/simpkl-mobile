@@ -3,15 +3,14 @@ import 'package:intl/intl.dart';
 import 'package:simpkl_mobile/models/profile_model.dart';
 import 'package:simpkl_mobile/database/database_helper.dart';
 
-
 class DataSiswaPage extends StatefulWidget {
   const DataSiswaPage({super.key});
 
   @override
-  _DataSiswaPageState createState() => _DataSiswaPageState();
+  DataSiswaPageState createState() => DataSiswaPageState();
 }
 
-class _DataSiswaPageState extends State<DataSiswaPage> {
+class DataSiswaPageState extends State<DataSiswaPage> {
   ProfileModel? dataDariDb;
 
   void getProfile() async {
@@ -90,11 +89,14 @@ class _DataSiswaPageState extends State<DataSiswaPage> {
             _buildDataItem(Icons.mail, dataDariDb?.alamat ?? "Not Found"),
             _buildDataItem(Icons.call, dataDariDb?.noHp ?? "Not Found"),
             _buildDataItem(Icons.place, dataDariDb?.tempatLahir ?? "Not Found"),
-            _buildDataItem(Icons.date_range, dataDariDb?.tanggalLahir != null
-              ? getFormattedDate(dataDariDb!.tanggalLahir)
-              : "Not Found"),
+            _buildDataItem(
+                Icons.date_range,
+                dataDariDb?.tanggalLahir != null
+                    ? getFormattedDate(dataDariDb!.tanggalLahir)
+                    : "Not Found"),
             _buildDataItem(Icons.school, dataDariDb?.jurusan ?? "Not Found"),
-            _buildDataItem(Icons.power_settings_new_sharp, dataDariDb?.statusAktif == true ? "Aktif" : "Tidak Aktif"),
+            _buildDataItem(Icons.power_settings_new_sharp,
+                dataDariDb?.statusAktif == true ? "Aktif" : "Tidak Aktif"),
           ],
         ),
       ),

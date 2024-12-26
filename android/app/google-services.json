@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "73917791758",
+    "project_id": "prakeran-ece3e",
+    "storage_bucket": "prakeran-ece3e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:73917791758:android:171c3492492a8999ae465f",
+        "android_client_info": {
+          "package_name": "com.example.simpkl_mobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBlcHRWPAvEomnfH8m2PZ2-bjdYcwqK7qU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

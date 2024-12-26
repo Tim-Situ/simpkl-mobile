@@ -1,8 +1,10 @@
+// File: android/app/build.gradle
 plugins {
     id "com.android.application"
     id "kotlin-android"
-    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
+    // Plugin Flutter Gradle yang harus diterapkan setelah plugin Android dan Kotlin
     id "dev.flutter.flutter-gradle-plugin"
+    id("com.google.gms.google-services")  // Memastikan plugin google-services diterapkan
 }
 
 def localProperties = new Properties()
@@ -34,10 +36,8 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
+        // Pastikan applicationId sesuai dengan yang ada di Firebase Console
         applicationId = "com.example.simpkl_mobile"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutterVersionCode.toInteger()
@@ -50,13 +50,20 @@ android {
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.debug
+            signingConfig = signingConfigs.debug // Menggunakan konfigurasi debug untuk saat ini
         }
     }
 }
 
 flutter {
-    source = "../.."
+    source = "../.."  // Menyediakan jalur sumber Flutter
+}
+
+dependencies {
+    // Menggunakan Firebase BoM untuk memastikan ketergantungan Firebase yang konsisten
+    implementation platform('com.google.firebase:firebase-bom:33.7.0')
+
+    // Implementasikan library Firebase yang dibutuhkan
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-messaging'
 }

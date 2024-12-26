@@ -13,6 +13,7 @@ class JurnalHarianModel {
   final String staf;
   final String foto;
   final String? catatanPembimbing;
+  final String status;
 
   JurnalHarianModel({
     required this.id,
@@ -27,6 +28,7 @@ class JurnalHarianModel {
     required this.staf,
     required this.foto,
     this.catatanPembimbing,
+    required this.status,
   });
 
   factory JurnalHarianModel.fromJson(Map<String, dynamic> json) {
@@ -49,6 +51,7 @@ class JurnalHarianModel {
       staf: json['staf'],
       foto: json['foto'],
       catatanPembimbing: json['catatan_pembimbing'],
+      status: json['status']
     );
   }
 
@@ -70,7 +73,8 @@ class JurnalHarianModel {
       'jam_selesai': timeToIso(jamSelesai),
       'staf': staf,
       'foto': foto,
-      'catatan_pembimbing': catatanPembimbing
+      'catatan_pembimbing': catatanPembimbing,
+      'status': status,
     };
   }
 }
