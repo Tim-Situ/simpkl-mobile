@@ -81,6 +81,9 @@ class _MyHomePageState extends State<MyHomePage> {
         messageToken = token;
       });
       print("FCM Token: $token");
+
+      await messaging.subscribeToTopic('all-devices');
+      print("Device subscribed to topic 'all-devices'");
     } else {
       print("FCM Token gagal diperoleh");
     }
