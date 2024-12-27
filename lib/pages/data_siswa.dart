@@ -30,6 +30,13 @@ class DataSiswaPageState extends State<DataSiswaPage> {
 
   @override
   Widget build(BuildContext context) {
+    final bool isDataEmpty = dataDariDb == null ||
+        (dataDariDb?.nisn == null &&
+            dataDariDb?.nama == null &&
+            dataDariDb?.alamat == null &&
+            dataDariDb?.noHp == null &&
+            dataDariDb?.jurusan == null);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -37,68 +44,76 @@ class DataSiswaPageState extends State<DataSiswaPage> {
         centerTitle: true,
         title: const Text(
           'Data Siswa',
-          style: TextStyle(
-            fontSize: 18,
-            color: Colors.black,
-          ),
+          style: TextStyle(fontSize: 18, color: Colors.black),
         ),
-        leading: GestureDetector(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: Padding(
-            padding: const EdgeInsets.only(left: 20, top: 10, bottom: 10),
+      ),
+      body: isDataEmpty
+        ? Padding(
+            padding: const EdgeInsets.all(20.0),
             child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.width * 0.2,
               decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: const BorderRadius.all(Radius.circular(50)),
+                borderRadius: const BorderRadius.all(Radius.circular(8)),
+                border: Border.all(
+                  width: 1,
+                  color: Colors.red,
+                ),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xFFD3D1D8).withOpacity(0.3),
+                    color: const Color(0xFFD8D1D1).withOpacity(0.3),
                     offset: const Offset(5, 10),
                     blurRadius: 20,
                   ),
                 ],
+                color: Colors.red.withOpacity(0.4),
               ),
-              child: const Icon(
-                Icons.arrow_back_ios_new_rounded,
-                color: Colors.black,
-                size: 16,
-              ),
-            ),
-          ),
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const SizedBox(height: 8),
-            // Profile Picture
-            const Padding(
-              padding: EdgeInsets.all(16.0),
-              child: CircleAvatar(
-                radius: 60,
-                backgroundImage: AssetImage('assets/img/profile.jpg'),
+              child: const Center(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    vertical: 20,
+                    horizontal: 53,
+                  ),
+                  child: Text(
+                    "Data Pribadi Anda Kosong",
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.red,
+                      fontWeight: FontWeight.w700,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
               ),
             ),
-
-            const SizedBox(height: 20),
-            // Data Items
-            _buildDataItem(Icons.credit_card, dataDariDb?.nisn ?? "Not Found"),
-            _buildDataItem(Icons.person, dataDariDb?.nama ?? "Not Found"),
-            _buildDataItem(Icons.location_on, dataDariDb?.alamat ?? "Not Found"),
-            _buildDataItem(Icons.call, dataDariDb?.noHp ?? "Not Found"),
-            _buildDataItem(
-                Icons.date_range,
-                dataDariDb?.tanggalLahir != null
-                    ? (dataDariDb?.tempatLahir ?? "Not Found") + ", " + getFormattedDate(dataDariDb!.tanggalLahir)
-                    : "Not Found"),
-            _buildDataItem(Icons.school, dataDariDb?.jurusan ?? "Not Found"),
-            _buildDataItem(Icons.power_settings_new_sharp,
-                dataDariDb?.statusAktif == true ? "Aktif" : "Tidak Aktif"),
-          ],
-        ),
-      ),
+          )
+          : SingleChildScrollView(
+              child: Column(
+                children: [
+                  const SizedBox(height: 8),
+                  const Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: CircleAvatar(
+                      radius: 60,
+                      backgroundImage: AssetImage('assets/img/profile.jpg'),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  _buildDataItem(Icons.credit_card, dataDariDb?.nisn ?? "Not Found"),
+                  _buildDataItem(Icons.person, dataDariDb?.nama ?? "Not Found"),
+                  _buildDataItem(Icons.location_on, dataDariDb?.alamat ?? "Not Found"),
+                  _buildDataItem(Icons.call, dataDariDb?.noHp ?? "Not Found"),
+                  _buildDataItem(
+                      Icons.date_range,
+                      dataDariDb?.tanggalLahir != null
+                          ? (dataDariDb?.tempatLahir ?? "Not Found") + ", " + getFormattedDate(dataDariDb!.tanggalLahir)
+                          : "Not Found"),
+                  _buildDataItem(Icons.school, dataDariDb?.jurusan ?? "Not Found"),
+                  _buildDataItem(Icons.power_settings_new_sharp,
+                      dataDariDb?.statusAktif == true ? "Aktif" : "Tidak Aktif"),
+                ],
+              ),
+            ),
     );
   }
 
@@ -135,3 +150,4 @@ class DataSiswaPageState extends State<DataSiswaPage> {
     );
   }
 }
+
