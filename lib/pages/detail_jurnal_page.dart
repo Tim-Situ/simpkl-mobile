@@ -117,93 +117,135 @@ class _DetailJurnalPageState extends State<DetailJurnalPage> {
                 ),
               ),
               Container(
-                width: MediaQuery.of(context).size.width,
-                margin: const EdgeInsets.symmetric(vertical: 5),
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(8),
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color(0xFFD3D1D8).withOpacity(0.3),
-                        blurRadius: 20,
-                      ),
-                    ]),
-                child: Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text(
-                              "Jenis Pekerjaan",
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w500),
-                            ),
-                            Text(
-                              ": ${jurnal.jenisPekerjaan}",
-                              style: const TextStyle(fontSize: 15),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text(
-                              "Bentuk Kegiatan",
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w500),
-                            ),
-                            Text(
-                              ": ${jurnal.bentukKegiatan}",
-                              style: const TextStyle(fontSize: 15),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text(
-                              "Jam Pekerjaan",
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w500),
-                            ),
-                            Text(
-                              ": ${jurnal.jamMulai.format(context)} - ${jurnal.jamSelesai.format(context)}",
-                              style: const TextStyle(fontSize: 15),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text(
-                              "Staff yang Menugaskan",
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w500),
-                            ),
-                            // SizedBox(width: 15),
-                            Expanded(
-                              child: Text(
-                                ": ${jurnal.staf}",
-                                style: TextStyle(fontSize: 15),
-                                
-                              ),
-                            ),
-                          ],
-                        )
-                      ],
-                    )),
+  width: MediaQuery.of(context).size.width,
+  margin: const EdgeInsets.symmetric(vertical: 5),
+  decoration: BoxDecoration(
+    color: Colors.white,
+    borderRadius: BorderRadius.circular(8),
+    boxShadow: [
+      BoxShadow(
+        color: const Color(0xFFD3D1D8).withOpacity(0.3),
+        blurRadius: 20,
+      ),
+    ],
+  ),
+  child: Padding(
+    padding: const EdgeInsets.all(10),
+    child: Column(
+      children: [
+        Row(
+          children: [
+            Expanded(
+              flex: 1,
+              child: Text(
+                "Jenis Pekerjaan",
+                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
               ),
+            ),
+            Text(
+              ":",
+              style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+            ),
+            Expanded(
+              flex: 2,
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: Text(
+                  "${jurnal.jenisPekerjaan}",
+                  style: const TextStyle(fontSize: 12),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 10),
+        Row(
+          children: [
+            Expanded(
+              flex: 1,
+              child: Text(
+                "Bentuk Kegiatan",
+                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+              ),
+            ),
+            Text(
+              ":",
+              style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+            ),
+            Expanded(
+              flex: 2,
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: Text(
+                  "${jurnal.bentukKegiatan}",
+                  style: const TextStyle(fontSize: 12),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 10),
+        Row(
+          children: [
+            Expanded(
+              flex: 1,
+              child: Text(
+                "Jam Pekerjaan",
+                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+              ),
+            ),
+            Text(
+              ":",
+              style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+            ),
+            Expanded(
+              flex: 2,
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: Text(
+                  "${jurnal.jamMulai.format(context)} - ${jurnal.jamSelesai.format(context)}",
+                  style: const TextStyle(fontSize: 12),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 10),
+        Row(
+          children: [
+            Expanded(
+              flex: 1,
+              child: Text(
+                "Staff yang Menugaskan",
+                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+              ),
+            ),
+            Text(
+              ":",
+              style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+            ),
+            Expanded(
+              flex: 2,
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: Text(
+                  "${jurnal.staf}",
+                  style: const TextStyle(fontSize: 12),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    ),
+  ),
+),
+
+
               Container(
                 width: MediaQuery.of(context).size.width,
                 margin: const EdgeInsets.symmetric(vertical: 5),

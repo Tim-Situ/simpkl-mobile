@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:simpkl_mobile/models/notification_model.dart';
+import 'package:simpkl_mobile/database/database_helper.dart';
 import 'package:simpkl_mobile/components/bottom_navbar.dart';
 import 'package:simpkl_mobile/pages/home_page.dart';
 import 'package:simpkl_mobile/pages/jurnal_page.dart';
@@ -9,20 +13,96 @@ import 'package:simpkl_mobile/pages/presence_page.dart';
 import 'package:simpkl_mobile/pages/nilai_akhir.dart';
 import 'package:simpkl_mobile/pages/profile.dart';
 import 'package:simpkl_mobile/services/auth_service.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:firebase_core/firebase_core.dart';  // Import Firebase core
+
+// Global notification plugin instance
+late FlutterLocalNotificationsPlugin localNotifications;
+
+// Dedicated function to save notification to database
+Future<void> saveNotificationToDatabase(String? title, String? body) async {
+  if (title != null && body != null) {
+    final notification = Notifikasi(
+      title: title,
+      body: body,
+      createdAt: DateTime.now(),
+    );
+    try {
+      await DatabaseHelper().insertNotification(notification);
+      print("Notification saved to database: $title");
+    } catch (e) {
+      print("Error saving notification to database: $e");
+    }
+  }
+}
+
+// Background message handler
+@pragma('vm:entry-point')
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  // Initialize Firebase first
+  await Firebase.initializeApp();
+  
+  if (message.notification != null) {
+    // Save notification to database
+    await saveNotificationToDatabase(
+      message.notification!.title,
+      message.notification!.body
+    );
+    
+    // Initialize local notifications plugin
+    final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = 
+      FlutterLocalNotificationsPlugin();
+    
+    // Initialize settings for Android
+    const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
+    const initSettings = InitializationSettings(android: androidSettings);
+    await flutterLocalNotificationsPlugin.initialize(initSettings);
+    
+    // Show notification
+    const androidDetails = AndroidNotificationDetails(
+      'default_channel',
+      'Default Notifications',
+      importance: Importance.high,
+      priority: Priority.high,
+      showWhen: true,
+    );
+    const notificationDetails = NotificationDetails(android: androidDetails);
+    
+    try {
+      await flutterLocalNotificationsPlugin.show(
+        DateTime.now().millisecondsSinceEpoch ~/ 1000,
+        message.notification!.title,
+        message.notification!.body,
+        notificationDetails,
+        payload: message.data['route'] ?? '/home',
+      );
+      print("Background notification displayed successfully");
+    } catch (e) {
+      print("Error showing background notification: $e");
+    }
+  }
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
-  // Initialize Firebase
-  await Firebase.initializeApp();  // Add this line to initialize Firebase
-  await initializeDateFormatting('id_ID', null);
+  try {
+    await Firebase.initializeApp();
+    // Set background handler before requesting permissions
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+    
+    // Request permissions early
+    await FirebaseMessaging.instance.requestPermission(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+    
+    await initializeDateFormatting('id_ID', null);
+  } catch (e) {
+    print("Error initializing app: $e");
+  }
 
   runApp(const MyApp());
 }
-
-late FlutterLocalNotificationsPlugin localNotifications;
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -32,7 +112,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        scaffoldBackgroundColor: Colors.white, // Set background
+        scaffoldBackgroundColor: Colors.white,
       ),
       initialRoute: '/home',
       routes: {
@@ -67,78 +147,115 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     _checkLoginStatus();
-    _initializeFirebaseMessaging();
-    _setupLocalNotifications();
+    _setupNotifications();
   }
 
-  Future<void> _initializeFirebaseMessaging() async {
-    FirebaseMessaging messaging = FirebaseMessaging.instance;
+  Future<void> _setupNotifications() async {
+    try {
+      // Setup Local Notifications
+      localNotifications = FlutterLocalNotificationsPlugin();
+      const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
+      const settings = InitializationSettings(android: androidSettings);
+      
+      // Initialize with notification tap callback
+      await localNotifications.initialize(
+        settings,
+        onDidReceiveNotificationResponse: (NotificationResponse response) {
+          print("Notification tapped: ${response.payload}");
+          _navigateToNotificationDestination(response.payload);
+        },
+      );
 
-    // Dapatkan token perangkat untuk debugging
-    String? token = await messaging.getToken();
-    if (token != null) {
-      setState(() {
-        messageToken = token;
+      // Setup Firebase Messaging
+      final messaging = FirebaseMessaging.instance;
+      
+      // Get FCM token
+      final token = await messaging.getToken();
+      if (token != null) {
+        setState(() => messageToken = token);
+        print("FCM Token: $token");
+        
+        // Update token in backend if logged in
+        if (await _authService.isLoggedIn()) {
+          await _authService.setMessageToken(token);
+        }
+      }
+
+      // Handle foreground messages
+      FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+        if (message.notification != null) {
+          // Save to database
+          await saveNotificationToDatabase(
+            message.notification!.title,
+            message.notification!.body
+          );
+          
+          // Show local notification
+          const androidDetails = AndroidNotificationDetails(
+            'default_channel',
+            'Default Notifications',
+            importance: Importance.high,
+            priority: Priority.high,
+            playSound: true,
+            enableVibration: true,
+            showWhen: true,
+          );
+          const notificationDetails = NotificationDetails(android: androidDetails);
+          
+          await localNotifications.show(
+            DateTime.now().millisecondsSinceEpoch ~/ 1000,
+            message.notification!.title,
+            message.notification!.body,
+            notificationDetails,
+            payload: message.data['route'] ?? '/home',
+          );
+        }
       });
-      print("FCM Token: $token");
 
-      await messaging.subscribeToTopic('all-devices');
-      print("Device subscribed to topic 'all-devices'");
-    } else {
-      print("FCM Token gagal diperoleh");
+      // Handle when app is opened from terminated state
+      final initialMessage = await messaging.getInitialMessage();
+      if (initialMessage != null) {
+        _handleNotificationOpen(initialMessage);
+      }
+
+      // Handle when app is in background
+      FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+        _handleNotificationOpen(message);
+      });
+    } catch (e) {
+      print("Error setting up notifications: $e");
     }
-
-    // Tangani pesan masuk saat aplikasi aktif
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      if (message.notification != null) {
-        _showNotification(message.notification!.title, message.notification!.body);
-      }
-    });
-
-    // Tangani pesan masuk saat aplikasi di latar belakang
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      if (message.notification != null) {
-        _showNotification(message.notification!.title, message.notification!.body);
-      }
-    });
   }
 
-  void _setupLocalNotifications() {
-    localNotifications = FlutterLocalNotificationsPlugin();
-
-    const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
-    const settings = InitializationSettings(android: androidSettings);
-
-    localNotifications.initialize(settings);
+  void _handleNotificationOpen(RemoteMessage message) {
+    final String route = message.data['route'] ?? '/home';
+    _navigateToNotificationDestination(route);
   }
 
-  void _showNotification(String? title, String? body) {
-    const androidDetails = AndroidNotificationDetails(
-      'default_channel',
-      'Default Notifications',
-      importance: Importance.high,
-    );
-    const notificationDetails = NotificationDetails(android: androidDetails);
-
-    localNotifications.show(0, title, body, notificationDetails);
-  }
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+  void _navigateToNotificationDestination(String? route) {
+    if (route == null) return;
+    
+    switch (route) {
+      case '/jurnal':
+        setState(() => _selectedIndex = 1);
+        break;
+      case '/presence':
+        setState(() => _selectedIndex = 2);
+        break;
+      case '/nilai':
+        setState(() => _selectedIndex = 3);
+        break;
+      case '/profile':
+        setState(() => _selectedIndex = 4);
+        break;
+      default:
+        setState(() => _selectedIndex = 0);
+    }
   }
 
   void _checkLoginStatus() async {
     final isLoggedIn = await _authService.isLoggedIn();
-    if (isLoggedIn) {
-      // Inisialisasi Firebase Messaging setelah login
-      await _initializeFirebaseMessaging();
-      if (messageToken != null) {
-        await _authService.setMessageToken(messageToken!);
-        print("Token berhasil disimpan ke API");
-      }
-    } else if (mounted) {
+    if (!isLoggedIn && mounted) {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const Login()),
@@ -146,6 +263,11 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
