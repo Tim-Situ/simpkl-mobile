@@ -1,7 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:simpkl_mobile/models/perusahaan_model.dart';
+import 'package:simpkl_mobile/database/database_helper.dart';
 
-class DataPerusahaanPage extends StatelessWidget {
+class DataPerusahaanPage extends StatefulWidget {
   const DataPerusahaanPage({super.key});
+
+  @override
+  DataPerusahaanPageState createState() => DataPerusahaanPageState();
+}
+
+class DataPerusahaanPageState extends State<DataPerusahaanPage> {
+  PerusahaanModel? dataPerusahaan;
+
+  void getPerusahaan() async {
+    dataPerusahaan = await DatabaseHelper().getPerusahaan();
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getPerusahaan();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,12 +86,12 @@ class DataPerusahaanPage extends StatelessWidget {
 
             const SizedBox(height: 20),
             // Data Items
-            _buildDataItem(Icons.person, 'IKEA'),
-            _buildDataItem(Icons.person_outline, 'Ingvar Kamprad'),
-            _buildDataItem(Icons.credit_card, 'ikea.co.id'),
-            _buildDataItem(Icons.email, 'IngvarKampradIk@gmail.com'),
-            _buildDataItem(Icons.phone, '01288992212'),
-            _buildDataItem(Icons.location_on, 'Sukabirus, Bojongsoang'),
+            _buildDataItem(Icons.home, dataPerusahaan?.nama_perusahaan ?? "Not"),
+            _buildDataItem(Icons.person, dataPerusahaan?.pimpinan ?? "Not"),
+            _buildDataItem(Icons.location_on, dataPerusahaan?.alamat ?? "Not Found"),
+            _buildDataItem(Icons.call, dataPerusahaan?.no_hp ?? "Not Found"),
+            _buildDataItem(Icons.mail, dataPerusahaan?.email ?? "Not Found"),
+            _buildDataItem(Icons.web, dataPerusahaan?.website ?? "Not Found"),
           ],
         ),
       ),

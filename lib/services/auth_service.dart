@@ -4,7 +4,9 @@ import 'package:http/http.dart' as http;
 import 'package:simpkl_mobile/core/contstants/api_constants.dart';
 import 'package:simpkl_mobile/database/database_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:simpkl_mobile/models/perusahaan_model.dart';
 import 'package:simpkl_mobile/models/profile_model.dart';
+import 'package:simpkl_mobile/models/pembimbing_model.dart';
 
 class AuthService with ChangeNotifier {
   final String _baseUrl = ApiConstants.baseUrl;
@@ -42,6 +44,34 @@ class AuthService with ChangeNotifier {
                 responseData['data']['dataPengguna'];
             ProfileModel dataProfile = ProfileModel.fromJson(jsonDataPengguna);
             await DatabaseHelper().insertProfile(dataProfile);
+          }
+          if (responseData['data']['dataPengguna']['kelompok_bimbingan'] !=
+              null) {
+            final kelompokBimbingan =
+                responseData['data']['dataPengguna']['kelompok_bimbingan'];
+
+            for (var item in kelompokBimbingan) {
+              if (item['guru_pembimbing'] != null) {
+                final pembimbingJson = item['guru_pembimbing'];
+                PembimbingModel pembimbing =
+                    PembimbingModel.fromJson(pembimbingJson);
+                await DatabaseHelper().insertPembimbing(pembimbing);
+              }
+            }
+          }
+          if (responseData['data']['dataPengguna']['kelompok_bimbingan'] !=
+              null) {
+            final kelompokBimbingan =
+                responseData['data']['dataPengguna']['kelompok_bimbingan'];
+
+            for (var item in kelompokBimbingan) {
+              if (item['perusahaan'] != null) {
+                final perusahaanJson = item['perusahaan'];
+                PerusahaanModel perusahaan =
+                    PerusahaanModel.fromJson(perusahaanJson);
+                await DatabaseHelper().insertPerusahaan(perusahaan);
+              }
+            }
           }
         }
 
