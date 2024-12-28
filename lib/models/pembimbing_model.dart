@@ -4,6 +4,7 @@ class PembimbingModel {
   final String alamat;
   final String noHp;
   final bool statusAktif;
+  final String foto;
 
   PembimbingModel({
     required this.nip,
@@ -11,6 +12,7 @@ class PembimbingModel {
     required this.alamat,
     required this.noHp,
     required this.statusAktif,
+    required this.foto,
   });
 
   factory PembimbingModel.fromJson(Map<String, dynamic> json) {
@@ -20,6 +22,7 @@ class PembimbingModel {
       alamat: json['alamat'],
       noHp: json['no_hp'],
       statusAktif: json['status_aktif'] == true,
+      foto: json['foto'],
     );
   }
 
@@ -30,6 +33,7 @@ class PembimbingModel {
       alamat: map['alamat'],
       noHp: map['no_hp'],
       statusAktif: map['status_aktif'] == 1,
+      foto: map['foto'],
     );
   }
 
@@ -40,7 +44,8 @@ class PembimbingModel {
       'nama': nama,
       'alamat': alamat,
       'no_hp': noHp,
-      'status_aktif': statusAktif
+      'status_aktif': statusAktif,
+      'foto': foto
     };
   }
 }

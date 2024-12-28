@@ -1,4 +1,5 @@
 class ProfileModel {
+  final int? id;
   final String nisn;
   final String nama;
   final String alamat;
@@ -7,8 +8,10 @@ class ProfileModel {
   final DateTime tanggalLahir;
   final bool statusAktif;
   final String jurusan;
+  String foto;
 
   ProfileModel({
+    this.id,
     required this.nisn,
     required this.nama,
     required this.alamat,
@@ -17,6 +20,7 @@ class ProfileModel {
     required this.tanggalLahir,
     required this.statusAktif,
     required this.jurusan,
+    required this.foto,
   });
 
   factory ProfileModel.fromJson(Map<String, dynamic> json) {
@@ -29,11 +33,13 @@ class ProfileModel {
       tanggalLahir: DateTime.parse(json['tanggal_lahir']),
       statusAktif: json['status_aktif'] == true,
       jurusan: json['jurusan']['bidang_keahlian'],
+      foto: json['foto'],
     );
   }
 
   factory ProfileModel.fromMap(Map<String, dynamic> map) {
     return ProfileModel(
+      id: map['id'],
       nisn: map['nisn'],
       nama: map['nama'],
       alamat: map['alamat'],
@@ -42,6 +48,7 @@ class ProfileModel {
       tanggalLahir: DateTime.parse(map['tanggal_lahir']),
       statusAktif: map['status_aktif'] == 1,
       jurusan: map['jurusan'],
+      foto: map['foto'],
     );
   }
 
@@ -54,7 +61,8 @@ class ProfileModel {
       'tempat_lahir': tempatLahir,
       'tanggal_lahir': tanggalLahir.toIso8601String(),
       'status_aktif': statusAktif,
-      'jurusan': jurusan
+      'jurusan': jurusan,
+      'foto': foto
     };
   }
 }

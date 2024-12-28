@@ -5,6 +5,7 @@ class PerusahaanModel {
   final String no_hp;
   final String email;
   final String website;
+  final String foto;
 
   PerusahaanModel({
     required this.nama_perusahaan,
@@ -13,6 +14,7 @@ class PerusahaanModel {
     required this.no_hp,
     required this.email,
     required this.website,
+    required this.foto,
   });
 
   factory PerusahaanModel.fromJson(Map<String, dynamic> json) {
@@ -23,6 +25,7 @@ class PerusahaanModel {
       no_hp: json['no_hp'],
       email: json['email'],
       website: json['website'],
+      foto: json['foto'],
     );
   }
 
@@ -34,6 +37,7 @@ class PerusahaanModel {
       no_hp: map['no_hp'],
       email: map['email'],
       website: map['website'],
+      foto: map['foto'],
     );
   }
 
@@ -44,7 +48,8 @@ class PerusahaanModel {
       'alamat': alamat,
       'no_hp': no_hp,
       'email': email,
-      'website': website
+      'website': website,
+      'foto': foto
     };
   }
 }

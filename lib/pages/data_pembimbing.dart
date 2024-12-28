@@ -85,11 +85,11 @@ class DataPembimbingPageState extends State<DataPembimbingPage> {
               child: Column(
                 children: [
                   const SizedBox(height: 8),
-                  const Padding(
+                  Padding(
                     padding: EdgeInsets.all(16.0),
                     child: CircleAvatar(
                       radius: 60,
-                      backgroundImage: AssetImage('assets/img/pembimbing.JPG'),
+                      backgroundImage: NetworkImage(dataPembimbing?.foto ?? "https://gambarpkl.blob.core.windows.net/gambar-simpkl/1735314679-user-profile.png"),
                     ),
                   ),
                   const SizedBox(height: 20),

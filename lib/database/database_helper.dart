@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:path/path.dart';
 import 'package:simpkl_mobile/models/pembimbing_model.dart';
 import 'package:simpkl_mobile/models/perusahaan_model.dart';
@@ -45,7 +46,8 @@ class DatabaseHelper {
             tempat_lahir TEXT,
             tanggal_lahir TEXT,
             jurusan TEXT,
-            status_aktif INTEGER
+            status_aktif INTEGER,
+            foto TEXT
           )
         ''');
 
@@ -56,7 +58,8 @@ class DatabaseHelper {
             nama TEXT,
             alamat TEXT,
             no_hp TEXT,
-            status_aktif INTEGER
+            status_aktif INTEGER,
+            foto TEXT
           )
         ''');
 
@@ -68,7 +71,8 @@ class DatabaseHelper {
             alamat TEXT,
             no_hp TEXT,
             email TEXT,
-            website TEXT
+            website TEXT,
+            foto TEXT
           )
         ''');
 
@@ -99,7 +103,8 @@ class DatabaseHelper {
       'tempat_lahir': profile.tempatLahir,
       'tanggal_lahir': profile.tanggalLahir.toIso8601String(),
       'status_aktif': profile.statusAktif == true ? 1 : 0,
-      'jurusan': profile.jurusan
+      'jurusan': profile.jurusan,
+      'foto': profile.foto
     });
   }
 
@@ -110,7 +115,8 @@ class DatabaseHelper {
       'nama': pembimbing.nama,
       'alamat': pembimbing.alamat,
       'no_hp': pembimbing.noHp,
-      'status_aktif': pembimbing.statusAktif == true ? 1 : 0
+      'status_aktif': pembimbing.statusAktif == true ? 1 : 0,
+      'foto': pembimbing.foto
     });
   }
 
@@ -122,7 +128,8 @@ class DatabaseHelper {
       'alamat': perusahaan.alamat,
       'no_hp': perusahaan.no_hp,
       'email': perusahaan.email,
-      'website': perusahaan.website
+      'website': perusahaan.website,
+      'foto': perusahaan.foto
     });
   }
 
@@ -220,5 +227,53 @@ class DatabaseHelper {
     );
 
     return Sqflite.firstIntValue(result) ?? 0;
+  }
+
+  
+
+  Future<void> updateProfilePhoto(String photoPath) async {
+    final db = await database;
+    
+    final File imageFile = File(photoPath);
+    if (!await imageFile.exists()) {
+      throw Exception('File tidak ditemukan');
+    }
+
+    await db.update(
+      'profile',
+      {'foto': photoPath},
+      where: 'id = ?',
+      whereArgs: [1],
+    );
+  }
+
+  Future<void> updateProfileField(String field, String value) async {
+    final db = await database;
+    
+    String columnName = _mapFieldToColumn(field);
+
+    await db.update(
+      'profile',
+      {columnName: value},
+      where: 'id = ?',
+      whereArgs: [1],
+    );
+  }
+
+  String _mapFieldToColumn(String field) {
+    switch (field.toLowerCase()) {
+      case 'nama':
+        return 'nama';
+      case 'alamat':
+        return 'alamat';
+      case 'nomor hp':
+        return 'no_hp';
+      case 'tempat lahir':
+        return 'tempat_lahir';
+      case 'tanggal lahir':
+        return 'tanggal_lahir';
+      default:
+        return field.toLowerCase().replaceAll(' ', '_');
+    }
   }
 }

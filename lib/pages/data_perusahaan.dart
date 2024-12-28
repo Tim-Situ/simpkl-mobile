@@ -91,8 +91,8 @@ class DataPerusahaanPageState extends State<DataPerusahaanPage> {
                       width: 370,
                       height: 224,
                       decoration: BoxDecoration(
-                        image: const DecorationImage(
-                          image: AssetImage('assets/img/perusahaan.jpeg'),
+                        image: DecorationImage(
+                          image: NetworkImage(dataPerusahaan?.foto ?? "https://gambarpkl.blob.core.windows.net/gambar-simpkl/1735314679-user-profile.png"),
                           fit: BoxFit.cover,
                         ),
                         borderRadius: BorderRadius.circular(12),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:simpkl_mobile/database/database_helper.dart';
 import 'package:simpkl_mobile/models/pembimbing_model.dart';
 import 'package:simpkl_mobile/models/profile_model.dart';
+import 'package:simpkl_mobile/pages/edit_data.dart';
 import 'package:simpkl_mobile/pages/login.dart';
 import 'package:simpkl_mobile/services/auth_service.dart';
 import 'data_siswa.dart';
@@ -50,9 +51,9 @@ class ProfilePageState extends State<ProfilePage> {
           // Profile Picture and Name
           Column(
             children: [
-              const CircleAvatar(
+              CircleAvatar(
                 radius: 50,
-                backgroundImage: AssetImage('assets/img/profile.jpg'),
+                backgroundImage: NetworkImage(dataDariDb?.foto ?? "https://gambarpkl.blob.core.windows.net/gambar-simpkl/1735314679-user-profile.png"),
               ),
               const SizedBox(height: 15),
               Text(
@@ -60,6 +61,34 @@ class ProfilePageState extends State<ProfilePage> {
                 style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(height: 14),
+              ElevatedButton.icon(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => EditDataPage(
+                      nama: dataDariDb!.nama,
+                      alamat: dataDariDb!.alamat,
+                      no_hp: dataDariDb!.noHp,
+                      tempat_lahir: dataDariDb!.tempatLahir,
+                      tanggal_lahir: dataDariDb!.tanggalLahir,
+                    )),
+                  );
+                },
+                icon: const Icon(Icons.edit, size: 18),
+                label: const Text('Edit Profile'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFFE86A33),
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 30,
+                    vertical: 10,
+                  ),
                 ),
               ),
             ],
