@@ -3,6 +3,7 @@ import 'package:path/path.dart';
 import 'package:simpkl_mobile/models/pembimbing_model.dart';
 import 'package:simpkl_mobile/models/perusahaan_model.dart';
 import 'package:simpkl_mobile/models/profile_model.dart';
+import 'package:simpkl_mobile/models/notification_model.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DatabaseHelper {
@@ -70,6 +71,15 @@ class DatabaseHelper {
             website TEXT
           )
         ''');
+
+        await db.execute('''
+          CREATE TABLE notifikasi (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title TEXT,
+            body TEXT,
+            createdAt TEXT
+          )
+        ''');
       },
     );
   }
@@ -116,6 +126,15 @@ class DatabaseHelper {
     });
   }
 
+  Future<void> insertNotification(Notifikasi notification) async {
+    final db = await database;
+    await db.insert(
+      'notifikasi',
+      notification.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
   Future<ProfileModel> getProfile() async {
     final db = await database;
     final result = await db.query('profile', limit: 1, orderBy: 'id DESC');
@@ -146,6 +165,15 @@ class DatabaseHelper {
     return null;
   }
 
+  Future<List<Notifikasi>> getNotifications() async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query('notifikasi');
+
+    return List.generate(maps.length, (i) {
+      return Notifikasi.fromMap(maps[i]);
+    });
+  }
+
   Future<int> deleteToken() async {
     final db = await database;
     return db.delete('token');
@@ -164,5 +192,33 @@ class DatabaseHelper {
   Future<int> deletePerusahaan() async {
     final db = await database;
     return db.delete('perusahaan');
+  }
+
+  Future<void> deleteNotification(int id) async {
+    final db = await database;
+    await db.delete(
+      'notifikasi',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  Future<bool> checkDuplicateNotification(String title, String body) async {
+    final db = await database;
+    final result = await db.query(
+      'notifikasi',
+      where: 'title = ? AND body = ?',
+      whereArgs: [title, body],
+    );
+    return result.isNotEmpty;
+  }
+
+  Future<int> getNotificationCount() async {
+    final db = await database;
+    final result = await db.rawQuery(
+      'SELECT COUNT(*) AS count FROM notifikasi'
+    );
+
+    return Sqflite.firstIntValue(result) ?? 0;
   }
 }
