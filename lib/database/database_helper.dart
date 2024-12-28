@@ -155,4 +155,14 @@ class DatabaseHelper {
     final db = await database;
     return db.delete('profile');
   }
+
+  Future<int> deletePembimbing() async {
+    final db = await database;
+    return db.delete('pembimbing');
+  }
+  
+  Future<int> deletePerusahaan() async {
+    final db = await database;
+    return db.delete('perusahaan');
+  }
 }

@@ -116,6 +116,8 @@ class AuthService with ChangeNotifier {
     // Delete token from SQLite
     await DatabaseHelper().deleteToken();
     await DatabaseHelper().deleteProfile();
+    await DatabaseHelper().deletePembimbing();
+    await DatabaseHelper().deletePerusahaan();
 
     // Remove login status from SharedPreferences
     final prefs = await SharedPreferences.getInstance();
