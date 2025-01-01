@@ -204,10 +204,10 @@ class AuthService with ChangeNotifier {
         }
         notifyListeners();
       } else {
-        print('Failed to add journal: ${response.statusCode} - ${response.body}');
+        print('Failed to update Profile: ${response.statusCode} - ${response.body}');
       }
     } catch (e) {
-      print('Failed to add user: $e');
+      print('Failed to update profile: $e');
     }
   }
 }
