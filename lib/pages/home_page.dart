@@ -117,6 +117,9 @@ class _HomePageState extends State<HomePage> {
     await getProfile();
     await getNotificationCount();
     await _fetchLocation();
+    await getdataArtikel();
+    await getdataBanner();
+    await getdataPengumuman();
   }
 
   Future<void> _fetchLocation() async {

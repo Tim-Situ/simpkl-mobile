@@ -86,6 +86,7 @@ void main() async {
   
   try {
     await Firebase.initializeApp();
+    await FirebaseMessaging.instance.subscribeToTopic('all-devices');
     // Set background handler before requesting permissions
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
     
@@ -162,7 +163,6 @@ class _MyHomePageState extends State<MyHomePage> {
         settings,
         onDidReceiveNotificationResponse: (NotificationResponse response) {
           print("Notification tapped: ${response.payload}");
-          _navigateToNotificationDestination(response.payload);
         },
       );
 
@@ -229,28 +229,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _handleNotificationOpen(RemoteMessage message) {
     final String route = message.data['route'] ?? '/home';
-    _navigateToNotificationDestination(route);
-  }
-
-  void _navigateToNotificationDestination(String? route) {
-    if (route == null) return;
-    
-    switch (route) {
-      case '/jurnal':
-        setState(() => _selectedIndex = 1);
-        break;
-      case '/presence':
-        setState(() => _selectedIndex = 2);
-        break;
-      case '/nilai':
-        setState(() => _selectedIndex = 3);
-        break;
-      case '/profile':
-        setState(() => _selectedIndex = 4);
-        break;
-      default:
-        setState(() => _selectedIndex = 0);
-    }
   }
 
   void _checkLoginStatus() async {
