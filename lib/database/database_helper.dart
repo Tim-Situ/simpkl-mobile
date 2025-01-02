@@ -142,12 +142,17 @@ class DatabaseHelper {
     );
   }
 
-  Future<ProfileModel> getProfile() async {
-    final db = await database;
-    final result = await db.query('profile', limit: 1, orderBy: 'id DESC');
+  Future<ProfileModel?> getProfile() async {
+  final db = await database;
+  final result = await db.query('profile', limit: 1, orderBy: 'id DESC');
 
+  if (result.isNotEmpty) {
     return ProfileModel.fromMap(result.first);
+  } else {
+    // Kembalikan null jika tidak ada data
+    return null;
   }
+}
 
   Future<PembimbingModel> getPembimbing() async {
     final db = await database;

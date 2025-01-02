@@ -3,9 +3,15 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:intl/intl.dart';
 import 'package:simpkl_mobile/core/contstants/colors.dart';
 import 'package:simpkl_mobile/database/database_helper.dart';
+import 'package:simpkl_mobile/models/artikel_model.dart';
+import 'package:simpkl_mobile/models/banner_model.dart';
+import 'package:simpkl_mobile/models/pengumuman_model.dart';
 import 'package:simpkl_mobile/models/profile_model.dart';
 import 'package:simpkl_mobile/pages/notifikasi.dart';
 import 'package:simpkl_mobile/pages/webview_page.dart';
+import 'package:simpkl_mobile/services/artikel_service.dart';
+import 'package:simpkl_mobile/services/banner_service.dart';
+import 'package:simpkl_mobile/services/pengumuman_service.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
@@ -22,60 +28,11 @@ class _HomePageState extends State<HomePage> {
   String _currentLocation = "Loading location...";
   ProfileModel? dataDariDb;
   int notificationCount = 0;
+  bool isLoading = true;
 
-  Future<void> getProfile() async {
-    dataDariDb = await DatabaseHelper().getProfile();
-    setState(() {});
-  }
-
-  final List<String> imgList = [
-    'https://fileserver.telkomuniversity.ac.id/mytelu/banners/photo_2022-01-27_10-13-02_1643253212901.jpeg',
-    'https://fileserver.telkomuniversity.ac.id/mytelu/banners/banner1_1632211918017_1643253030279.jpeg',
-    'https://fileserver.telkomuniversity.ac.id/mytelu/banners/banner2_1643253100022.jpeg',
-  ];
-
-  final List<String> linkImg = [
-    'https://smb.telkomuniversity.ac.id/cerita-telutizen/pentingnya-pemanfaatan-waktu-luang-mahasiswa-kuliah-produktif-tapi-tetap-asik/',
-    'https://smb.telkomuniversity.ac.id/cerita-telutizen/mengapa-memilih-jurusan-perhotelan-5-alasan-dan-peluang-kerja-yang-menjanjikan/',
-    'https://smb.telkomuniversity.ac.id/cerita-telutizen/cara-agar-tidak-salah-jurusan-calon-mahasiswa-baru-harus-baca/',
-  ];
-
-  final List<Map<String, String>> pemberitahuan = [
-    {
-      'text':
-          'Peserta magang harap segera melakukan konfirmasi kepada guru pembimbing terkait perusahaannya.',
-      'date': '24 November 2024',
-    },
-    {
-      'text': 'Peserta magang harap segera mengumpulkan laporan mingguan.',
-      'date': '23 November 2024',
-    },
-    {
-      'text': 'Jadwal sidang akhir magang akan diumumkan minggu depan.',
-      'date': '22 November 2024',
-    },
-  ];
-
-  final List<Map<String, String>> cardData = [
-    {
-      'imageUrl':
-          'https://smktelkom-bdg.sch.id/wp-content/uploads/2024/12/Kunjin-2024.jpg',
-      'title': 'Kunjungan Industri Tingkatkan Wawasan Siswa SMK Telkom Bandung',
-      'date': '20 November 2024',
-    },
-    {
-      'imageUrl':
-          'https://smktelkom-bdg.sch.id/wp-content/uploads/2024/12/Kunjin-2024.jpg',
-      'title': 'Kunjungan Industri Tingkatkan Wawasan Siswa SMK Telkom Bandung',
-      'date': '20 November 2024',
-    },
-    {
-      'imageUrl':
-          'https://smktelkom-bdg.sch.id/wp-content/uploads/2024/12/Kunjin-2024.jpg',
-      'title': 'Kunjungan Industri Tingkatkan Wawasan Siswa SMK Telkom Bandung',
-      'date': '20 November 2024',
-    }
-  ];
+  List<BannerModel> resultsBanner = [];
+  List<PengumumanModel> resultsPengumuman = [];
+  List<ArtikelModel> resultsArtikel = [];
 
   DateTime selectedDate = DateTime.now();
 
@@ -85,6 +42,52 @@ class _HomePageState extends State<HomePage> {
     _fetchLocation();
     getProfile();
     getNotificationCount();
+    getdataBanner();
+    getdataPengumuman();
+    getdataArtikel();
+  }
+
+  Future<void> getdataBanner() async {
+    try {
+      final fetchedData = await BannerService().fetchBanner();
+      setState(() {
+        resultsBanner = fetchedData;
+        isLoading = false;
+      });
+    } catch (e) {
+      // print("Error fetching data: $e");
+    }
+  }
+
+  Future<void> getdataPengumuman() async {
+    try {
+      final fetchedData = await PengumumanService().fetchPengumuman();
+      setState(() {
+        resultsPengumuman = fetchedData;
+        isLoading = false;
+      });
+    } catch (e) {
+      // print("Error fetching data: $e");
+    }
+  }
+
+  Future<void> getdataArtikel() async {
+    try {
+      final fetchedData = await ArtikelService().fetchArtikel();
+      setState(() {
+        resultsArtikel = fetchedData;
+        isLoading = false;
+      });
+    } catch (e) {
+      // print("Error fetching data: $e");
+    }
+  }
+
+  Future<void> getProfile() async {
+    dataDariDb = await DatabaseHelper().getProfile();
+    setState(() {
+      isLoading = false;
+    });
   }
 
   Future<void> getNotificationCount() async {
@@ -117,64 +120,79 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _fetchLocation() async {
-    try {
-      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-      if (!serviceEnabled) {
+  try {
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      if (mounted) {
         setState(() {
           _currentLocation = "Location services are disabled.";
         });
-        return;
       }
+      return;
+    }
 
-      LocationPermission permission = await Geolocator.checkPermission();
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        permission = await Geolocator.requestPermission();
-        if (permission == LocationPermission.denied) {
+        if (mounted) {
           setState(() {
             _currentLocation = "Location permissions are denied.";
           });
-          return;
         }
+        return;
       }
+    }
 
-      if (permission == LocationPermission.deniedForever) {
+    if (permission == LocationPermission.deniedForever) {
+      if (mounted) {
         setState(() {
           _currentLocation =
               "Location permissions are permanently denied. Please enable them in settings.";
         });
-        return;
       }
+      return;
+    }
 
-      // Dapatkan lokasi terkini
-      LocationSettings locationSettings = const LocationSettings(
-        accuracy: LocationAccuracy.high,
-        distanceFilter: 10, // Optional: Set a distance filter if needed
-      );
+    // Dapatkan lokasi terkini
+    LocationSettings locationSettings = const LocationSettings(
+      accuracy: LocationAccuracy.high,
+      distanceFilter: 10, // Optional: Set a distance filter if needed
+    );
 
-      Position position = await Geolocator.getCurrentPosition(
-        locationSettings: locationSettings,
-      );
+    Position position = await Geolocator.getCurrentPosition(
+      locationSettings: locationSettings,
+    );
 
-      // Convert coordinate to address
-      List<Placemark> placemarks =
-          await placemarkFromCoordinates(position.latitude, position.longitude);
-      Placemark place = placemarks[0];
+    // Convert coordinate to address
+    List<Placemark> placemarks =
+        await placemarkFromCoordinates(position.latitude, position.longitude);
+    Placemark place = placemarks[0];
 
+    if (mounted) {
       setState(() {
         _currentLocation =
             "${place.locality}, ${place.country}"; // Misalnya: Bandung, Indonesia
       });
-    } catch (e) {
+    }
+  } catch (e) {
+    if (mounted) {
       setState(() {
         _currentLocation = "Failed to get location: $e";
       });
     }
   }
+}
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
+      body: isLoading
+        ? Center(
+            child: CircularProgressIndicator(), // Menampilkan animasi loading
+          )
+        : SafeArea(
         child: RefreshIndicator(
           onRefresh: _refreshPage,
           child: SingleChildScrollView(
@@ -261,32 +279,30 @@ class _HomePageState extends State<HomePage> {
                 ),
                 const SizedBox(height: 20),
                 CarouselSlider(
-                  options: CarouselOptions(
-                    height: 120.0,
-                    autoPlay: true,
-                    enlargeCenterPage: true,
-                    aspectRatio: 16 / 9,
-                    autoPlayInterval: const Duration(seconds: 3),
-                    autoPlayAnimationDuration: const Duration(milliseconds: 800),
-                    enableInfiniteScroll: true,
-                  ),
-                  items: imgList.asMap().entries.map((entry) {
-                    int index = entry.key;
-                    String item = entry.value;
-                    return InkWell(
-                      onTap: () {
-                        _launchURL(linkImg[index]);
-                      },
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(15.0),
-                        child: Image.network(
-                          item,
-                          fit: BoxFit.cover,
-                          width: 1000.0,
+                    options: CarouselOptions(
+                      height: 120.0,
+                      autoPlay: true,
+                      enlargeCenterPage: true,
+                      aspectRatio: 16 / 9,
+                      autoPlayInterval: const Duration(seconds: 3),
+                      autoPlayAnimationDuration: const Duration(milliseconds: 800),
+                      enableInfiniteScroll: true,
+                    ),
+                    items: resultsBanner.map((banner) {
+                      return InkWell(
+                        onTap: () {
+                          _launchURL(banner.link);
+                        },
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(15.0),
+                          child: Image.network(
+                            banner.gambar,
+                            fit: BoxFit.cover,
+                            width: 1000.0,
+                          ),
                         ),
-                      ),
-                    );
-                  }).toList(),
+                      );
+                    }).toList(),
                 ),
                 const SizedBox(height: 20),
                 Container(
@@ -337,7 +353,7 @@ class _HomePageState extends State<HomePage> {
                             autoPlay: false,
                             enlargeCenterPage: true,
                           ),
-                          items: pemberitahuan.map((item) {
+                          items: resultsPengumuman.map((item) {
                             return Container(
                               decoration: BoxDecoration(
                                 color: Colors.white,
@@ -349,7 +365,7 @@ class _HomePageState extends State<HomePage> {
                                 children: [
                                   Expanded(
                                     child: Text(
-                                      item['text'] ?? '',
+                                      item.pengumuman.toString(),
                                       textAlign: TextAlign.left,
                                       style: const TextStyle(
                                         fontSize: 14,
@@ -361,7 +377,9 @@ class _HomePageState extends State<HomePage> {
                                       height:
                                           4.0), // Spasi antara teks dan tanggal
                                   Text(
-                                    item['date'] ?? '', // Menampilkan tanggal
+                                    item.createdAt != null
+                                        ? DateFormat('dd/MM/yyyy').format(DateTime.tryParse(item.createdAt.toString()) ?? DateTime.now())
+                                        : 'Tanggal tidak tersedia',
                                     style: const TextStyle(
                                       fontSize: 12,
                                       color: Colors.grey,
@@ -491,7 +509,7 @@ class _HomePageState extends State<HomePage> {
                     viewportFraction: 0.45, // Sesuaikan nilai ini untuk lebar Card
                     padEnds: false,
                   ),
-                  items: cardData.map((data) {
+                  items: resultsArtikel.map((data) {
                     return Container(
                       margin: const EdgeInsets.symmetric(horizontal: 8), // Jarak antar card
                       decoration: BoxDecoration(
@@ -508,15 +526,25 @@ class _HomePageState extends State<HomePage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // Gambar di atas
                           Container(
                             height: 120,
-                            decoration: BoxDecoration(
-                              borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-                              image: DecorationImage(
-                                image: NetworkImage(data['imageUrl'].toString()),
-                                fit: BoxFit.cover,
+                            child: InkWell(
+                            onTap: () {
+                              _launchURL(data.link);
+                            },
+                            child: ClipRRect(
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(15.0),    
+                                topRight: Radius.circular(15.0),   
+                                bottomLeft: Radius.circular(0.0), 
+                                bottomRight: Radius.circular(0.0), 
                               ),
+                              child: Image.network(
+                                data.thumbnail,
+                                fit: BoxFit.cover,
+                                width: 1000.0,
+                              ),
+                            ),
                             ),
                           ),
                           // Konten teks di bawah
@@ -526,7 +554,7 @@ class _HomePageState extends State<HomePage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  data['title'].toString(),
+                                  data.judul.toString(),
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(
@@ -536,7 +564,9 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 const SizedBox(height: 8),
                                 Text(
-                                  data['date'].toString(),
+                                  data.createdAt != null
+                                    ? DateFormat('dd/MM/yyyy').format(DateTime.tryParse(data.createdAt.toString()) ?? DateTime.now())
+                                    : 'Tanggal tidak tersedia',
                                   style: TextStyle(
                                     fontSize: 11,
                                     color: Colors.grey[600],
