@@ -174,262 +174,259 @@ class _EditDataPageState extends State<EditDataPage> {
   }
 
   @override
-Widget build(BuildContext context) {
-  return Scaffold(
-    appBar: AppBar(
-      leading: GestureDetector(
-        onTap: () {
-          Navigator.pop(context);
-        },
-        child: const Icon(
-          Icons.arrow_back,
-          color: Color(0xFFE86D38),
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: const Icon(
+            Icons.arrow_back,
+            color: Color(0xFFE86D38),
+          ),
         ),
+        centerTitle: true,
+        title: const Text(
+            'Data Perusahaan',
+            style: TextStyle(fontSize: 18, color: Colors.black),
+          ),
+        backgroundColor: Colors.white,
+        elevation: 0,
       ),
-      title: const Text(
-        "Edit Profile",
-        style: TextStyle(
-            fontSize: 16, 
-            fontWeight: FontWeight.w500,
-            color: Colors.black
-        ),
-      ),
-      backgroundColor: Colors.white,
-      elevation: 0,
-    ),
-    body: Column(
-      children: [
-        Expanded(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  "Ubah Data yang Anda inginkan, masukkan data yang sesuai dengan diri Anda.",
-                  style: TextStyle(
-                    color: Color(0xFF666666),
-                    fontSize: 14,
+      body: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Ubah Data yang Anda inginkan, masukkan data yang sesuai dengan diri Anda.",
+                    style: TextStyle(
+                      color: Color(0xFF666666),
+                      fontSize: 14,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 24),
-                Center(
-                  child: GestureDetector(
-                    onTap: _pickImage,
-                    child: Container(
-                      width: 100,
-                      height: 100,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.grey[200],
-                      ),
-                      child: _image != null
-                          ? ClipOval(
-                              child: Image.file(
-                                _image!,
-                                width: 100,
-                                height: 100,
-                                fit: BoxFit.cover,
+                  const SizedBox(height: 24),
+                  Center(
+                    child: GestureDetector(
+                      onTap: _pickImage,
+                      child: Container(
+                        width: 100,
+                        height: 100,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.grey[200],
+                        ),
+                        child: _image != null
+                            ? ClipOval(
+                                child: Image.file(
+                                  _image!,
+                                  width: 100,
+                                  height: 100,
+                                  fit: BoxFit.cover,
+                                ),
+                              )
+                            : const Icon(
+                                Icons.camera_alt,
+                                size: 40,
+                                color: Colors.grey,
                               ),
-                            )
-                          : const Icon(
-                              Icons.camera_alt,
-                              size: 40,
-                              color: Colors.grey,
-                            ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 24),
-                const Text(
-                  "NAMA",
-                  style: TextStyle(
-                    color: Color(0xFF666666),
-                    fontSize: 12,
-                  ),
-                ),
-                Container(
-                  margin: const EdgeInsets.only(top: 8, bottom: 16),
-                  child: TextFormField(
-                    controller: _namaController,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: Color(0xFFE86D38)),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: Color(0xFFE86D38)),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: Color(0xFFE86D38)),
-                      ),
-                      suffixIcon: IconButton(
-                        icon: const Icon(Icons.close, color: Color(0xFFE86D38)),
-                        onPressed: () {
-                          _namaController.clear();
-                        },
                       ),
                     ),
                   ),
-                ),
-                const Text(
-                  "ALAMAT",
-                  style: TextStyle(
-                    color: Color(0xFF666666),
-                    fontSize: 12,
+                  const SizedBox(height: 24),
+                  const Text(
+                    "NAMA",
+                    style: TextStyle(
+                      color: Color(0xFF666666),
+                      fontSize: 12,
+                    ),
                   ),
-                ),
-                Container(
-                  margin: const EdgeInsets.only(top: 8, bottom: 16),
-                  child: TextFormField(
-                    controller: _alamatController,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: Color(0xFFE86D38)),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: Color(0xFFE86D38)),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: Color(0xFFE86D38)),
-                      ),
-                      suffixIcon: IconButton(
-                        icon: const Icon(Icons.close, color: Color(0xFFE86D38)),
-                        onPressed: () {
-                          _alamatController.clear();
-                        },
+                  Container(
+                    margin: const EdgeInsets.only(top: 8, bottom: 16),
+                    child: TextFormField(
+                      controller: _namaController,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(color: Color(0xFFE86D38)),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(color: Color(0xFFE86D38)),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(color: Color(0xFFE86D38)),
+                        ),
+                        suffixIcon: IconButton(
+                          icon: const Icon(Icons.close, color: Color(0xFFE86D38)),
+                          onPressed: () {
+                            _namaController.clear();
+                          },
+                        ),
                       ),
                     ),
                   ),
-                ),
-                const Text(
-                  "NO HP",
-                  style: TextStyle(
-                    color: Color(0xFF666666),
-                    fontSize: 12,
+                  const Text(
+                    "ALAMAT",
+                    style: TextStyle(
+                      color: Color(0xFF666666),
+                      fontSize: 12,
+                    ),
                   ),
-                ),
-                Container(
-                  margin: const EdgeInsets.only(top: 8, bottom: 16),
-                  child: TextFormField(
-                    controller: _nomorHpController,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: Color(0xFFE86D38)),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: Color(0xFFE86D38)),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: Color(0xFFE86D38)),
-                      ),
-                      suffixIcon: IconButton(
-                        icon: const Icon(Icons.close, color: Color(0xFFE86D38)),
-                        onPressed: () {
-                          _nomorHpController.clear();
-                        },
+                  Container(
+                    margin: const EdgeInsets.only(top: 8, bottom: 16),
+                    child: TextFormField(
+                      controller: _alamatController,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(color: Color(0xFFE86D38)),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(color: Color(0xFFE86D38)),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(color: Color(0xFFE86D38)),
+                        ),
+                        suffixIcon: IconButton(
+                          icon: const Icon(Icons.close, color: Color(0xFFE86D38)),
+                          onPressed: () {
+                            _alamatController.clear();
+                          },
+                        ),
                       ),
                     ),
                   ),
-                ),
-                const Text(
-                  "TEMPAT LAHIR",
-                  style: TextStyle(
-                    color: Color(0xFF666666),
-                    fontSize: 12,
+                  const Text(
+                    "NO HP",
+                    style: TextStyle(
+                      color: Color(0xFF666666),
+                      fontSize: 12,
+                    ),
                   ),
-                ),
-                Container(
-                  margin: const EdgeInsets.only(top: 8, bottom: 16),
-                  child: TextFormField(
-                    controller: _tempatLahirController,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: Color(0xFFE86D38)),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: Color(0xFFE86D38)),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: Color(0xFFE86D38)),
-                      ),
-                      suffixIcon: IconButton(
-                        icon: const Icon(Icons.close, color: Color(0xFFE86D38)),
-                        onPressed: () {
-                          _tempatLahirController.clear();
-                        },
+                  Container(
+                    margin: const EdgeInsets.only(top: 8, bottom: 16),
+                    child: TextFormField(
+                      controller: _nomorHpController,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(color: Color(0xFFE86D38)),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(color: Color(0xFFE86D38)),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(color: Color(0xFFE86D38)),
+                        ),
+                        suffixIcon: IconButton(
+                          icon: const Icon(Icons.close, color: Color(0xFFE86D38)),
+                          onPressed: () {
+                            _nomorHpController.clear();
+                          },
+                        ),
                       ),
                     ),
                   ),
-                ),
-                const Text(
-                  "TANGGAL LAHIR",
-                  style: TextStyle(
-                    color: Color(0xFF666666),
-                    fontSize: 12,
-                  ),
-                ),
-                Container(
-                  margin: const EdgeInsets.only(top: 8, bottom: 16),
-                  child: TextFormField(
-                    controller: _tanggalLahirController,
-                    readOnly: true,
-                    onTap: () => _selectDate(context),
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: Color(0xFFE86D38)),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: Color(0xFFE86D38)),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: Color(0xFFE86D38)),
-                      ),
-                      suffixIcon: const Icon(Icons.calendar_today, color: Color(0xFFE86D38)),
+                  const Text(
+                    "TEMPAT LAHIR",
+                    style: TextStyle(
+                      color: Color(0xFF666666),
+                      fontSize: 12,
                     ),
                   ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(20),
-          child: ElevatedButton(
-            onPressed: _submitForm,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFFE86D38),
-              minimumSize: const Size(double.infinity, 50),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(25),
-              ),
-            ),
-            child: const Text(
-              "Konfirmasi",
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                color: Colors.white,
+                  Container(
+                    margin: const EdgeInsets.only(top: 8, bottom: 16),
+                    child: TextFormField(
+                      controller: _tempatLahirController,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(color: Color(0xFFE86D38)),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(color: Color(0xFFE86D38)),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(color: Color(0xFFE86D38)),
+                        ),
+                        suffixIcon: IconButton(
+                          icon: const Icon(Icons.close, color: Color(0xFFE86D38)),
+                          onPressed: () {
+                            _tempatLahirController.clear();
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                  const Text(
+                    "TANGGAL LAHIR",
+                    style: TextStyle(
+                      color: Color(0xFF666666),
+                      fontSize: 12,
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(top: 8, bottom: 16),
+                    child: TextFormField(
+                      controller: _tanggalLahirController,
+                      readOnly: true,
+                      onTap: () => _selectDate(context),
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(color: Color(0xFFE86D38)),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(color: Color(0xFFE86D38)),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(color: Color(0xFFE86D38)),
+                        ),
+                        suffixIcon: const Icon(Icons.calendar_today, color: Color(0xFFE86D38)),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
-        ),
-      ],
-    ),
-  );
-}
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: ElevatedButton(
+              onPressed: _submitForm,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFFE86D38),
+                minimumSize: const Size(double.infinity, 50),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25),
+                ),
+              ),
+              child: const Text(
+                "Konfirmasi",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
