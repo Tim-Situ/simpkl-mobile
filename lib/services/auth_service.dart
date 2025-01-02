@@ -33,48 +33,7 @@ class AuthService with ChangeNotifier {
         await DatabaseHelper().insertToken(token);
 
         //Simpan Profile ke DBLocal
-        final response =
-            await http.get(Uri.parse('$_baseUrl/auth/profile'), headers: {
-          'Authorization': 'Bearer $token',
-        });
-
-        if (response.statusCode == 200) {
-          final Map<String, dynamic> responseData = jsonDecode(response.body);
-          if (responseData['data'] != null) {
-            final dynamic jsonDataPengguna =
-                responseData['data']['dataPengguna'];
-            ProfileModel dataProfile = ProfileModel.fromJson(jsonDataPengguna);
-            await DatabaseHelper().insertProfile(dataProfile);
-          }
-          if (responseData['data']['dataPengguna']['kelompok_bimbingan'] !=
-              null) {
-            final kelompokBimbingan =
-                responseData['data']['dataPengguna']['kelompok_bimbingan'];
-
-            for (var item in kelompokBimbingan) {
-              if (item['guru_pembimbing'] != null) {
-                final pembimbingJson = item['guru_pembimbing'];
-                PembimbingModel pembimbing =
-                    PembimbingModel.fromJson(pembimbingJson);
-                await DatabaseHelper().insertPembimbing(pembimbing);
-              }
-            }
-          }
-          if (responseData['data']['dataPengguna']['kelompok_bimbingan'] !=
-              null) {
-            final kelompokBimbingan =
-                responseData['data']['dataPengguna']['kelompok_bimbingan'];
-
-            for (var item in kelompokBimbingan) {
-              if (item['perusahaan'] != null) {
-                final perusahaanJson = item['perusahaan'];
-                PerusahaanModel perusahaan =
-                    PerusahaanModel.fromJson(perusahaanJson);
-                await DatabaseHelper().insertPerusahaan(perusahaan);
-              }
-            }
-          }
-        }
+        await _refreshLocalData(token);
 
         // Save login status to SharedPreferences
         final prefs = await SharedPreferences.getInstance();

@@ -35,19 +35,16 @@ class _NilaiAkhirState extends State<NilaiAkhir> {
       body: SafeArea(
         bottom: false,
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(20.0),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 50),
-
-                // Header dengan Teks dan Icon Lonceng
-                Row(
+                const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     // Kontainer untuk teks "Nilai Akhir" dan deskripsinya
-                    const Expanded(
+                    Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -69,44 +66,10 @@ class _NilaiAkhirState extends State<NilaiAkhir> {
                         ],
                       ),
                     ),
-
-                    // Tombol Lonceng Notif
-                    IconButton(
-                      icon: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white, // Background
-                          borderRadius:
-                              BorderRadius.circular(10), // Border radius 10
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey
-                                  .withOpacity(0.5), // Warna bayangan
-                              blurRadius: 5,
-                              spreadRadius: 2,
-                            ),
-                          ],
-                        ),
-                        padding: const EdgeInsets.all(
-                            8.0), // Padding penempatkan icon di tengah
-                        child: const Icon(
-                          Icons.notifications_none,
-                          size: 32.0,
-                          color: Colors.black, //  icon
-                        ),
-                      ),
-                      onPressed: () {
-                        // Aksi ketika tombol lonceng ditekan
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Notifikasi ditekan'),
-                          ),
-                        );
-                      },
-                    ),
                   ],
                 ),
 
-                const SizedBox(height: 50),
+                const SizedBox(height: 20),
 
                 // ListView Builder untuk Daftar Nilai
                 ListView.builder(

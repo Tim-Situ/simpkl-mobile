@@ -7,7 +7,7 @@ class PengumumanService {
   final String _baseUrl = ApiConstants.baseUrl;
 
   Future<List<PengumumanModel>> fetchPengumuman() async {
-    final url = Uri.parse('$_baseUrl/pengumuman/all');
+    final url = Uri.parse('$_baseUrl/pengumuman/all?status=true');
 
     final headers = {
       'Content-Type': 'application/json',

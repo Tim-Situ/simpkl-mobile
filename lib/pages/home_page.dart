@@ -189,7 +189,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: isLoading
-        ? Center(
+        ? const Center(
             child: CircularProgressIndicator(), // Menampilkan animasi loading
           )
         : SafeArea(
