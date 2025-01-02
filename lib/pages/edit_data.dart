@@ -2,11 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:simpkl_mobile/core/contstants/colors.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:panara_dialogs/panara_dialogs.dart';
 import 'package:simpkl_mobile/services/auth_service.dart';
-import 'package:simpkl_mobile/services/jurnal_harian_service.dart';
 
 class EditDataPage extends StatefulWidget {
   final String nama;
@@ -14,13 +12,17 @@ class EditDataPage extends StatefulWidget {
   final String no_hp;
   final DateTime tanggal_lahir;
   final String tempat_lahir;
+  final String foto;
+  final VoidCallback? onProfileUpdated; 
 
   const EditDataPage({super.key, 
-  required this.nama,
-  required this.alamat,
-  required this.no_hp,
-  required this.tanggal_lahir,
-  required this.tempat_lahir,
+    required this.nama,
+    required this.alamat,
+    required this.no_hp,
+    required this.tanggal_lahir,
+    required this.tempat_lahir,
+    required this.foto,
+    this.onProfileUpdated,  
   });
 
   @override
@@ -28,6 +30,8 @@ class EditDataPage extends StatefulWidget {
 }
 
 class _EditDataPageState extends State<EditDataPage> {
+  bool _isLoading = false;
+
   File? _image;
   final TextEditingController _namaController = TextEditingController();
   final TextEditingController _alamatController = TextEditingController();
@@ -110,8 +114,7 @@ class _EditDataPageState extends State<EditDataPage> {
         _alamatController.text.isEmpty ||
         _nomorHpController.text.isEmpty ||
         _tempatLahirController.text.isEmpty ||
-        _tanggalLahirController.text.isEmpty ||
-        _image == null) {
+        _tanggalLahirController.text.isEmpty) {
           print("KOSONG");
           PanaraInfoDialog.show(
             context,
@@ -126,6 +129,10 @@ class _EditDataPageState extends State<EditDataPage> {
           return;
         }
 
+    setState(() {
+      _isLoading = true;
+    });
+
     try {
       await _authService.editProfile(
         nama: _namaController.text,
@@ -133,33 +140,34 @@ class _EditDataPageState extends State<EditDataPage> {
         no_hp: _nomorHpController.text,
         tempat_lahir: _tempatLahirController.text,
         tanggal_lahir: _tanggalLahirController.text,
-        fileFoto: _image!,
+        fileFoto: _image,
       );
 
-      // Clear fields after submission
-      setState(() {
-        _image = null;
-        _namaController.clear();
-        _alamatController.clear();
-        _nomorHpController.clear();
-        _tempatLahirController.clear();
-        _tanggalLahirController.clear();
-      });
-
-      Navigator.pop(context, true);
+      widget.onProfileUpdated?.call();
+      if (mounted) {
+        Navigator.pop(context);
+      }
 
     } catch (e) {
       // Handle error submitting form
-      PanaraInfoDialog.show(
-        context,
-        title: "Gagal",
-        message: "Terjadi kesalahan saat mengubah profile.",
-        buttonText: "Okay",
-        onTapDismiss: () {
+      if (mounted) {
+        PanaraInfoDialog.show(
+          context,
+          title: "Gagal",
+          message: "Terjadi kesalahan saat mengubah profile.",
+          buttonText: "Okay",
+          onTapDismiss: () {
             Navigator.pop(context);
-        },
-        panaraDialogType: PanaraDialogType.normal,
-      );
+          },
+          panaraDialogType: PanaraDialogType.normal,
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 
@@ -170,7 +178,7 @@ class _EditDataPageState extends State<EditDataPage> {
     _alamatController.text = widget.alamat;
     _nomorHpController.text = widget.no_hp;
     _tempatLahirController.text = widget.tempat_lahir;
-    _tanggalLahirController.text = DateFormat('dd MMMM yyyy', 'id_ID').format(widget.tanggal_lahir);
+    _tanggalLahirController.text = DateFormat('yyyy-MM-dd').format(widget.tanggal_lahir);
   }
 
   @override
@@ -211,30 +219,69 @@ class _EditDataPageState extends State<EditDataPage> {
                   ),
                   const SizedBox(height: 24),
                   Center(
-                    child: GestureDetector(
-                      onTap: _pickImage,
-                      child: Container(
-                        width: 100,
-                        height: 100,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.grey[200],
+                    child: Stack(
+                      children: [
+                        GestureDetector(
+                          onTap: _pickImage,
+                          child: Container(
+                            width: 100,
+                            height: 100,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.grey[200],
+                            ),
+                            child: _image != null
+                                ? ClipOval(
+                                    child: Image.file(
+                                      _image!,
+                                      width: 100,
+                                      height: 100,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  )
+                                : widget.foto.isNotEmpty
+                                    ? ClipOval(
+                                        child: Image.network(
+                                          widget.foto,
+                                          width: 100,
+                                          height: 100,
+                                          fit: BoxFit.cover,
+                                          errorBuilder: (context, error, stackTrace) {
+                                            return const Icon(
+                                              Icons.person,
+                                              size: 40,
+                                              color: Colors.grey,
+                                            );
+                                          },
+                                        ),
+                                      )
+                                    : const Icon(
+                                        Icons.person,
+                                        size: 40,
+                                        color: Colors.grey,
+                                      ),
+                          ),
                         ),
-                        child: _image != null
-                            ? ClipOval(
-                                child: Image.file(
-                                  _image!,
-                                  width: 100,
-                                  height: 100,
-                                  fit: BoxFit.cover,
-                                ),
-                              )
-                            : const Icon(
-                                Icons.camera_alt,
-                                size: 40,
-                                color: Colors.grey,
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: GestureDetector(
+                            onTap: _pickImage,
+                            child: Container(
+                              padding: const EdgeInsets.all(4),
+                              decoration: const BoxDecoration(
+                                color: Color(0xFFE86D38),
+                                shape: BoxShape.circle,
                               ),
-                      ),
+                              child: const Icon(
+                                Icons.edit,
+                                color: Colors.white,
+                                size: 20,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   const SizedBox(height: 24),
@@ -407,7 +454,7 @@ class _EditDataPageState extends State<EditDataPage> {
           Padding(
             padding: const EdgeInsets.all(20),
             child: ElevatedButton(
-              onPressed: _submitForm,
+              onPressed: _isLoading ? null : _submitForm,
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFFE86D38),
                 minimumSize: const Size(double.infinity, 50),
@@ -415,14 +462,23 @@ class _EditDataPageState extends State<EditDataPage> {
                   borderRadius: BorderRadius.circular(25),
                 ),
               ),
-              child: const Text(
-                "Konfirmasi",
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white,
-                ),
-              ),
+              child: _isLoading
+                ? const SizedBox(
+                    height: 20,
+                    width: 20,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                    ),
+                  )
+                : const Text(
+                    "Konfirmasi",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white,
+                    ),
+                  ),
             ),
           ),
         ],

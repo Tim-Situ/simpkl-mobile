@@ -131,83 +131,75 @@ class AuthService with ChangeNotifier {
     required String no_hp,
     required String tanggal_lahir,
     required String tempat_lahir,
-    required File fileFoto,
+    File? fileFoto,
   }) async {
     try {
       final token = await getToken();
-      if (token == null) {
-        throw Exception('Token not found!');
-      }
+      if (token == null) throw Exception('Token not found!');
 
       final request = http.MultipartRequest('PUT', Uri.parse('$_baseUrl/auth/update-profile'));
       request.headers['Authorization'] = 'Bearer $token';
+      
       request.fields['nama'] = nama;
       request.fields['alamat'] = alamat;
       request.fields['no_hp'] = no_hp;
       request.fields['tanggal_lahir'] = tanggal_lahir;
       request.fields['tempat_lahir'] = tempat_lahir;
-      request.files.add(
-        await http.MultipartFile.fromPath(
-          'foto',
-          fileFoto.path,
-        ),
-      );
+
+      if (fileFoto != null) {
+        request.files.add(
+          await http.MultipartFile.fromPath('foto', fileFoto.path),
+        );
+      }
 
       final streamedResponse = await request.send();
       final response = await http.Response.fromStream(streamedResponse);
 
       if (response.statusCode == 200) {
-        await DatabaseHelper().deleteProfile();
-        await DatabaseHelper().deletePembimbing();
-        await DatabaseHelper().deletePerusahaan();
-        final response =
-            await http.get(Uri.parse('$_baseUrl/auth/profile'), headers: {
-          'Authorization': 'Bearer $token',
-        });
+        await _refreshLocalData(token);
+        notifyListeners();
+      } else {
+        throw Exception('Failed to update Profile: ${response.statusCode} - ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Failed to update profile: $e');
+    }
+  }
 
-        if (response.statusCode == 200) {
-          final Map<String, dynamic> responseData = jsonDecode(response.body);
-          if (responseData['data'] != null) {
-            final dynamic jsonDataPengguna =
-                responseData['data']['dataPengguna'];
-            ProfileModel dataProfile = ProfileModel.fromJson(jsonDataPengguna);
-            await DatabaseHelper().insertProfile(dataProfile);
-          }
-          if (responseData['data']['dataPengguna']['kelompok_bimbingan'] !=
-              null) {
-            final kelompokBimbingan =
-                responseData['data']['dataPengguna']['kelompok_bimbingan'];
+  Future<void> _refreshLocalData(String token) async {
+    await DatabaseHelper().deleteProfile();
+    await DatabaseHelper().deletePembimbing();
+    await DatabaseHelper().deletePerusahaan();
 
-            for (var item in kelompokBimbingan) {
-              if (item['guru_pembimbing'] != null) {
-                final pembimbingJson = item['guru_pembimbing'];
-                PembimbingModel pembimbing =
-                    PembimbingModel.fromJson(pembimbingJson);
-                await DatabaseHelper().insertPembimbing(pembimbing);
-              }
+    final response = await http.get(
+      Uri.parse('$_baseUrl/auth/profile'),
+      headers: {'Authorization': 'Bearer $token'},
+    );
+
+    if (response.statusCode == 200) {
+      final responseData = jsonDecode(response.body);
+      final data = responseData['data'];
+
+      if (data != null) {
+        final jsonDataPengguna = data['dataPengguna'];
+        await DatabaseHelper().insertProfile(ProfileModel.fromJson(jsonDataPengguna));
+        
+        final kelompokBimbingan = jsonDataPengguna['kelompok_bimbingan'];
+        if (kelompokBimbingan != null) {
+          for (var item in kelompokBimbingan) {
+            if (item['guru_pembimbing'] != null) {
+              await DatabaseHelper().insertPembimbing(
+                PembimbingModel.fromJson(item['guru_pembimbing'])
+              );
             }
-          }
-          if (responseData['data']['dataPengguna']['kelompok_bimbingan'] !=
-              null) {
-            final kelompokBimbingan =
-                responseData['data']['dataPengguna']['kelompok_bimbingan'];
-
-            for (var item in kelompokBimbingan) {
-              if (item['perusahaan'] != null) {
-                final perusahaanJson = item['perusahaan'];
-                PerusahaanModel perusahaan =
-                    PerusahaanModel.fromJson(perusahaanJson);
-                await DatabaseHelper().insertPerusahaan(perusahaan);
-              }
+            if (item['perusahaan'] != null) {
+              await DatabaseHelper().insertPerusahaan(
+                PerusahaanModel.fromJson(item['perusahaan'])
+              );
             }
           }
         }
-        notifyListeners();
-      } else {
-        print('Failed to update Profile: ${response.statusCode} - ${response.body}');
       }
-    } catch (e) {
-      print('Failed to update profile: $e');
     }
   }
 }

@@ -74,6 +74,10 @@ class ProfilePageState extends State<ProfilePage> {
                       no_hp: dataDariDb!.noHp,
                       tempat_lahir: dataDariDb!.tempatLahir,
                       tanggal_lahir: dataDariDb!.tanggalLahir,
+                      foto: dataDariDb!.foto,
+                      onProfileUpdated: () {
+                        getProfile(); // Refresh profile data
+                      },
                     )),
                   );
                 },

@@ -27,7 +27,7 @@ class _JurnalPageState extends State<JurnalPage> {
       context: context,
       initialDate: selectedDate,
       firstDate: DateTime(2020),
-      lastDate: DateTime(2025),
+      lastDate: DateTime(2026),
     );
 
     if (picked != null && picked != selectedDate) {
